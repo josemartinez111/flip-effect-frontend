@@ -1,12 +1,13 @@
 <!-- ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
-        COMPONENTS > SHARED > FOOTER > FOOTER.VUE 
+    COMPONENTS: SHARED > FOOTER
+    > FOOTER.VUE
 ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞ -->
 <script setup lang="ts">
 // ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
 import Divider from 'primevue/divider';
 import { twMerge } from 'tailwind-merge';
 import { formatDate } from '../../../lib';
-import { FantumWaveLogo } from '../../../assets';
+import { FlipEffectLogo } from '../../../assets';
 import clsx from 'clsx';
 // ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
 
@@ -56,6 +57,18 @@ const sectionsStyleClasses = twMerge(
 		' dark:hover:text-white transition-colors duration-150',
 	),
 );
+
+const footerBrandLinkStyleClasses = twMerge(
+	clsx(
+		'flex shrink-0 rounded-full transition duration-150 ease-out',
+		'hover:scale-[1.04] hover:opacity-90 active:scale-95 active:opacity-75',
+		'focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-flipeffect-sky',
+	),
+);
+
+const footerLogoStyleClasses = twMerge(
+	clsx('max-w-12 rounded-full object-contain'),
+);
 </script>
 <!-- ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
                         </>MARKUP</>
@@ -73,14 +86,15 @@ const sectionsStyleClasses = twMerge(
 				<!-- --- Brand column --- -->
 				<div class="col-span-2 flex flex-col gap-3 md:col-span-1">
 					<div class="flex items-center gap-3">
-						<img
-							:src="FantumWaveLogo"
-							alt="FantumWave Logo"
-							class="max-w-12 rounded-full object-contain"
-						/>
+						<RouterLink to="/" :class="footerBrandLinkStyleClasses">
+							<img
+								:src="FlipEffectLogo"
+								alt="The Flip Effect Logo"
+								:class="footerLogoStyleClasses"
+							/>
+						</RouterLink>
 						<p class="text-xs text-slate-400 dark:text-slate-500">
-							&copy; {{ currentYear }} FantumWave Tech. All rights
-							reserved.
+							&copy; {{ currentYear }} The Flip Effect. All rights reserved.
 						</p>
 					</div>
 				</div>

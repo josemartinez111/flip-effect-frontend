@@ -9,6 +9,9 @@
 /* ∞∞ Dark mode — matches PrimeVue .dark class selector ∞∞ */
 @custom-variant dark (&:is(.dark *));
 
+/* ∞∞ Phone landscape — hides elements on phones/small tablets in landscape ∞∞ */
+@custom-variant phone-landscape (@media (orientation: landscape) and (max-width: 1023px));
+
 /* ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞ */
 /* Design tokens                                                 */
 /* ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞ */
@@ -31,6 +34,27 @@
   --color-brand-pink:   #ec4899;
   --color-brand-purple: #7c3aed;
   --color-brand-orange: #f97316;
+
+  /* --- The Flip Effect palette --- */
+  --color-flipeffect-ink:         #0f172a;
+  --color-flipeffect-rose:        #f43f5e;
+  --color-flipeffect-rose-bright: #fb7185;
+  --color-flipeffect-flip:        #e11d48;
+  --color-flipeffect-orange:      #f97316;
+  --color-flipeffect-sky:         #0ea5e9;
+  --color-flipeffect-effect:      #0284c7;
+  --color-flipeffect-cyan:        #67e8f9;
+  --color-flipeffect-teal:        #14b8a6;
+
+  /* --- Truman approval rating palette --- */
+  --color-flipeffect-truman-gold:   #facc15;
+  --color-flipeffect-truman-amber:  #f59e0b;
+  --color-flipeffect-truman-bronze: #b45309;
+
+  /* --- Presidential label palette --- */
+  --color-flipeffect-presidential-white:    #f8fafc;
+  --color-flipeffect-presidential-silver:   #cbd5e1;
+  --color-flipeffect-presidential-charcoal: #64748b;
 
   /* --- Surface shades (light) --- */
   --color-surface-0:   #ffffff;
@@ -58,7 +82,7 @@
   ::before,
   ::backdrop,
   ::file-selector-button {
-    border-color: var(--color-gray-200, currentColor);
+    border-color: var(--color-surface-200, currentColor);
   }
 }
 

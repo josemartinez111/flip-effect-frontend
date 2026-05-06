@@ -5,6 +5,14 @@
 // ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
 
 /* Shared: components */
+// ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
+// home components->approval-rating
+// ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
+export { default as HeroApprovalRatingCard } from './pages/home/approval-rating/HeroApprovalRatingCard.vue';
+// ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
+// backgrounds components->shared
+// ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
+export { default as LayoutBackgroundImage } from './shared/backgrounds/LayoutBackgroundImage.vue';
 // ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
 // navbar components->shared
 // ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞

@@ -1,44 +1,51 @@
 <!-- ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
-    COMPONENTS: SHARED > ICONS
-    > CHEVRON_DOWN_ICON.VUE
+    COMPONENTS: SHARED > BACKGROUNDS
+    > LAYOUT_BACKGROUND_IMAGE.VUE
 ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞ -->
 <script setup lang="ts">
 // ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
-
+import clsx from 'clsx';
+import { twMerge } from 'tailwind-merge';
 // ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
 
-interface ChevronDimensions {
-	width: string;
-	height: string;
-}
-// ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
+const { image } = defineProps<{
+	image: string;
+}>();
 
-const { width = '16', height = '16' } = defineProps<ChevronDimensions>();
+const bgImageContainerStyleClasses = twMerge(
+	clsx(
+		'pointer-events-none absolute inset-x-0 top-0 z-0',
+		'h-[112vh] overflow-hidden',
+		'mask-b-from-55% mask-b-to-100%',
+	),
+);
+
+const bgImageStyleClasses = twMerge(
+	clsx(
+		'absolute -top-10 left-1/2 h-auto w-full max-w-none',
+		'tablet:-top-16 laptop:-top-24',
+		'-translate-x-1/2 object-contain object-top',
+		'blur-[0.35px] saturate-[0.92] contrast-[0.98] brightness-[1.16]',
+		'opacity-[0.52] mix-blend-multiply',
+		'dark:opacity-[0.5] dark:mix-blend-screen dark:brightness-[1.5]',
+		'dark:saturate-[0.88] dark:contrast-[0.9]',
+	),
+);
+// ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
 </script>
 <!-- ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
                         </>MARKUP</>
 ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞ -->
 <template>
-	<svg
-		xmlns="http://www.w3.org/2000/svg"
-		:width="width"
-		:height="height"
-		fill="currentColor"
-		class="bi bi-chevron-compact-down"
-		viewBox="0 0 16 16"
-	>
-		<path
-			fill-rule="evenodd"
-			d="M1.553 6.776a.5.5 0 0 1 .67-.223L8
-		  9.44l5.776-2.888a.5.5 0 1 1
-		  .448.894l-6 3a.5.5 0 0 1-.448 0l-6-3a.5.5 0 0 1-.223-.67"
-		></path>
-	</svg>
+	<div :class="bgImageContainerStyleClasses" aria-hidden="true">
+		<img :src="image" alt="" :class="bgImageStyleClasses" />
+	</div>
 </template>
 <!-- ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
                           STYLES
 ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞ -->
 <style scoped lang="postcss">
 /* prettier-ignore */
+
 </style>
 <!-- ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞ -->

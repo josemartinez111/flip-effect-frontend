@@ -102,7 +102,7 @@ vuejs-frontend-template/
 
 ### API Action Pattern
 
-```typescript
+```zsh
 export type ApiActionResult<T> = {
   success: boolean;
   message?: string;
@@ -113,7 +113,7 @@ export type ApiActionResult<T> = {
 
 ### TypeScript Action Organization
 
-```typescript
+```zsh
 // Static class pattern for modular organization
 export class CheckInActions { static async checkIn(...): Promise<ApiActionResult<T>> {} }
 export class RecipientActions { static async create(...): Promise<ApiActionResult<T>> {} }
@@ -124,12 +124,12 @@ export class StatsActions { static async getMonthly(...): Promise<ApiActionResul
 
 ## 📚 Documentation Hub
 
-| File | Purpose |
-|------|---------|
-| `SESSION.md` | Current session context, recent work, next steps |
-| `README.md` | Project overview and tech stack |
-| `src/api/domain/architecture/*.mermaid` | DB ERD, workflows, system architecture |
-| `vite.config.ts` | Build config |
+| File                                    | Purpose                                          |
+|-----------------------------------------|--------------------------------------------------|
+| `SESSION.md`                            | Current session context, recent work, next steps |
+| `README.md`                             | Project overview and tech stack                  |
+| `src/api/domain/architecture/*.mermaid` | DB ERD, workflows, system architecture           |
+| `vite.config.ts`                        | Build config                                     |
 
 ---
 
@@ -140,7 +140,7 @@ export class StatsActions { static async getMonthly(...): Promise<ApiActionResul
 **Use This:**
 - Pinia for ALL state (Setup Store style — `defineStore` with `ref`/`computed`/functions)
 - Native Vue lifecycle: `onMounted`, `onUnmounted`, `watch`, `watchEffect`, `computed`
-- Component templates with `//⚫️ ∞∞∞` dividers
+- Component templates with the exact WebStorm-style `<!-- ∞∞∞ -->` / `// ∞∞∞` section dividers shown below
 - Comment pattern: `// --- comment ---`
 - TailwindCSS (no CSS-in-JS, no `<style scoped>` unless truly necessary)
 - PrimeVue for tables/complex UI, Vue Router, Supabase, TypeScript strict mode
@@ -155,102 +155,162 @@ export class StatsActions { static async getMonthly(...): Promise<ApiActionResul
 - Deleting scaffolded files without permission
 - Over-engineering, scope creep
 
+## Scope Control (CRITICAL)
+
+- Do exactly what the user asked for in the current instruction.
+- Do not complete adjacent pieces, fill in assumed content, or turn a scaffold/container request into a full feature implementation.
+- If the next step seems obvious but was not explicitly requested, ask before attempting it.
+- When building UI incrementally, preserve the user's intended pace: create the requested shell, slot, wrapper, or single piece first, then wait for the next instruction.
+- Do not add labels, sample data, hardcoded content, images, props, interactions, or layout behavior unless the user specifically asked for them.
+
 ---
 
 ## 🎨 Code Style Guide (CRITICAL)
 
-### Component Template
+### Preferred Vue Component / Page Section Template
 
-**ALL regular components MUST follow this exact template:**
+**ALL Vue components and pages MUST follow this WebStorm-style section scaffold unless the user provides a newer template. This supersedes older component/page examples below.**
 
-```vue
-<!-- ⚫️ ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞ -->
-<!--                          $PATH$                                   -->
-<!-- ⚫️ ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞ -->
-
+```zsh
+<!-- ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
+    $BREADCRUMB_ROOT$: $BREADCRUMB_DIRECTORIES$
+    > $COMPONENT_FILE_NAME$
+∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞ -->
 <script setup lang="ts">
-// ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
-//                           IMPORTS
-// ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
+// ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
 
-// ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
-//                           PROPS
-// ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
+// ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
 
-interface ShowProps {
-  class?: string;
-  // Add other props here
-}
+// const props = defineProps<{
+//  msg: string;
+// }>();
 
-const props = withDefaults(defineProps<ShowProps>(), {});
+// const { msg } = toRefs(props);
 
-// ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
-//                        COMPONENT LOGIC
-// ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
+// OR
+
+// const { msg } = defineProps<{
+//  msg: string;
+// }>();
 </script>
-
+<!-- ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
+                        </>MARKUP</>
+∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞ -->
 <template>
-  <!-- ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞ -->
-  <main :class="props.class">
-    <h1 class="text-4xl text-center font-semibold items-center py-16">
-      $COMPONENT_NAME$ Component
-    </h1>
-  </main>
-  <!-- ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞ -->
+  <h1 class="text-4xl text-center items-center py-56">
+    $PAGE_NAME$ Page $END$
+	</h1>
 </template>
+<!-- ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
+                          STYLES
+∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞ -->
+<style scoped lang="postcss">
+/* prettier-ignore */
+
+</style>
+<!-- ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞ -->
 ```
 
-**Replace:** `$PATH$` → file path, `$COMPONENT_NAME$` → PascalCase name
+**Breadcrumb note:** Vue component/page scaffold breadcrumbs MUST be uppercase. Use `:` after the root folder, `>` between nested folders, and wrap long breadcrumbs by putting the file name on the next line with a leading `>`. Do not shorten, wrap, or alter the divider lines themselves. This does not apply to `index.ts` barrel files; barrel files keep the simpler index/barrel comment style.
 
----
+**Breadcrumb example:**
 
-### View (Page) Template
-
-**ALL view/page components MUST follow this exact template:**
-
-```vue
-<!-- ⚫️ ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞ -->
-<!--                          $PATH$                                   -->
-<!-- ⚫️ ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞ -->
-
-<script setup lang="ts">
-// ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
-//                           IMPORTS
-// ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
-
-// ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
-//                           VIEW LOGIC
-// ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
-</script>
-
-<template>
-  <!-- ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞ -->
-  <main class="min-h-screen w-full dark:bg-black dark:text-white bg-white">
-    <h1 class="text-4xl text-center items-center py-56">
-      $VIEW_NAME$ View
-    </h1>
-  </main>
-  <!-- ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞ -->
-</template>
+```zsh
+<!-- ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
+    COMPONENTS: SHARED > BACKGROUNDS
+    > LAYOUT_BACKGROUND_IMAGE.VUE
+∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞ -->
 ```
 
-**Replace:** `$PATH$` → file path, `$VIEW_NAME$` → PascalCase (no "View" suffix in the label)
+**Replace:** `$BREADCRUMB_ROOT$` → root folder such as `COMPONENTS` or `PAGES`, `$BREADCRUMB_DIRECTORIES$` → uppercase directory chain, `$COMPONENT_FILE_NAME$` → uppercase snake-style file name, `$PAGE_NAME$` → PascalCase display name, `$END$` → final display suffix or remove it.
 
----
+**Props note:** Prefer direct destructuring from `defineProps`. Use `const props = defineProps<...>()` with `toRefs(props)` only when the component needs a props object or multiple reactive prop refs.
+
+**Page styling note:** Page files under `src/pages/` may keep page-specific scoped PostCSS styles while the page is being shaped. Extracted reusable components under `src/components/` should stay cleaner and more portable, with styling limited to the component's reusable responsibility.
+
+**Session file note:** Do not update `SESSION.md` during active build iterations. `SESSION.md` is updated only at the end of a session or when the user explicitly asks to capture session state. During a session, keep working context in conversation and final summaries instead.
+
+### Long Tailwind Class Naming
+
+When a Tailwind class list gets long enough to hurt template readability, move it into a clearly named `StyleClasses` constant using `twMerge(clsx(...))`. Use descriptive names that match the element or role, such as `imageStyleClasses`, `dropdownContainerStyleClasses`, `mainContainerStyleClasses`, `heroSectionStyleClasses`, or `bgImageOverlayStyleClasses`.
+
+**Example:**
+
+```zsh
+import clsx from 'clsx';
+import { twMerge } from 'tailwind-merge';
+
+const imageStyleClasses = twMerge(
+  clsx(
+    'h-8 w-8 cursor-pointer rounded-full object-cover ring-1',
+    'ring-purple-500 transition-opacity duration-150 hover:opacity-80',
+    'active:opacity-50 tablet:h-10 tablet:w-10',
+  ),
+);
+
+const dropdownContainerStyleClasses = twMerge(
+  clsx(
+    'absolute right-0 top-12 z-50 flex w-80 max-w-[95vw]',
+    'flex-col rounded-2xl bg-white',
+    'px-6 py-4 text-gray-200 shadow-xl dark:bg-gray-900',
+    'min-w-[18rem]',
+  ),
+);
+```
+
+In Vue templates, bind these constants with `:class="imageStyleClasses"` or `:class="dropdownContainerStyleClasses"` instead of leaving long class strings inline.
+
+### Navbar Desktop Note
+
+The desktop navbar should render brand on the left and action controls on the right. Do not render the scaffold `NavCTAButton` "Get Started" button in the navbar unless the user explicitly asks for a real CTA. Preserve `NavCTAButton.vue` as a scaffolded artifact, but use `DarkmodeToggleSwitch` in the navbar action area with `block phone-landscape:hidden` so the toggle is visible on portrait phone and tablet/desktop while hidden on phone/small-tablet landscape.
+
+The reusable Tailwind v4 variant for that behavior lives in `src/app.css`:
+
+```zsh
+@custom-variant phone-landscape (@media (orientation: landscape) and (max-width: 1023px));
+```
+
+### Barrel Export Style
+
+Use barrel exports throughout frontend apps. Directory-level `index.ts` files collect and re-export assets, components, pages, stores, utilities, and types so consuming files import from stable module boundaries instead of deep nested paths.
+
+For `src/components/`, keep one root component barrel at `src/components/index.ts`. Do not add nested `index.ts` files inside component subdirectories; that creates too many barrels to maintain. New reusable components should be exported from the root component barrel with a clear section comment.
+
+**Examples:**
+
+```zsh
+export { default as NavBar } from './shared/navbar/NavBar.vue';
+export { default as Footer } from './shared/footer/Footer.vue';
+export { default as HomePage } from './home/home.page.vue';
+```
+
+Asset barrels MUST be grouped by source directory with comment headers. Runtime image exports should use Vite ImageTools `?format=webp` whenever the source image supports it. Keep Canva/high-quality source files as PNG/JPG assets, then export the optimized app import as WebP through the barrel.
+
+**Asset barrel example:**
+
+```zsh
+/* Approval Rating */
+// ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
+// approval-rating assets->hero
+// ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
+export { default as UsaApprovalMapTier1 } from './approval-rating/usaApprovalMapTier1.png?format=webp';
+export { default as UsaApprovalMapTier2 } from './approval-rating/usaApprovalMapTier2.png?format=webp';
+// ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
+```
 
 ### Pinia Store Template
 
 **ALL stores MUST follow this exact Setup Store pattern:**
 
-```typescript
-//⚫️ ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
+```zsh
+// ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
 //                        $PATH$
-//⚫️ ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
+// ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
 //                       IMPORTS
-//⚫️ ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
+// ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
 import { defineStore } from 'pinia';
 import { ref, computed } from 'vue';
-//⚫️ ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
+// ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
 
 export const use$STORE_NAME$Store = defineStore('$storeName$', () => {
   // ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
@@ -272,7 +332,7 @@ export const use$STORE_NAME$Store = defineStore('$storeName$', () => {
 
   return { value, derivedValue, fetchData };
 });
-//⚫️ ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
+// ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
 ```
 
 **Replace:** `$STORE_NAME$` → PascalCase, `$storeName$` → camelCase store ID
@@ -281,7 +341,7 @@ export const use$STORE_NAME$Store = defineStore('$storeName$', () => {
 
 ### Comment Patterns
 
-```typescript
+```zsh
 // --- Single line comment ---
 
 // ---
@@ -298,7 +358,7 @@ export const use$STORE_NAME$Store = defineStore('$storeName$', () => {
 
 **Use native Vue APIs directly — no wrappers needed.**
 
-```typescript
+```zsh
 import { ref, computed, watch, watchEffect, onMounted, onUnmounted } from 'vue';
 
 // --- Reactive state ---
@@ -333,7 +393,7 @@ watchEffect(() => {
 
 ### Persistent State
 
-```typescript
+```zsh
 import { defineStore } from 'pinia';
 import { useLocalStorage } from '@vueuse/core'; // or pinia-plugin-persistedstate
 
@@ -352,7 +412,7 @@ export const useDarkModeStore = defineStore('darkMode', () => {
 
 ### In Components
 
-```typescript
+```zsh
 // --- always destructure with storeToRefs for reactivity ---
 import { storeToRefs } from 'pinia';
 import { useDarkModeStore } from '@/lib/stores/dark-mode.store';
@@ -362,7 +422,7 @@ const { isDark } = storeToRefs(darkModeStore);
 ```
 
 **Anti-patterns:**
-```typescript
+```zsh
 // ❌ WRONG — loses reactivity
 const { isDark } = useDarkModeStore();
 
@@ -380,7 +440,7 @@ const { isDark } = storeToRefs(useDarkModeStore());
 
 **Always destructure directly from `defineProps`. Never use `withDefaults` or `const props =`.**
 
-```typescript
+```zsh
 // ✅ CORRECT — Option 1: separate interface (complex props)
 interface CardProps {
   title: string;
@@ -407,7 +467,7 @@ const props = defineProps<CardProps>();
 
 **Always use arrow functions. Never use `function` declarations in `<script setup>`.**
 
-```typescript
+```zsh
 // ✅ CORRECT
 const handleClick = (): void => { router.push(path); };
 const getTotal = (items: CartItem[]): number => items.reduce((sum, i) => sum + i.price, 0);
@@ -423,7 +483,7 @@ function handleClick(): void { router.push(path); }
 - `twMerge(clsx(...))` for dynamic/conditional long class strings
 - `app.css` via `@utility` for custom animations/utilities
 
-```typescript
+```zsh
 // ✅ CORRECT
 const boxClass = twMerge(clsx('flex items-center', { 'bg-slate-900': isDark }));
 
@@ -433,7 +493,7 @@ const boxClass = twMerge(clsx('flex items-center', { 'bg-slate-900': isDark }));
 
 **Error Handling (MANDATORY):**
 
-```typescript
+```zsh
 // ✅ GOOD — typed catch
 try {
   // --- code ---
@@ -456,7 +516,7 @@ try {
 
 ## 🚀 Commands
 
-```bash
+```zsh
 pm dev              # Dev server (localhost:5173)
 pm build            # Production build → dist/
 pm preview          # Preview production locally
@@ -472,7 +532,7 @@ pm preview          # Preview production locally
 - Provide drop-in code respecting templates
 - Cite file paths when recommending edits
 - Replace ALL placeholders (`$COMPONENT_NAME$`, `$VIEW_NAME$`, `$PATH$`, `$STORE_NAME$`)
-- Maintain `<!-- ⚫️ ∞∞∞ -->` / `//⚫️ ∞∞∞` dividers and `// --- comment ---` pattern
+- Maintain the exact WebStorm-style `<!-- ∞∞∞ -->` / `// ∞∞∞` divider shape shown in the Preferred Vue Component / Page Section Template. Do not shorten, wrap, or replace divider lines.
 - Control flow: always use braces on `if`/`else`
 - Prefer existing stack (Tailwind/PrimeVue/@vueuse/motion)
 - SESSION.md only updated at task end after confirmation
@@ -503,7 +563,7 @@ pm preview          # Preview production locally
 **Template Compliance:**
 - ALWAYS use `<script setup lang="ts">` — never Options API
 - ALWAYS use component/view templates with divider sections
-- NEVER skip `//⚫️ ∞∞∞` dividers
+- NEVER skip the exact divider sections from the Preferred Vue Component / Page Section Template
 - ALWAYS use `storeToRefs` when destructuring Pinia stores
 - ALWAYS define stores with Setup Store (`defineStore('id', () => { ... })`)
 

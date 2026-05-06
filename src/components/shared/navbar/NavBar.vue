@@ -1,13 +1,13 @@
-<!-- ⚫️ ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞ -->
-<!--            components/shared/navbar/NavBar.vue                    -->
-<!-- ⚫️ ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞ -->
-
+<!-- ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
+    COMPONENTS: SHARED > NAVBAR
+    > NAV_BAR.VUE
+∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞ -->
 <script setup lang="ts">
 // ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
 import { ref } from 'vue';
 import { useNavLinks } from '../../../router/composables/useNavLinks.ts';
 import NavBrand from './NavBrand.vue';
-import NavCTAButton from './NavCTAButton.vue';
+import DarkmodeToggleSwitch from './DarkmodeToggleSwitch.vue';
 import NavHamburger from './NavHamburger.vue';
 import SideDrawer from './SideDrawer.vue';
 import clsx from 'clsx';
@@ -38,9 +38,9 @@ const headerStyleClasses = twMerge(
 
 			<!-- --- Actions (right) --- -->
 			<div class="flex items-center gap-3">
-				<!-- CTA: hidden on mobile, visible tablet+ -->
-				<div class="tablet:block hidden">
-					<NavCTAButton btn-title="Get Started" path="/" />
+				<!-- --- Dark mode toggle: always visible, hidden on phone landscape --- -->
+				<div class="block phone-landscape:hidden">
+					<DarkmodeToggleSwitch />
 				</div>
 
 				<!-- Hamburger: always visible -->
