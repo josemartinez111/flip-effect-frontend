@@ -228,6 +228,8 @@ export class StatsActions { static async getMonthly(...): Promise<ApiActionResul
 
 **Page styling note:** Page files under `src/pages/` may keep page-specific scoped PostCSS styles while the page is being shaped. Extracted reusable components under `src/components/` should stay cleaner and more portable, with styling limited to the component's reusable responsibility.
 
+**Extraction boundary note:** When building page-specific markup in `src/pages/`, add a short HTML comment directly above any block that is likely to be extracted later into `src/components/pages/`. This is required for pages so future extraction points stay obvious while the page is still being shaped. For components in general, add the same kind of comment only when a sub-block is clearly likely to become its own component later.
+
 **Session file note:** Do not update `SESSION.md` during active build iterations. `SESSION.md` is updated only at the end of a session or when the user explicitly asks to capture session state. During a session, keep working context in conversation and final summaries instead.
 
 ### Long Tailwind Class Naming

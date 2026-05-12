@@ -58,7 +58,10 @@ const brandFlipStyleClasses = twMerge(
 
 const brandEffectStyleClasses = twMerge(
 	clsx(
-		'bg-gradient-to-r from-flipeffect-effect to-flipeffect-teal bg-clip-text text-transparent',
+		'bg-gradient-to-r from-slate-950 via-sky-700 to-cyan-500 bg-clip-text text-transparent',
+		'drop-shadow-[0_1px_3px_rgba(255,255,255,0.85)]',
+		'dark:from-white dark:via-cyan-100 dark:to-sky-300',
+		'dark:drop-shadow-[0_0_18px_rgba(125,211,252,1)]',
 	),
 );
 // ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞

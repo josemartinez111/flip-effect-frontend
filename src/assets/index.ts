@@ -2,6 +2,9 @@
 //      index.ts for all assets in this directory
 // ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
 
+/* ∞∞∞∞∞∞∞∞∞∞∞∞∞ General ∞∞∞∞∞∞∞∞∞∞∞∞∞  */
+export {default as KnowYourBranches} from './general/KnowYourBranches.png?format=webp';
+export {default as ThreeBranchesOfGovernment} from './general/ThreeBranchesOfGovernment.png?format=webp';
 /* ∞∞∞∞∞∞∞∞∞∞∞∞∞ App Reusable Backgrounds ∞∞∞∞∞∞∞∞∞∞∞∞∞  */
 export { default as DominoEffectBGHomePage } from './app-reusable-bg/DominoEffectBGHomePage.png?format=webp';
 export { default as ApprovalRatingCardBG } from './app-reusable-bg/ApprovalRatingCardBG.png?format=webp';
@@ -11,7 +14,6 @@ export { default as UsaApprovalMapTier2 } from './approval-rating/usaApprovalMap
 export { default as UsaApprovalMapTier3 } from './approval-rating/usaApprovalMapTier3.png?format=webp';
 export { default as UsaApprovalMapTier4 } from './approval-rating/usaApprovalMapTier4.png?format=webp';
 export { default as UsaApprovalMapTier5 } from './approval-rating/usaApprovalMapTier5.png?format=webp';
-
 /* ∞∞∞∞∞∞∞∞∞∞∞∞∞ Brand ∞∞∞∞∞∞∞∞∞∞∞∞∞  */
 export {default as TrumpAvatar } from './avatars/TrumpAvatar.png?format=webp';
 export {default as TrumanAvatar } from './avatars/TrumanAvatar.png?format=webp';
