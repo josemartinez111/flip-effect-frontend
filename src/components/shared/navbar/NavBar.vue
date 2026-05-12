@@ -20,9 +20,8 @@ const navLinks = useNavLinks();
 
 const headerStyleClasses = twMerge(
 	clsx(
-		'fixed inset-x-0 top-0 z-50 h-16 border-b border-gray-200/60',
-		'bg-white/80 backdrop-blur-md transition-colors duration-300',
-		'dark:border-gray-800/60 dark:bg-gray-950/80',
+		'fixed inset-x-0 top-0 z-50 h-16 border-0 bg-transparent',
+		'shadow-none ring-0 transition-colors duration-300',
 	),
 );
 // ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
