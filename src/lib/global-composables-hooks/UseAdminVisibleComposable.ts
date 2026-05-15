@@ -1,18 +1,20 @@
 // ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
-//           LIB > COMPOSABLES > USE_GRADIENT.TS
+//  LIB > GLOBAL-COMPOSABLES-HOOKS > USE_ADMIN_VISIBLE_COMPOSABLE.TS
+// ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
+import { UseSessionStore } from '../stores/UseSessionStore';
 // ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
 
-type GradientOptions = {
-  textSize?: string;
+// ---
+// Shared admin visibility gate used across components that live
+// outside protected route guards (e.g. FoodbankAlertBanner, BlogAnnouncementsPage).
+//
+// isMaintenance: pass true to force-show admin controls during
+// maintenance without requiring a logged-in session.
+// TODO: flip to true in both call sites when entering maintenance mode.
+// ---
+export const UseAdminVisibleComposable = (isMaintenance: boolean): boolean => {
+	const { isLoggedIn } = UseSessionStore();
+	return isMaintenance || isLoggedIn;
 };
-// ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
 
-export const useGradient = ({ textSize = 'text-7xl' }: GradientOptions = {}) => {
-  const result = `${textSize} relative top-0 w-fit mx-auto lg:mx-0 text-balance
-    font-semibold tracking-tight bg-gradient-to-r from-blue-500 via-teal-500
-    to-pink-500 dark:from-blue-400 dark:via-teal-400 dark:to-pink-400
-    bg-clip-text text-transparent transition-colors duration-300`.trim();
-
-  return result;
-};
 // ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞

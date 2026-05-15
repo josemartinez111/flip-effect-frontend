@@ -2,8 +2,8 @@
 //                       main.ts
 // ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
 import { createPinia } from 'pinia';
+import { createHead } from '@unhead/vue/client';
 import { createApp } from 'vue';
-import { createHead } from '@vueuse/head';
 import PrimeVue from 'primevue/config';
 import Aura from '@primeuix/themes/aura';
 import './app.css';

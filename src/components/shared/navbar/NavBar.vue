@@ -5,7 +5,7 @@
 <script setup lang="ts">
 // ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
 import { ref } from 'vue';
-import { useNavLinks } from '../../../router/composables/useNavLinks.ts';
+import { UseNavLinksComposable } from '../../../router/composables/UseNavLinksComposable.ts';
 import NavBrand from './NavBrand.vue';
 import DarkmodeToggleSwitch from './DarkmodeToggleSwitch.vue';
 import NavHamburger from './NavHamburger.vue';
@@ -15,7 +15,7 @@ import { twMerge } from 'tailwind-merge';
 // ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
 
 const drawerOpen = ref<boolean>(false);
-const navLinks = useNavLinks();
+const navLinks = UseNavLinksComposable();
 // ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
 
 const headerStyleClasses = twMerge(

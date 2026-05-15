@@ -8,7 +8,7 @@ import { computed } from 'vue';
 import { useRouter } from 'vue-router';
 import Drawer from 'primevue/drawer';
 import Button from 'primevue/button';
-import type { NavLinkType } from '../../../router/composables/useNavLinks.ts';
+import type { NavLinkType } from '../../../router/composables/UseNavLinksComposable.ts';
 import NavBrand from './NavBrand.vue';
 import DarkmodeToggleSwitch from './DarkmodeToggleSwitch.vue';
 // ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
