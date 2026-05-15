@@ -1,11 +1,11 @@
 // ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
-//             USE_HERO_APPROVAL_RATING.TS
+//             USE_HERO_APPROVAL_RATING_COMPOSABLE.TS
 // ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
 import clsx from 'clsx';
 import { twMerge } from 'tailwind-merge';
 // ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
 
-export const UseHeroApprovalRating = () => {
+export const UseHeroApprovalRatingComposable = () => {
 	const cardContainerStyleClasses = twMerge(
 		clsx(
 			'relative mx-auto h-[28rem] w-[min(98vw,100rem)] scale-[0.76] overflow-hidden',
@@ -105,7 +105,7 @@ export const UseHeroApprovalRating = () => {
 	const trumpAvatarStyleClasses = twMerge(
 		clsx(avatarImageStyleClasses, 'right-[21%]'),
 	);
-	
+
 	return {
 		cardContainerStyleClasses,
 		cardBgImageStyleClasses,
@@ -120,6 +120,6 @@ export const UseHeroApprovalRating = () => {
 		trumpPercentageStyleClasses,
 		trumanAvatarStyleClasses,
 		trumpAvatarStyleClasses,
-	}
-}
+	};
+};
 // ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞

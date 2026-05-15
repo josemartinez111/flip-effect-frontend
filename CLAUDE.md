@@ -162,6 +162,7 @@ export class StatsActions { static async getMonthly(...): Promise<ApiActionResul
 - If the next step seems obvious but was not explicitly requested, ask before attempting it.
 - When building UI incrementally, preserve the user's intended pace: create the requested shell, slot, wrapper, or single piece first, then wait for the next instruction.
 - Do not add labels, sample data, hardcoded content, images, props, interactions, or layout behavior unless the user specifically asked for them.
+- Do not start, restart, or attempt to start local dev servers, preview servers, browser sessions, or long-running watch processes unless the user explicitly asks for that exact action.
 
 ---
 

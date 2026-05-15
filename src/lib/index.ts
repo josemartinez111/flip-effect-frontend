@@ -6,9 +6,9 @@
 // ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
 // global-composables-hooks lib->composables
 // ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
-export * from './global-composables-hooks/useSocialMediaMetadata';
-export * from './global-composables-hooks/useGradient';
-export * from './global-composables-hooks/useAdminVisible';
+export * from './global-composables-hooks/UseSocialMediaMetadataComposable';
+export * from './global-composables-hooks/UseGradientComposable';
+export * from './global-composables-hooks/UseAdminVisibleComposable';
 // ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
 
 /* Stores: lib */

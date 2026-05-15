@@ -1,7 +1,7 @@
 // ⚫️ ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
-//        LIB > COMPOSABLES > USE-SOCIAL-MEDIA-METADATA.TS
+//        LIB > COMPOSABLES > USE_SOCIAL_MEDIA_METADATA_COMPOSABLE.TS
 // ⚫️ ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
-import { useHead } from '@vueuse/head';
+import { useHead } from '@unhead/vue';
 // ⚫️ ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
 
 /**
@@ -42,7 +42,9 @@ interface SocialMetadataProps {
   platforms: SupportedPlatform[];
 }
 
-type MetaTag = Record<string, string>;
+type MetaTag =
+	| { name: string; content: string }
+	| { property: string; content: string };
 
 // ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
 
@@ -66,9 +68,21 @@ const PLATFORM_CONFIGS: Record<SupportedPlatform, PlatformConfig> = {
   },
 };
 
+const createMetaTag = (
+	nameAttribute: PlatformConfig['nameAttribute'],
+	key: string,
+	content: string,
+): MetaTag => {
+	if (nameAttribute === 'name') {
+		return { name: key, content };
+	}
+
+	return { property: key, content };
+};
+
 // ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
 
-export function useSocialMediaMetadata({
+export function UseSocialMediaMetadataComposable({
   siteUrl,
   title,
   description,
@@ -84,24 +98,26 @@ export function useSocialMediaMetadata({
     const { prefix, nameAttribute, extraMeta } = config;
 
     const baseTags: MetaTag[] = [
-      { [nameAttribute]: `${prefix}:title`, content: title },
-      { [nameAttribute]: `${prefix}:description`, content: description },
+      createMetaTag(nameAttribute, `${prefix}:title`, title),
+      createMetaTag(nameAttribute, `${prefix}:description`, description),
     ];
 
     if (prefix === 'og') {
       baseTags.push(
-        { [nameAttribute]: `${prefix}:type`, content: type },
-        { [nameAttribute]: `${prefix}:url`, content: url },
+        createMetaTag(nameAttribute, `${prefix}:type`, type),
+        createMetaTag(nameAttribute, `${prefix}:url`, url),
       );
     }
 
     if (image) {
-      baseTags.push({ [nameAttribute]: `${prefix}:image`, content: image });
+      baseTags.push(createMetaTag(nameAttribute, `${prefix}:image`, image));
     }
 
     if (extraMeta) {
       Object.entries(extraMeta).forEach(([key, metaValue]) => {
-        baseTags.push({ [nameAttribute]: `${prefix}:${key}`, content: metaValue });
+        baseTags.push(
+          createMetaTag(nameAttribute, `${prefix}:${key}`, metaValue),
+        );
       });
     }
 
