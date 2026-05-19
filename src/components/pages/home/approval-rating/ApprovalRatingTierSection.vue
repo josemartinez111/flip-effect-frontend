@@ -10,7 +10,7 @@ import { UseApprovalRatingTierComposable } from './UseApprovalRatingTierComposab
 
 const {
 	approvalRatingTierMaps,
-	TRUMP_APPROVAL_RATING,
+	animatedApprovalRatingPercentage,
 	approvalTierSectionStyleClasses,
 	approvalTierViewportStyleClasses,
 	approvalTierEdgeStyleClasses,
@@ -19,16 +19,16 @@ const {
 	approvalTierBadgeValueStyleClasses,
 	approvalTierBadgeLabelStyleClasses,
 	getApprovalTierImageStyleClasses,
-	startApprovalRatingTierAnimation,
-	stopApprovalRatingTierAnimation,
+	startApprovalRatingAnimation,
+	stopApprovalRatingAnimation,
 } = UseApprovalRatingTierComposable();
 
 onMounted(() => {
-	startApprovalRatingTierAnimation();
+	startApprovalRatingAnimation();
 });
 
 onUnmounted(() => {
-	stopApprovalRatingTierAnimation();
+	stopApprovalRatingAnimation();
 });
 // ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
 </script>
@@ -52,7 +52,7 @@ onUnmounted(() => {
 
 			<div :class="approvalTierBadgeStyleClasses">
 				<span :class="approvalTierBadgeValueStyleClasses">
-					{{ TRUMP_APPROVAL_RATING }}%
+					{{ animatedApprovalRatingPercentage }}%
 				</span>
 				<span :class="approvalTierBadgeLabelStyleClasses">
 					Approval

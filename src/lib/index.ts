@@ -9,6 +9,7 @@
 export * from './global-composables-hooks/UseSocialMediaMetadataComposable';
 export * from './global-composables-hooks/UseGradientComposable';
 export * from './global-composables-hooks/UseAdminVisibleComposable';
+export * from './global-composables-hooks/UseAnimatedPercentageComposable';
 // ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
 
 /* Stores: lib */

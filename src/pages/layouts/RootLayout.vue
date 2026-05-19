@@ -1,6 +1,5 @@
 <!-- ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
-    PAGES: LAYOUTS
-    > ROOT_LAYOUT.VUE
+    PAGES: LAYOUTS > ROOT_LAYOUT.VUE
 ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞ -->
 <script setup lang="ts">
 // ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
@@ -9,7 +8,13 @@
 import { computed } from 'vue';
 import { storeToRefs } from 'pinia';
 import { useRoute } from 'vue-router';
-import { Footer, LayoutBackgroundImage, NavBar, Show } from '../../components';
+import {
+  Footer,
+  FWTBackToTopBanner,
+  LayoutBackgroundImage,
+  NavBar,
+  Show,
+} from '../../components';
 import { UseDarkmodeStore } from '../../lib';
 // ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
 
@@ -50,6 +55,7 @@ const layoutBackgroundImage = computed((): string | null => {
       <RouterView />
     </main>
 	  <!-- ∞∞∞∞∞∞∞∞ FOOTER-COMPONENT ∞∞∞∞∞∞∞∞ -->
+    <FWTBackToTopBanner />
     <Footer />
   </div>
 </template>

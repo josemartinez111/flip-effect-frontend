@@ -40,6 +40,8 @@ type ModalProps = {
 	blockScroll?: boolean;
 	draggable?: boolean;
 	appendTo?: 'body' | 'self' | string;
+	rootClass?: string;
+	contentClass?: string;
 };
 
 const {
@@ -51,6 +53,8 @@ const {
 	blockScroll = true,
 	draggable = false,
 	appendTo = 'body',
+	rootClass,
+	contentClass,
 } = defineProps<ModalProps>();
 
 const emit = defineEmits<{
@@ -75,12 +79,16 @@ const slots = defineSlots<{
 // <BaseModal
 //  v-model:visible="approvalDetailsModalOpen"
 //  header="Approval Rating Details"
+//  :root-class="customModalRootStyleClasses"
+//  :content-class="customModalContentStyleClasses"
 // >
 //  <ApprovalRatingDetails />
 // </BaseModal>
 //
 // Use the default slot for the child component. Add #footer only when the
 // modal wrapper should own actions such as Save, Cancel, Delete, or Confirm.
+// Use rootClass and contentClass only when a caller needs to override the
+// modal shell or content padding, such as a transparent image-only modal.
 // ---
 // ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
 
@@ -94,6 +102,7 @@ const modalRootStyleClasses = twMerge(
 		'border border-surface-200/70 bg-white text-slate-950 shadow-2xl',
 		'shadow-slate-950/20 dark:border-white/10 dark:bg-surface-950',
 		'dark:text-white dark:shadow-black/50',
+		rootClass,
 	),
 );
 
@@ -112,7 +121,7 @@ const modalTitleStyleClasses = twMerge(
 );
 
 const modalContentStyleClasses = twMerge(
-	clsx('max-h-[min(86vh,58rem)] overflow-hidden px-3 py-3'),
+	clsx('max-h-[min(86vh,58rem)] overflow-hidden px-3 py-3', contentClass),
 );
 
 const modalFooterStyleClasses = twMerge(

@@ -7,7 +7,6 @@
 import Card from 'primevue/card';
 import { ref } from 'vue';
 import {
-	DominoEffectBGHomePage,
 	KnowYourBranches,
 	ThreeBranchesOfGovernment,
 } from '../../../../assets';
@@ -24,10 +23,11 @@ const {
 	heroCardShellStyleClasses,
 	branchesTriggerButtonStyleClasses,
 	branchesTriggerImageStyleClasses,
+	branchesModalRootStyleClasses,
+	branchesModalContentWrapperStyleClasses,
 	branchesModalCardStyleClasses,
 	branchesModalCardBodyStyleClasses,
 	branchesModalCardContentStyleClasses,
-	branchesModalBgImageStyleClasses,
 	branchesModalImageStyleClasses,
 } = UseHomeComposable();
 </script>
@@ -56,7 +56,11 @@ const {
 		</div>
 	</section>
 
-	<BaseModal v-model:visible="threeBranchesModalOpen">
+	<BaseModal
+		v-model:visible="threeBranchesModalOpen"
+		:root-class="branchesModalRootStyleClasses"
+		:content-class="branchesModalContentWrapperStyleClasses"
+	>
 		<Card
 			unstyled
 			:class="branchesModalCardStyleClasses"
@@ -66,12 +70,6 @@ const {
 			}"
 		>
 			<template #content>
-				<img
-					:src="DominoEffectBGHomePage"
-					alt=""
-					:class="branchesModalBgImageStyleClasses"
-					aria-hidden="true"
-				/>
 				<img
 					:src="ThreeBranchesOfGovernment"
 					alt="Three branches of government"
