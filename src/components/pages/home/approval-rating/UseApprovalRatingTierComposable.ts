@@ -11,6 +11,7 @@ import {
 	UsaApprovalMapTier4,
 	UsaApprovalMapTier5,
 } from '../../../../assets';
+import { UseAnimatedPercentageComposable } from '../../../../lib';
 // ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
 
 type ApprovalRatingTierMap = {
@@ -20,9 +21,52 @@ type ApprovalRatingTierMap = {
 };
 
 export const UseApprovalRatingTierComposable = () => {
-	const TRUMP_APPROVAL_RATING = 36;
+	const APPROVAL_RATING_TIER_STEP_DELAY_MS = 1600;
+	const APPROVAL_RATING_TIER_FINAL_DELAY_MS = 4600;
+	const trumpApprovalRatingPercentage = ref(36);
 	const activeApprovalRatingTierIndex = ref(0);
 	const approvalRatingTierTimeoutIds: number[] = [];
+	
+	const {
+		animatedPercentage: animatedApprovalRatingPercentage,
+		startAnimatedPercentage: startApprovalRatingPercentageAnimation,
+		stopAnimatedPercentage: stopApprovalRatingPercentageAnimation,
+	} = UseAnimatedPercentageComposable({
+		initialPercentage: 100,
+		targetPercentage: trumpApprovalRatingPercentage,
+		getPercentageAnimationSteps: (targetPercentage) => {
+			return [
+				{
+					fromPercentage: 100,
+					toPercentage: 90,
+					delayMs: 300,
+					durationMs: 1900,
+					easing: 'easeInOutSine',
+				},
+				{
+					fromPercentage: 90,
+					toPercentage: 95,
+					delayMs: 1500,
+					durationMs: 1100,
+					easing: 'easeOutCubic',
+				},
+				{
+					fromPercentage: 95,
+					toPercentage: 85,
+					delayMs: 2120,
+					durationMs: 1600,
+					easing: 'easeInOutSine',
+				},
+				{
+					fromPercentage: 85,
+					toPercentage: targetPercentage,
+					delayMs: 3000,
+					durationMs: 2600,
+					easing: 'easeInQuart',
+				},
+			];
+		},
+	});
 
 	const approvalRatingTierMaps: Array<ApprovalRatingTierMap> = [
 		{
@@ -54,7 +98,9 @@ export const UseApprovalRatingTierComposable = () => {
 
 	const targetApprovalRatingTierIndex = computed(() => {
 		const tierIndex = approvalRatingTierMaps.findIndex((tierMap) => {
-			return TRUMP_APPROVAL_RATING >= tierMap.minApprovalRating;
+			return (
+				trumpApprovalRatingPercentage.value >= tierMap.minApprovalRating
+			);
 		});
 
 		return tierIndex === -1 ? approvalRatingTierMaps.length - 1 : tierIndex;
@@ -69,8 +115,9 @@ export const UseApprovalRatingTierComposable = () => {
 	
 	const approvalTierSectionStyleClasses = twMerge(
 		clsx(
-			'relative z-20 mx-auto -mt-44 w-[min(98vw,100rem)] scale-[0.76]',
-			'origin-top overflow-hidden bg-transparent px-4 pb-4 pt-10',
+			'relative z-20 mx-auto -mt-44 w-[min(98vw,100rem)] scale-[0.70]',
+			'origin-top overflow-visible bg-transparent px-4 pb-4 pt-10',
+			'dark:overflow-hidden',
 			'tablet:-mt-52 tablet:px-6 tablet:pb-6 tablet:pt-14 laptop:-mt-60',
 		),
 	);
@@ -78,8 +125,9 @@ export const UseApprovalRatingTierComposable = () => {
 	const approvalTierViewportStyleClasses = twMerge(
 		clsx(
 			'relative aspect-[3/2] w-full overflow-hidden',
-			' backdrop-blur-[2px]',
-			'shadow-[0_0_28px_rgba(14,165,233,0.24),inset_0_0_34px_rgba(2,6,23,0.62)]',
+			'bg-white/[0.03] backdrop-blur-[2px]',
+			'shadow-[0_14px_30px_rgba(15,23,42,0.06),inset_0_14px_24px_rgba(255,255,255,0.34),inset_0_-16px_26px_rgba(15,23,42,0.03)]',
+			'dark:bg-transparent dark:shadow-[0_0_28px_rgba(14,165,233,0.24),inset_0_0_34px_rgba(2,6,23,0.62)]',
 			'[clip-path:polygon(2%_13%,10%_5%,18%_10%,28%_3%,41%_8%,52%_2%,63%_9%,76%_4%,88%_12%,97%_7%,94%_23%,99%_39%,95%_54%,98%_72%,90%_84%,82%_96%,70%_90%,58%_98%,45%_92%,35%_99%,24%_90%,13%_96%,5%_82%,9%_66%,1%_51%,7%_35%)]',
 		),
 	);
@@ -87,7 +135,7 @@ export const UseApprovalRatingTierComposable = () => {
 	const approvalTierImageStyleClasses = twMerge(
 		clsx(
 			'absolute inset-0 w-full h-full object-cover object-center',
-			'transition-[opacity,transform,filter] duration-[1400ms] ease-out',
+			'transition-[opacity,transform,filter] duration-[2600ms] ease-out',
 			'tablet:p-8 laptop:p-10',
 		),
 	);
@@ -96,8 +144,10 @@ export const UseApprovalRatingTierComposable = () => {
 		clsx(
 			'pointer-events-none absolute inset-0 z-20',
 			'[clip-path:polygon(2%_13%,10%_5%,18%_10%,28%_3%,41%_8%,52%_2%,63%_9%,76%_4%,88%_12%,97%_7%,94%_23%,99%_39%,95%_54%,98%_72%,90%_84%,82%_96%,70%_90%,58%_98%,45%_92%,35%_99%,24%_90%,13%_96%,5%_82%,9%_66%,1%_51%,7%_35%)]',
-			'bg-[linear-gradient(135deg,rgba(255,255,255,0.34),transparent_22%,transparent_72%,rgba(15,23,42,0.42))]',
-			'shadow-[inset_0_0_0_2px_rgba(255,255,255,0.22),inset_0_0_42px_rgba(0,0,0,0.58)]',
+			'bg-[linear-gradient(135deg,rgba(255,255,255,0.48),rgba(255,255,255,0.16)_18%,transparent_42%,transparent_70%,rgba(15,23,42,0.045))]',
+			'shadow-[inset_0_0_0_2px_rgba(148,163,184,0.18),inset_12px_16px_28px_rgba(255,255,255,0.30),inset_-12px_-14px_24px_rgba(15,23,42,0.045)]',
+			'dark:bg-[linear-gradient(135deg,rgba(255,255,255,0.34),transparent_22%,transparent_72%,rgba(15,23,42,0.42))]',
+			'dark:shadow-[inset_0_0_0_2px_rgba(255,255,255,0.22),inset_0_0_42px_rgba(0,0,0,0.58)]',
 		),
 	);
 	
@@ -105,7 +155,8 @@ export const UseApprovalRatingTierComposable = () => {
 		clsx(
 			'pointer-events-none absolute inset-0 -z-10',
 			'[clip-path:polygon(2%_13%,10%_5%,18%_10%,28%_3%,41%_8%,52%_2%,63%_9%,76%_4%,88%_12%,97%_7%,94%_23%,99%_39%,95%_54%,98%_72%,90%_84%,82%_96%,70%_90%,58%_98%,45%_92%,35%_99%,24%_90%,13%_96%,5%_82%,9%_66%,1%_51%,7%_35%)]',
-			'bg-slate-300/40 dark:bg-black/35 blur-xl',
+			'translate-y-2 scale-[1.012] bg-slate-400/[0.08] blur-xl',
+			'dark:translate-y-0 dark:scale-100 dark:bg-black/35 dark:blur-xl',
 		),
 	);
 
@@ -158,7 +209,9 @@ export const UseApprovalRatingTierComposable = () => {
 			}
 
 			const delayMs =
-				index === targetApprovalRatingTierIndex.value ? 4600 : index * 1600;
+				index === targetApprovalRatingTierIndex.value
+					? APPROVAL_RATING_TIER_FINAL_DELAY_MS
+					: index * APPROVAL_RATING_TIER_STEP_DELAY_MS;
 			const timeoutId = window.setTimeout(() => {
 				activeApprovalRatingTierIndex.value = index;
 			}, delayMs);
@@ -171,11 +224,23 @@ export const UseApprovalRatingTierComposable = () => {
 		approvalRatingTierTimeoutIds.forEach((timeoutId) => {
 			window.clearTimeout(timeoutId);
 		});
+
+		approvalRatingTierTimeoutIds.length = 0;
+	};
+
+	const startApprovalRatingAnimation = () => {
+		startApprovalRatingTierAnimation();
+		startApprovalRatingPercentageAnimation();
+	};
+
+	const stopApprovalRatingAnimation = () => {
+		stopApprovalRatingTierAnimation();
+		stopApprovalRatingPercentageAnimation();
 	};
 
 	return {
 		approvalRatingTierMaps,
-		TRUMP_APPROVAL_RATING,
+		animatedApprovalRatingPercentage,
 		approvalTierSectionStyleClasses,
 		approvalTierViewportStyleClasses,
 		approvalTierEdgeStyleClasses,
@@ -184,8 +249,8 @@ export const UseApprovalRatingTierComposable = () => {
 		approvalTierBadgeValueStyleClasses,
 		approvalTierBadgeLabelStyleClasses,
 		getApprovalTierImageStyleClasses,
-		startApprovalRatingTierAnimation,
-		stopApprovalRatingTierAnimation,
+		startApprovalRatingAnimation,
+		stopApprovalRatingAnimation,
 	};
 };
 // ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞

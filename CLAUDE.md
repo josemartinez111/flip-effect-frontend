@@ -344,6 +344,8 @@ export const use$STORE_NAME$Store = defineStore('$storeName$', () => {
 
 ### Comment Patterns
 
+**Divider Rule (CRITICAL):** Do not generate or approximate `∞` divider lines from memory. Treat divider lines as fixed code. When adding or editing any comment scaffold in any file type, copy the exact divider line from the same file first. If the file has none, copy from the closest same-kind file. If still unclear, copy the exact scaffold from this `CLAUDE.md`. Before finalizing a diff, scan for shortened or wrapped divider lines and fix them.
+
 ```zsh
 // --- Single line comment ---
 

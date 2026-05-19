@@ -8,7 +8,7 @@ import { twMerge } from 'tailwind-merge';
 export const UseHeroApprovalRatingComposable = () => {
 	const cardContainerStyleClasses = twMerge(
 		clsx(
-			'relative mx-auto h-[28rem] w-[min(98vw,100rem)] scale-[0.76] overflow-hidden',
+			'relative mx-auto mt-20 h-[28rem] w-[min(98vw,100rem)] scale-[0.76] overflow-hidden',
 			'origin-top rounded-[1.6rem] border-none bg-white/20',
 			'backdrop-blur-sm',
 			'tablet:h-[34rem] laptop:h-[40rem]',

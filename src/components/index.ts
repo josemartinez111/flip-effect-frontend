@@ -9,6 +9,7 @@
 // home components
 // ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
 export { default as MidtermsCountdownSection } from './pages/home/MidtermsCountdownSection.vue';
+export { default as CivicRepresentativeSearchSection } from './pages/home/search/CivicRepresentativeSearchSection.vue';
 // ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
 // home components->hero
 // ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
@@ -22,6 +23,7 @@ export { default as HeroApprovalRatingCard } from './pages/home/approval-rating/
 // backgrounds components->shared
 // ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
 export { default as LayoutBackgroundImage } from './shared/backgrounds/LayoutBackgroundImage.vue';
+export { default as CongressionalSeatAvatar } from './shared/CongressionalSeatAvatar.vue';
 // ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
 // navbar components->shared
 // ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
@@ -53,6 +55,8 @@ export { default as Ribbon } from './shared/ribbon/Ribbon.vue';
 // utils components->utils
 // ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
 export { default as FWTTransition } from './utils/FWTTransition.vue';
+export { default as FWTScrollReveal } from './utils/FWTScrollReveal.vue';
+export { default as FWTBackToTopBanner } from './utils/FWTBackToTopBanner.vue';
 export { default as BaseModal } from './utils/BaseModal.vue';
 export { default as Show } from './utils/Show.vue';
 // ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
