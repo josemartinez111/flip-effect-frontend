@@ -1,5 +1,6 @@
 // ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
-//             USE_HERO_APPROVAL_RATING_COMPOSABLE.TS
+// COMPONENTS: PAGES > PAGES_COMPOSABLES
+// > USE_HERO_APPROVAL_RATING_COMPOSABLE.TS
 // ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
 import clsx from 'clsx';
 import { twMerge } from 'tailwind-merge';

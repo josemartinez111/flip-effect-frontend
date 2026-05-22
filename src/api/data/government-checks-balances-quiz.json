@@ -1,0 +1,449 @@
+{
+	"quizId": "government-checks-balances-quiz",
+	"title": "Government Checks & Balances Quiz",
+	"description": "A quick civics quiz covering the branches of government, checks and balances, and why the rules matter.",
+	"questions": [
+		{
+			"id": "government-checks-balances-q1",
+			"category": "legislative-branch",
+			"question": "Which branch of government makes the laws?",
+			"options": [
+				{
+					"id": "a",
+					"label": "Executive"
+				},
+				{
+					"id": "b",
+					"label": "Judicial"
+				},
+				{
+					"id": "c",
+					"label": "Legislative"
+				},
+				{
+					"id": "d",
+					"label": "Military"
+				}
+			],
+			"correctOptionId": "c",
+			"explanation": "Congress is the legislative branch, and its core constitutional job is making federal law.",
+			"incorrectExplanation": "The President enforces laws and the courts interpret them, but Congress writes and passes federal laws."
+		},
+		{
+			"id": "government-checks-balances-q2",
+			"category": "senate",
+			"question": "How many senators does each state have?",
+			"options": [
+				{
+					"id": "a",
+					"label": "1"
+				},
+				{
+					"id": "b",
+					"label": "2"
+				},
+				{
+					"id": "c",
+					"label": "4"
+				},
+				{
+					"id": "d",
+					"label": "Depends on population"
+				}
+			],
+			"correctOptionId": "b",
+			"explanation": "Every state gets two senators, regardless of population.",
+			"incorrectExplanation": "The House changes by population, but the Senate gives every state exactly two seats."
+		},
+		{
+			"id": "government-checks-balances-q3",
+			"category": "judicial-branch",
+			"question": "Which branch can declare a law unconstitutional?",
+			"options": [
+				{
+					"id": "a",
+					"label": "The President"
+				},
+				{
+					"id": "b",
+					"label": "Congress"
+				},
+				{
+					"id": "c",
+					"label": "The Supreme Court"
+				},
+				{
+					"id": "d",
+					"label": "The FBI"
+				}
+			],
+			"correctOptionId": "c",
+			"explanation": "The Supreme Court is part of the judicial branch and can strike down laws that violate the Constitution.",
+			"incorrectExplanation": "Congress passes laws and the President signs or vetoes them, but judicial review belongs to the courts."
+		},
+		{
+			"id": "government-checks-balances-q4",
+			"category": "supreme-court",
+			"question": "How many justices sit on the Supreme Court?",
+			"options": [
+				{
+					"id": "a",
+					"label": "7"
+				},
+				{
+					"id": "b",
+					"label": "8"
+				},
+				{
+					"id": "c",
+					"label": "9"
+				},
+				{
+					"id": "d",
+					"label": "12"
+				}
+			],
+			"correctOptionId": "c",
+			"explanation": "The Supreme Court currently has nine justices.",
+			"incorrectExplanation": "The Constitution does not fix the number, but current federal law sets the Court at nine justices."
+		},
+		{
+			"id": "government-checks-balances-q5",
+			"category": "impeachment",
+			"question": "What does it mean to impeach a president?",
+			"options": [
+				{
+					"id": "a",
+					"label": "Remove them from office immediately"
+				},
+				{
+					"id": "b",
+					"label": "Formally charge them in the House, then try them in the Senate"
+				},
+				{
+					"id": "c",
+					"label": "Vote them out in a special election"
+				},
+				{
+					"id": "d",
+					"label": "Have the Supreme Court remove them"
+				}
+			],
+			"correctOptionId": "b",
+			"explanation": "Impeachment starts with formal charges in the House. Removal only happens if the Senate convicts.",
+			"incorrectExplanation": "Impeachment is not automatic removal. It is the formal charging step before a Senate trial."
+		},
+		{
+			"id": "government-checks-balances-q6",
+			"category": "congressional-power",
+			"question": "Which branch of government controls the federal budget?",
+			"options": [
+				{
+					"id": "a",
+					"label": "The President"
+				},
+				{
+					"id": "b",
+					"label": "The Supreme Court"
+				},
+				{
+					"id": "c",
+					"label": "Congress"
+				},
+				{
+					"id": "d",
+					"label": "The Treasury Department alone"
+				}
+			],
+			"correctOptionId": "c",
+			"explanation": "Congress controls federal spending through appropriations and budget laws.",
+			"incorrectExplanation": "The executive branch administers spending, but Congress controls the power of the purse."
+		},
+		{
+			"id": "government-checks-balances-q7",
+			"category": "impeachment",
+			"question": "How many votes in the Senate are needed to convict a president after impeachment?",
+			"options": [
+				{
+					"id": "a",
+					"label": "Simple majority (51)"
+				},
+				{
+					"id": "b",
+					"label": "60 votes"
+				},
+				{
+					"id": "c",
+					"label": "Two-thirds of senators present"
+				},
+				{
+					"id": "d",
+					"label": "Unanimous vote"
+				}
+			],
+			"correctOptionId": "c",
+			"explanation": "Conviction in an impeachment trial requires a two-thirds vote of senators present.",
+			"incorrectExplanation": "The Senate can acquit by simple majority blocking conviction, but conviction requires two-thirds of senators present."
+		},
+		{
+			"id": "government-checks-balances-q8",
+			"category": "house",
+			"question": "How long is a House Representative's term?",
+			"options": [
+				{
+					"id": "a",
+					"label": "2 years"
+				},
+				{
+					"id": "b",
+					"label": "4 years"
+				},
+				{
+					"id": "c",
+					"label": "6 years"
+				},
+				{
+					"id": "d",
+					"label": "8 years"
+				}
+			],
+			"correctOptionId": "a",
+			"explanation": "Members of the House serve two-year terms, which keeps them close to regular voter accountability.",
+			"incorrectExplanation": "Senators serve six-year terms. House members face voters every two years."
+		},
+		{
+			"id": "government-checks-balances-q9",
+			"category": "executive-branch",
+			"question": "Which of these is a cabinet-level position NOT inside a department?",
+			"options": [
+				{
+					"id": "a",
+					"label": "Secretary of Defense"
+				},
+				{
+					"id": "b",
+					"label": "Attorney General"
+				},
+				{
+					"id": "c",
+					"label": "EPA Administrator"
+				},
+				{
+					"id": "d",
+					"label": "Secretary of State"
+				}
+			],
+			"correctOptionId": "c",
+			"explanation": "The EPA Administrator is cabinet-level, but the EPA is an independent agency rather than an executive department.",
+			"incorrectExplanation": "Defense, State, and Justice are departments. The EPA is cabinet-level but not an executive department."
+		},
+		{
+			"id": "government-checks-balances-q10",
+			"category": "war-powers",
+			"question": "Under the Constitution, who has the sole power to declare war?",
+			"options": [
+				{
+					"id": "a",
+					"label": "The President as Commander in Chief"
+				},
+				{
+					"id": "b",
+					"label": "The Joint Chiefs of Staff"
+				},
+				{
+					"id": "c",
+					"label": "Congress"
+				},
+				{
+					"id": "d",
+					"label": "NATO allies must agree first"
+				}
+			],
+			"correctOptionId": "c",
+			"explanation": "The Constitution gives Congress the power to declare war, even though the President is Commander in Chief.",
+			"incorrectExplanation": "The President commands the military, but the Constitution gives the power to declare war to Congress."
+		},
+		{
+			"id": "government-checks-balances-q11",
+			"category": "checks-and-balances",
+			"question": "If the President vetoes a bill, how can Congress override it?",
+			"options": [
+				{
+					"id": "a",
+					"label": "A simple majority in both chambers"
+				},
+				{
+					"id": "b",
+					"label": "Two-thirds majority in both chambers"
+				},
+				{
+					"id": "c",
+					"label": "The Supreme Court must approve the override"
+				},
+				{
+					"id": "d",
+					"label": "They cannot override a presidential veto"
+				}
+			],
+			"correctOptionId": "b",
+			"explanation": "Congress can override a presidential veto with a two-thirds vote in both the House and the Senate.",
+			"incorrectExplanation": "A veto is not final if Congress has enough votes. Both chambers need a two-thirds majority to override it."
+		},
+		{
+			"id": "government-checks-balances-q12",
+			"category": "judicial-appointments",
+			"question": "Who nominates Supreme Court justices?",
+			"options": [
+				{
+					"id": "a",
+					"label": "Congress votes on candidates"
+				},
+				{
+					"id": "b",
+					"label": "The President nominates, Senate confirms"
+				},
+				{
+					"id": "c",
+					"label": "Current Supreme Court justices vote on replacements"
+				},
+				{
+					"id": "d",
+					"label": "The Attorney General selects candidates"
+				}
+			],
+			"correctOptionId": "b",
+			"explanation": "The President nominates Supreme Court justices, and the Senate confirms or rejects the nominee.",
+			"incorrectExplanation": "The courts do not choose their own replacements. This is a shared executive and Senate power."
+		},
+		{
+			"id": "government-checks-balances-q13",
+			"category": "constitutional-amendments",
+			"question": "How can a constitutional amendment be proposed?",
+			"options": [
+				{
+					"id": "a",
+					"label": "The President signs an executive order"
+				},
+				{
+					"id": "b",
+					"label": "The Supreme Court rules it necessary"
+				},
+				{
+					"id": "c",
+					"label": "Two-thirds majority in both chambers of Congress"
+				},
+				{
+					"id": "d",
+					"label": "A simple majority vote in the Senate"
+				}
+			],
+			"correctOptionId": "c",
+			"explanation": "An amendment can be proposed by a two-thirds vote in both chambers of Congress before going to the states for ratification.",
+			"incorrectExplanation": "Neither executive orders nor court rulings can amend the Constitution. The amendment process is intentionally harder."
+		},
+		{
+			"id": "government-checks-balances-q14",
+			"category": "judicial-review",
+			"question": "What is judicial review?",
+			"options": [
+				{
+					"id": "a",
+					"label": "Congress reviewing a judge's decisions"
+				},
+				{
+					"id": "b",
+					"label": "The President's power to overturn court rulings"
+				},
+				{
+					"id": "c",
+					"label": "The Supreme Court's power to strike down unconstitutional laws"
+				},
+				{
+					"id": "d",
+					"label": "A yearly review of federal court cases"
+				}
+			],
+			"correctOptionId": "c",
+			"explanation": "Judicial review is the power of the courts to decide whether laws or government actions violate the Constitution.",
+			"incorrectExplanation": "Judicial review is not a performance review. It is the courts checking laws and government actions against the Constitution."
+		},
+		{
+			"id": "government-checks-balances-q15",
+			"category": "house",
+			"question": "How many seats are in the House of Representatives?",
+			"options": [
+				{
+					"id": "a",
+					"label": "100"
+				},
+				{
+					"id": "b",
+					"label": "270"
+				},
+				{
+					"id": "c",
+					"label": "435"
+				},
+				{
+					"id": "d",
+					"label": "538"
+				}
+			],
+			"correctOptionId": "c",
+			"explanation": "The House has 435 voting seats, divided among states by population.",
+			"incorrectExplanation": "The Senate has 100 seats. The House has 435 voting seats."
+		},
+		{
+			"id": "government-checks-balances-q16",
+			"category": "congressional-power",
+			"question": "What is the Impoundment Control Act?",
+			"options": [
+				{
+					"id": "a",
+					"label": "A law preventing presidents from pardoning criminals"
+				},
+				{
+					"id": "b",
+					"label": "A law requiring the President to spend funds Congress has appropriated"
+				},
+				{
+					"id": "c",
+					"label": "A law limiting how many executive orders a president can sign"
+				},
+				{
+					"id": "d",
+					"label": "A law preventing Congress from freezing foreign aid"
+				}
+			],
+			"correctOptionId": "b",
+			"explanation": "The Impoundment Control Act limits a president's ability to withhold or delay spending that Congress has already approved.",
+			"incorrectExplanation": "This is about Congress's power of the purse. Presidents generally cannot ignore appropriated spending because they dislike it."
+		},
+		{
+			"id": "government-checks-balances-q17",
+			"category": "executive-branch",
+			"question": "Which Article of the Constitution establishes the Executive Branch?",
+			"options": [
+				{
+					"id": "a",
+					"label": "Article I"
+				},
+				{
+					"id": "b",
+					"label": "Article II"
+				},
+				{
+					"id": "c",
+					"label": "Article III"
+				},
+				{
+					"id": "d",
+					"label": "Article IV"
+				}
+			],
+			"correctOptionId": "b",
+			"explanation": "Article II establishes the executive branch and the presidency.",
+			"incorrectExplanation": "Article I creates Congress, Article II creates the executive branch, and Article III creates the judiciary."
+		}
+	]
+}

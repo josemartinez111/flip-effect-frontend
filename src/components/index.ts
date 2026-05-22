@@ -19,11 +19,12 @@ export { default as HomeHeroSection } from './pages/home/hero/HomeHeroSection.vu
 // ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
 export { default as ApprovalRatingTierSection } from './pages/home/approval-rating/ApprovalRatingTierSection.vue';
 export { default as HeroApprovalRatingCard } from './pages/home/approval-rating/HeroApprovalRatingCard.vue';
+export { default as CongressionalControlSection } from './pages/home/congressional/CongressionalControlSection.vue';
 // ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
 // backgrounds components->shared
 // ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
 export { default as LayoutBackgroundImage } from './shared/backgrounds/LayoutBackgroundImage.vue';
-export { default as CongressionalSeatAvatar } from './shared/CongressionalSeatAvatar.vue';
+export { default as FWTSeatAvatar } from './shared/FWTSeatAvatar.vue';
 // ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
 // navbar components->shared
 // ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
@@ -55,8 +56,9 @@ export { default as Ribbon } from './shared/ribbon/Ribbon.vue';
 // utils components->utils
 // ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
 export { default as FWTTransition } from './utils/FWTTransition.vue';
-export { default as FWTScrollReveal } from './utils/FWTScrollReveal.vue';
+export { default as FWTScrollAnimation } from './utils/FWTScrollAnimation.vue';
 export { default as FWTBackToTopBanner } from './utils/FWTBackToTopBanner.vue';
+export { default as FWTSupportButton } from './utils/FWTSupportButton.vue';
 export { default as BaseModal } from './utils/BaseModal.vue';
 export { default as Show } from './utils/Show.vue';
 // ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞

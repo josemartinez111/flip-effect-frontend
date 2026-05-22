@@ -7,7 +7,7 @@
 import Checkbox from 'primevue/checkbox';
 import InputText from 'primevue/inputtext';
 import { ref } from 'vue';
-import { UseHomeComposable } from '../../../../pages/home/UseHomeComposable.ts';
+import { UseCivicRepresentativeSearchComposable } from '../../pages-composables/UseCivicRepresentativeSearchComposable.ts';
 // -- ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞ --
 
 type CivicSearchFilterOption = {
@@ -43,7 +43,7 @@ const {
 	civicSearchFiltersStyleClasses,
 	civicSearchFilterItemStyleClasses,
 	civicSearchFilterLabelStyleClasses,
-} = UseHomeComposable();
+} = UseCivicRepresentativeSearchComposable();
 // -- ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞ --
 </script>
 <!-- ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞

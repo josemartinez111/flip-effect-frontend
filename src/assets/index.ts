@@ -3,11 +3,14 @@
 // ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
 
 /* ∞∞∞∞∞∞∞∞∞∞∞∞∞ General ∞∞∞∞∞∞∞∞∞∞∞∞∞  */
-export {default as KnowYourBranches} from './general/KnowYourBranches.png?format=webp';
-export {default as ThreeBranchesOfGovernment} from './general/ThreeBranchesOfGovernment.png?format=webp';
+export { default as KnowYourBranches } from './general/KnowYourBranches.png?format=webp';
+export { default as ThreeBranchesOfGovernmentClick } from './general/ThreeBranchesOfGovernmentClick.png?format=webp';
+export { default as TrumpAdminTimelineModalClick } from './general/TrumpAdminTimelineModalClick.png?format=webp';
+export { default as GovernmentChecksBalancesClick } from './general/GovernmentChecksBalancesClick.png?format=webp';
 /* ∞∞∞∞∞∞∞∞∞∞∞∞∞ App Reusable Backgrounds ∞∞∞∞∞∞∞∞∞∞∞∞∞  */
 export { default as DominoEffectBGHomePage } from './app-reusable-bg/DominoEffectBGHomePage.png?format=webp';
 export { default as ApprovalRatingCardBG } from './app-reusable-bg/ApprovalRatingCardBG.png?format=webp';
+export { default as DominosFallingBG } from './app-reusable-bg/DominosFallingBG.png?format=webp';
 /* ∞∞∞∞∞∞∞∞∞∞∞∞∞ Approval Rating ∞∞∞∞∞∞∞∞∞∞∞∞∞  */
 export { default as UsaApprovalMapTier1 } from './approval-rating/usaApprovalMapTier1.png?format=webp';
 export { default as UsaApprovalMapTier2 } from './approval-rating/usaApprovalMapTier2.png?format=webp';
@@ -15,9 +18,9 @@ export { default as UsaApprovalMapTier3 } from './approval-rating/usaApprovalMap
 export { default as UsaApprovalMapTier4 } from './approval-rating/usaApprovalMapTier4.png?format=webp';
 export { default as UsaApprovalMapTier5 } from './approval-rating/usaApprovalMapTier5.png?format=webp';
 /* ∞∞∞∞∞∞∞∞∞∞∞∞∞ Brand ∞∞∞∞∞∞∞∞∞∞∞∞∞  */
-export {default as TrumpAvatar } from './avatars/TrumpAvatar.png?format=webp';
-export {default as TrumanAvatar } from './avatars/TrumanAvatar.png?format=webp';
+export { default as TrumpAvatar } from './avatars/TrumpAvatar.png?format=webp';
+export { default as TrumanAvatar } from './avatars/TrumanAvatar.png?format=webp';
 /* ∞∞∞∞∞∞∞∞∞∞∞∞∞ Brand ∞∞∞∞∞∞∞∞∞∞∞∞∞  */
-export { default as FantumWaveLogo } from './brand/fantum-wave-circuit-logo.png?format=webp';
+// export { default as FantumWaveLogo } from './brand/fantum-wave-circuit-logo.png?format=webp';
 export { default as FlipEffectLogo } from './brand/flipEffectLogo.png?format=webp';
 // ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞

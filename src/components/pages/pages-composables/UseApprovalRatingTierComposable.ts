@@ -1,5 +1,6 @@
 // ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
-//             USE_APPROVAL_RATING_TIER_COMPOSABLE.TS
+// COMPONENTS: PAGES > PAGES_COMPOSABLES
+// > USE_APPROVAL_RATING_TIER_COMPOSABLE.TS
 // ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
 import clsx from 'clsx';
 import { twMerge } from 'tailwind-merge';
@@ -10,9 +11,9 @@ import {
 	UsaApprovalMapTier3,
 	UsaApprovalMapTier4,
 	UsaApprovalMapTier5,
-} from '../../../../assets';
-import { UseAnimatedPercentageComposable } from '../../../../lib';
-// ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
+} from '../../../assets';
+import { UseAnimatedPercentageComposable } from '../../../lib';
+// ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
 
 type ApprovalRatingTierMap = {
 	minApprovalRating: number;
@@ -21,9 +22,12 @@ type ApprovalRatingTierMap = {
 };
 
 export const UseApprovalRatingTierComposable = () => {
-	const APPROVAL_RATING_TIER_STEP_DELAY_MS = 1600;
-	const APPROVAL_RATING_TIER_FINAL_DELAY_MS = 4600;
-	const trumpApprovalRatingPercentage = ref(36);
+	const APPROVAL_RATING_TIER_STEP_DELAY_MS = 2400;
+	const APPROVAL_RATING_TIER_FINAL_SETTLE_DELAY_MS = 200;
+
+	// TODO: Replace with the approval API call later. Keep this sourced from
+	// the same value as the Trump avatar percentage so the tier maps stay in sync.
+	const trumpApprovalRatingPercentage = ref(31);
 	const activeApprovalRatingTierIndex = ref(0);
 	const approvalRatingTierTimeoutIds: number[] = [];
 	
@@ -60,8 +64,8 @@ export const UseApprovalRatingTierComposable = () => {
 				{
 					fromPercentage: 85,
 					toPercentage: targetPercentage,
-					delayMs: 3000,
-					durationMs: 2600,
+					delayMs: 3600,
+					durationMs: 3800,
 					easing: 'easeInQuart',
 				},
 			];
@@ -112,13 +116,19 @@ export const UseApprovalRatingTierComposable = () => {
 			targetApprovalRatingTierIndex.value + 1,
 		);
 	});
-	
+
+	const approvalTierCompositionStyleClasses = twMerge(
+		clsx(
+			'relative z-20 mx-auto -mt-44 w-[min(98vw,100rem)]',
+			'overflow-visible bg-transparent px-4 pb-4 pt-10',
+			'tablet:-mt-52 tablet:px-6 tablet:pb-6 tablet:pt-14 laptop:-mt-60',
+		),
+	);
+
 	const approvalTierSectionStyleClasses = twMerge(
 		clsx(
-			'relative z-20 mx-auto -mt-44 w-[min(98vw,100rem)] scale-[0.70]',
-			'origin-top overflow-visible bg-transparent px-4 pb-4 pt-10',
+			'relative scale-[0.70] origin-top overflow-visible',
 			'dark:overflow-hidden',
-			'tablet:-mt-52 tablet:px-6 tablet:pb-6 tablet:pt-14 laptop:-mt-60',
 		),
 	);
 
@@ -135,7 +145,7 @@ export const UseApprovalRatingTierComposable = () => {
 	const approvalTierImageStyleClasses = twMerge(
 		clsx(
 			'absolute inset-0 w-full h-full object-cover object-center',
-			'transition-[opacity,transform,filter] duration-[2600ms] ease-out',
+			'transition-[opacity,transform,filter] duration-[3200ms] ease-out',
 			'tablet:p-8 laptop:p-10',
 		),
 	);
@@ -183,6 +193,102 @@ export const UseApprovalRatingTierComposable = () => {
 		),
 	);
 
+	const approvalTimelineTriggerButtonStyleClasses = twMerge(
+		clsx(
+			'absolute right-4 top-4 z-40 flex h-40 w-28 cursor-pointer overflow-hidden',
+			'origin-top-right items-center justify-center rounded-xl bg-transparent p-0',
+			'transition duration-300 hover:z-50 hover:scale-[1.55] hover:opacity-100',
+			'active:scale-95 active:opacity-75',
+			'tablet:right-8 tablet:h-56 tablet:w-38 laptop:h-72 laptop:w-48',
+		),
+	);
+
+	const approvalTimelineTriggerImageStyleClasses = twMerge(
+		clsx(
+			'h-full w-full object-contain',
+			'drop-shadow-[0_12px_24px_rgba(15,23,42,0.35)]',
+			'dark:drop-shadow-[0_12px_24px_rgba(0,0,0,0.55)]',
+		),
+	);
+
+	const approvalQuizTriggerButtonStyleClasses = twMerge(
+		clsx(
+			'absolute left-4 top-4 z-40 flex h-40 w-[6rem] cursor-pointer overflow-hidden',
+			'origin-top-left items-center justify-center rounded-xl bg-transparent p-0',
+			'transition duration-300 hover:z-50 hover:scale-[1.55] hover:opacity-100',
+			'active:scale-95 active:opacity-75',
+			'tablet:left-8 tablet:h-56 tablet:w-[8rem] laptop:h-72 laptop:w-[10.5rem]',
+		),
+	);
+
+	const approvalQuizTriggerImageStyleClasses = twMerge(
+		clsx(
+			'h-full w-full object-contain object-center',
+			'drop-shadow-[0_12px_24px_rgba(15,23,42,0.35)]',
+			'dark:drop-shadow-[0_12px_24px_rgba(0,0,0,0.55)]',
+		),
+	);
+
+	const approvalTimelineModalRootStyleClasses = twMerge(
+		clsx(
+			'w-auto overflow-hidden border-none! bg-transparent! shadow-none!',
+			'dark:border-none! dark:bg-transparent! dark:shadow-none!',
+		),
+	);
+
+	const approvalTimelineModalContentWrapperStyleClasses = twMerge(
+		clsx('max-h-[90vh] bg-transparent! p-0!'),
+	);
+
+	const approvalTimelineModalHeaderStyleClasses = twMerge(
+		clsx(
+			'absolute right-2 top-2 z-20 border-none! bg-transparent! p-0!',
+			'dark:border-none!',
+		),
+	);
+
+	const approvalTimelineModalCloseButtonStyleClasses = twMerge(
+		clsx(
+			'cursor-pointer border! border-white/35! bg-slate-950/72! text-white!',
+			'shadow-lg shadow-black/35 backdrop-blur-md',
+			'hover:border-flipeffect-rose-bright/80! hover:bg-slate-950/90!',
+			'hover:text-flipeffect-rose-bright!',
+			'[&_.p-button-icon]:text-white! hover:[&_.p-button-icon]:text-flipeffect-rose-bright!',
+			'dark:border-white/25! dark:bg-black/62! dark:text-white!',
+			'dark:hover:bg-black/82! dark:hover:text-flipeffect-rose-bright!',
+		),
+	);
+
+	const approvalTimelineModalCloseIconStyleClasses = twMerge(
+		clsx('text-white! dark:text-white!'),
+	);
+
+	const approvalTimelineModalCardStyleClasses = twMerge(
+		clsx('relative overflow-hidden bg-transparent! shadow-none!'),
+	);
+
+	const approvalTimelineModalCardBodyStyleClasses = twMerge(clsx('p-0!'));
+
+	const approvalTimelineModalCardContentStyleClasses = twMerge(
+		clsx('relative p-0!'),
+	);
+
+	const approvalTimelineModalImageStyleClasses = twMerge(
+		clsx(
+			'relative z-10 max-h-[86vh] w-[min(92vw,62rem)] object-contain',
+			'drop-shadow-[0_24px_48px_rgba(15,23,42,0.25)]',
+			'dark:drop-shadow-[0_24px_48px_rgba(0,0,0,0.45)]',
+		),
+	);
+
+	const approvalQuizModalRootStyleClasses = twMerge(
+		clsx(
+			'w-auto overflow-hidden border-none! bg-slate-950! shadow-2xl',
+			'shadow-flipeffect-cyan/20',
+			'dark:border-none! dark:bg-black! dark:shadow-black/45',
+		),
+	);
+
 	const approvalTierActiveImageStyleClasses = twMerge(
 		clsx('opacity-100 scale-100 blur-0 saturate-100'),
 	);
@@ -209,9 +315,10 @@ export const UseApprovalRatingTierComposable = () => {
 			}
 
 			const delayMs =
-				index === targetApprovalRatingTierIndex.value
-					? APPROVAL_RATING_TIER_FINAL_DELAY_MS
-					: index * APPROVAL_RATING_TIER_STEP_DELAY_MS;
+				index * APPROVAL_RATING_TIER_STEP_DELAY_MS +
+				(index === targetApprovalRatingTierIndex.value
+					? APPROVAL_RATING_TIER_FINAL_SETTLE_DELAY_MS
+					: 0);
 			const timeoutId = window.setTimeout(() => {
 				activeApprovalRatingTierIndex.value = index;
 			}, delayMs);
@@ -241,6 +348,7 @@ export const UseApprovalRatingTierComposable = () => {
 	return {
 		approvalRatingTierMaps,
 		animatedApprovalRatingPercentage,
+		approvalTierCompositionStyleClasses,
 		approvalTierSectionStyleClasses,
 		approvalTierViewportStyleClasses,
 		approvalTierEdgeStyleClasses,
@@ -248,9 +356,23 @@ export const UseApprovalRatingTierComposable = () => {
 		approvalTierBadgeStyleClasses,
 		approvalTierBadgeValueStyleClasses,
 		approvalTierBadgeLabelStyleClasses,
+		approvalTimelineTriggerButtonStyleClasses,
+		approvalTimelineTriggerImageStyleClasses,
+		approvalQuizTriggerButtonStyleClasses,
+		approvalQuizTriggerImageStyleClasses,
+		approvalTimelineModalRootStyleClasses,
+		approvalTimelineModalContentWrapperStyleClasses,
+		approvalTimelineModalHeaderStyleClasses,
+		approvalTimelineModalCloseButtonStyleClasses,
+		approvalTimelineModalCloseIconStyleClasses,
+		approvalTimelineModalCardStyleClasses,
+		approvalTimelineModalCardBodyStyleClasses,
+		approvalTimelineModalCardContentStyleClasses,
+		approvalTimelineModalImageStyleClasses,
+		approvalQuizModalRootStyleClasses,
 		getApprovalTierImageStyleClasses,
 		startApprovalRatingAnimation,
 		stopApprovalRatingAnimation,
 	};
 };
-// ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
+// ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
