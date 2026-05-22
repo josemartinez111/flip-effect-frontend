@@ -275,9 +275,11 @@ The reusable Tailwind v4 variant for that behavior lives in `src/app.css`:
 
 ### Barrel Export Style
 
-Use barrel exports throughout frontend apps. Directory-level `index.ts` files collect and re-export assets, components, pages, stores, utilities, and types so consuming files import from stable module boundaries instead of deep nested paths.
+Use barrel exports only at intentional app boundaries. Root-level barrels collect and re-export assets, components, stores, utilities, and types so consuming files import from stable module boundaries instead of deep nested paths.
 
 For `src/components/`, keep one root component barrel at `src/components/index.ts`. Do not add nested `index.ts` files inside component subdirectories; that creates too many barrels to maintain. New reusable components should be exported from the root component barrel with a clear section comment.
+
+Do not add local barrel files inside `src/pages/`, page-specific directories, or `src/components/pages/pages-composables/`. Page files and page composables should import the exact file they need. The reason is navigation clarity: extra nested barrels create mod-file-style indirection, hide the real source file, and make a Vue app feel heavier than it needs to be.
 
 **Examples:**
 
@@ -441,6 +443,24 @@ const { isDark } = storeToRefs(useDarkModeStore());
 
 **Strict Mode:** `strict: true`, `noImplicitAny: true`, `strictNullChecks: true`
 
+### Array Types
+
+**Prefer `Array<T>` over `T[]` in new TypeScript code.** This keeps collection types visually explicit and easier to scan in complex object shapes.
+
+```zsh
+// ✅ CORRECT
+type UserListProps = {
+  users: Array<User>;
+  selectedIds: Array<string>;
+};
+
+// ❌ WRONG
+type UserListProps = {
+  users: User[];
+  selectedIds: string[];
+};
+```
+
 ### Props Pattern (CRITICAL)
 
 **Always destructure directly from `defineProps`. Never use `withDefaults` or `const props =`.**
@@ -475,7 +495,7 @@ const props = defineProps<CardProps>();
 ```zsh
 // ✅ CORRECT
 const handleClick = (): void => { router.push(path); };
-const getTotal = (items: CartItem[]): number => items.reduce((sum, i) => sum + i.price, 0);
+const getTotal = (items: Array<CartItem>): number => items.reduce((sum, i) => sum + i.price, 0);
 
 // ❌ WRONG
 function handleClick(): void { router.push(path); }

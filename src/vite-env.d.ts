@@ -2,6 +2,14 @@
 /// <reference types="vite-imagetools" />
 // noinspection JSUnusedGlobalSymbols
 
+interface ImportMetaEnv {
+  readonly VITE_STRIPE_DONATION_URL?: string;
+}
+
+interface ImportMeta {
+  readonly env: ImportMetaEnv;
+}
+
 // --- Image format query transform declarations ---
 declare module '*.png?format=webp' {
   const src: string;

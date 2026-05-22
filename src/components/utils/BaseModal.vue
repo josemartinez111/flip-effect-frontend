@@ -41,7 +41,10 @@ type ModalProps = {
 	draggable?: boolean;
 	appendTo?: 'body' | 'self' | string;
 	rootClass?: string;
+	headerClass?: string;
 	contentClass?: string;
+	closeButtonClass?: string;
+	closeButtonIconClass?: string;
 };
 
 const {
@@ -54,7 +57,10 @@ const {
 	draggable = false,
 	appendTo = 'body',
 	rootClass,
+	headerClass,
 	contentClass,
+	closeButtonClass,
+	closeButtonIconClass,
 } = defineProps<ModalProps>();
 
 const emit = defineEmits<{
@@ -80,15 +86,19 @@ const slots = defineSlots<{
 //  v-model:visible="approvalDetailsModalOpen"
 //  header="Approval Rating Details"
 //  :root-class="customModalRootStyleClasses"
+//  :header-class="customModalHeaderStyleClasses"
 //  :content-class="customModalContentStyleClasses"
+//  :close-button-class="customModalCloseButtonStyleClasses"
+//  :close-button-icon-class="customModalCloseIconStyleClasses"
 // >
 //  <ApprovalRatingDetails />
 // </BaseModal>
 //
 // Use the default slot for the child component. Add #footer only when the
 // modal wrapper should own actions such as Save, Cancel, Delete, or Confirm.
-// Use rootClass and contentClass only when a caller needs to override the
-// modal shell or content padding, such as a transparent image-only modal.
+// Use rootClass, headerClass, contentClass, closeButtonClass, and
+// closeButtonIconClass only when a caller needs to override the modal shell,
+// close affordance, or content padding, such as a transparent image-only modal.
 // ---
 // ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
 
@@ -111,7 +121,11 @@ const modalMaskStyleClasses = twMerge(
 );
 
 const modalHeaderStyleClasses = twMerge(
-	clsx('border-b border-surface-200/70 px-5 py-4', 'dark:border-white/10'),
+	clsx(
+		'border-b border-surface-200/70 px-5 py-4',
+		'dark:border-white/10',
+		headerClass,
+	),
 );
 
 const modalTitleStyleClasses = twMerge(
@@ -126,6 +140,14 @@ const modalContentStyleClasses = twMerge(
 
 const modalFooterStyleClasses = twMerge(
 	clsx('border-t border-surface-200/70 px-5 py-4', 'dark:border-white/10'),
+);
+
+const modalCloseButtonStyleClasses = twMerge(
+	clsx(closeButtonClass),
+);
+
+const modalCloseButtonIconStyleClasses = twMerge(
+	clsx(closeButtonIconClass),
 );
 // ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
 </script>
@@ -149,6 +171,10 @@ const modalFooterStyleClasses = twMerge(
 			mask: { class: modalMaskStyleClasses },
 			header: { class: modalHeaderStyleClasses },
 			title: { class: modalTitleStyleClasses },
+			pcCloseButton: {
+				root: { class: modalCloseButtonStyleClasses },
+				icon: { class: modalCloseButtonIconStyleClasses },
+			},
 			content: { class: modalContentStyleClasses },
 			footer: { class: modalFooterStyleClasses },
 		}"

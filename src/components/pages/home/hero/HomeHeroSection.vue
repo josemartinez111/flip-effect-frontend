@@ -8,9 +8,9 @@ import Card from 'primevue/card';
 import { ref } from 'vue';
 import {
 	KnowYourBranches,
-	ThreeBranchesOfGovernment,
+	ThreeBranchesOfGovernmentClick,
 } from '../../../../assets';
-import { UseHomeComposable } from '../../../../pages/home/UseHomeComposable.ts';
+import { UseHomeHeroComposable } from '../../pages-composables/UseHomeHeroComposable.ts';
 import BaseModal from '../../../utils/BaseModal.vue';
 import HeroApprovalRatingCard from '../approval-rating/HeroApprovalRatingCard.vue';
 // ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
@@ -25,11 +25,14 @@ const {
 	branchesTriggerImageStyleClasses,
 	branchesModalRootStyleClasses,
 	branchesModalContentWrapperStyleClasses,
+	branchesModalHeaderStyleClasses,
+	branchesModalCloseButtonStyleClasses,
+	branchesModalCloseIconStyleClasses,
 	branchesModalCardStyleClasses,
 	branchesModalCardBodyStyleClasses,
 	branchesModalCardContentStyleClasses,
 	branchesModalImageStyleClasses,
-} = UseHomeComposable();
+} = UseHomeHeroComposable();
 </script>
 <!-- ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
                         </>MARKUP</>
@@ -59,7 +62,10 @@ const {
 	<BaseModal
 		v-model:visible="threeBranchesModalOpen"
 		:root-class="branchesModalRootStyleClasses"
+		:header-class="branchesModalHeaderStyleClasses"
 		:content-class="branchesModalContentWrapperStyleClasses"
+		:close-button-class="branchesModalCloseButtonStyleClasses"
+		:close-button-icon-class="branchesModalCloseIconStyleClasses"
 	>
 		<Card
 			unstyled
@@ -71,7 +77,7 @@ const {
 		>
 			<template #content>
 				<img
-					:src="ThreeBranchesOfGovernment"
+					:src="ThreeBranchesOfGovernmentClick"
 					alt="Three branches of government"
 					:class="branchesModalImageStyleClasses"
 				/>

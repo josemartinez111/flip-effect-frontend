@@ -1,5 +1,5 @@
 <!-- ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
-    COMPONENTS: UTILS > FWT_SCROLL_REVEAL.VUE
+    COMPONENTS: UTILS > FWT_SCROLL_ANIMATION.VUE
 ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞ -->
 <script setup lang="ts">
 // ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
@@ -14,7 +14,7 @@ import {
 } from 'vue';
 // ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
 
-type FWTScrollRevealDirection =
+type FWTScrollAnimationDirection =
 	| 'up'
 	| 'down'
 	| 'left'
@@ -22,8 +22,8 @@ type FWTScrollRevealDirection =
 	| 'scale'
 	| 'none';
 
-type FWTScrollRevealProps = {
-	direction?: FWTScrollRevealDirection;
+type FWTScrollAnimationProps = {
+	direction?: FWTScrollAnimationDirection;
 	distance?: number;
 	durationMs?: number;
 	delayMs?: number;
@@ -35,6 +35,14 @@ type FWTScrollRevealProps = {
 	blur?: boolean;
 	wrapperClass?: string;
 };
+// -- ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞ Usage ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞ --
+// <FWTScrollAnimation direction="left" :distance="64" :duration-ms="980">
+// 	<section>...</section>
+// </FWTScrollAnimation>
+//
+// Use `once` when an element should animate only the first time it enters view.
+// Use `disabled` for static rendering or when a parent controls visibility.
+// -- ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞ Usage ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞ --
 
 const {
 	direction = 'up',
@@ -48,7 +56,7 @@ const {
 	initialScale = 1,
 	blur = false,
 	wrapperClass,
-} = defineProps<FWTScrollRevealProps>();
+} = defineProps<FWTScrollAnimationProps>();
 
 defineSlots<{
 	default(): unknown;
@@ -85,22 +93,27 @@ const getHiddenTransform = () => {
 const revealRootStyleClasses = computed(() => {
 	return twMerge(
 		clsx(
-			'transform-gpu backface-hidden will-change-[opacity,transform]',
-			blur && 'will-change-[opacity,transform,filter]',
-			revealVisible.value && 'will-change-auto',
+			direction !== 'none' && 'transform-gpu',
+			direction !== 'none' && 'backface-hidden will-change-[opacity,transform]',
+			direction !== 'none' && blur && 'will-change-[opacity,transform,filter]',
+			(direction === 'none' || revealVisible.value) && 'will-change-auto',
 			wrapperClass,
 		),
 	);
 });
 
 const revealRootStyle = computed<CSSProperties>(() => {
-	const visible = disabled || revealVisible.value;
+	const visible = disabled || direction === 'none' || revealVisible.value;
+	const transform =
+		direction === 'none'
+			? undefined
+			: visible
+				? 'translate3d(0, 0, 0) scale(1)'
+				: getHiddenTransform();
 
 	return {
 		opacity: visible ? '1' : '0',
-		transform: visible
-			? 'translate3d(0, 0, 0) scale(1)'
-			: getHiddenTransform(),
+		transform,
 		filter: blur ? (!visible ? 'blur(2px)' : 'blur(0)') : undefined,
 		transitionProperty: blur
 			? 'opacity, transform, filter'
@@ -112,6 +125,11 @@ const revealRootStyle = computed<CSSProperties>(() => {
 });
 
 onMounted(() => {
+	if (direction === 'none') {
+		revealVisible.value = true;
+		return;
+	}
+
 	const reducedMotion = window.matchMedia(
 		'(prefers-reduced-motion: reduce)',
 	).matches;

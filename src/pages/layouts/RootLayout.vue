@@ -11,6 +11,7 @@ import { useRoute } from 'vue-router';
 import {
   Footer,
   FWTBackToTopBanner,
+  FWTSupportButton,
   LayoutBackgroundImage,
   NavBar,
   Show,
@@ -55,6 +56,7 @@ const layoutBackgroundImage = computed((): string | null => {
       <RouterView />
     </main>
 	  <!-- ∞∞∞∞∞∞∞∞ FOOTER-COMPONENT ∞∞∞∞∞∞∞∞ -->
+    <FWTSupportButton />
     <FWTBackToTopBanner />
     <Footer />
   </div>

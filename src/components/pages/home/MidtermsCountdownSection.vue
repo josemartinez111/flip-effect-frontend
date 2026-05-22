@@ -1,12 +1,12 @@
 <!-- ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
-         COMPONENTS: PAGES > HOME > MIDTERMS_COUNTDOWN_SECTION.VUE
+   COMPONENTS: PAGES > HOME > MIDTERMS_COUNTDOWN_SECTION.VUE
 ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞ -->
 <script setup lang="ts">
-// ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
+// ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
 import { type CountdownTimeLeft, formatCountdownUnit } from '../../../lib';
-import { UseHomeComposable } from '../../../pages/home/UseHomeComposable.ts';
+import { UseMidtermsCountdownComposable } from '../pages-composables/UseMidtermsCountdownComposable.ts';
 import Card from 'primevue/card';
-// ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
+// ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
 
 type MidtermsCountdownSectionProps = {
 	midtermsCountdown: CountdownTimeLeft;
@@ -26,7 +26,7 @@ const {
 	countdownTimeValueStyleClasses,
 	countdownTimeLabelStyleClasses,
 	countdownDateLabelStyleClasses,
-} = UseHomeComposable();
+} = UseMidtermsCountdownComposable();
 </script>
 <!-- ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
                         </>MARKUP</>
