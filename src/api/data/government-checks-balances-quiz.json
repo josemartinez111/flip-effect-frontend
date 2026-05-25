@@ -444,6 +444,456 @@
 			"correctOptionId": "b",
 			"explanation": "Article II establishes the executive branch and the presidency.",
 			"incorrectExplanation": "Article I creates Congress, Article II creates the executive branch, and Article III creates the judiciary."
+		},
+		{
+			"id": "government-checks-balances-q18",
+			"category": "executive-power",
+			"difficulty": "easy",
+			"question": "Can an executive order override the Constitution?",
+			"options": [
+				{ "id": "a", "label": "Yes, if the President says it is an emergency" },
+				{ "id": "b", "label": "Yes, if Congress is moving too slowly" },
+				{ "id": "c", "label": "No, the Constitution remains supreme" },
+				{ "id": "d", "label": "Only during an election year" }
+			],
+			"correctOptionId": "c",
+			"explanation": "Executive orders must comply with the Constitution and federal law.",
+			"incorrectExplanation": "A president cannot use an executive order to erase constitutional limits. Courts can block unlawful orders."
+		},
+		{
+			"id": "government-checks-balances-q19",
+			"category": "due-process",
+			"difficulty": "medium",
+			"question": "Who gets due process protections under the Fifth Amendment?",
+			"options": [
+				{ "id": "a", "label": "Only U.S. citizens" },
+				{ "id": "b", "label": "Only people born in the United States" },
+				{ "id": "c", "label": "Persons, not just citizens" },
+				{ "id": "d", "label": "Only people accused of violent crimes" }
+			],
+			"correctOptionId": "c",
+			"explanation": "The Fifth Amendment protects persons from being deprived of life, liberty, or property without due process of law.",
+			"incorrectExplanation": "Due process is not limited to citizens. The constitutional text protects persons."
+		},
+		{
+			"id": "government-checks-balances-q20",
+			"category": "fourteenth-amendment",
+			"difficulty": "medium",
+			"question": "Which amendment is the source of birthright citizenship?",
+			"options": [
+				{ "id": "a", "label": "First Amendment" },
+				{ "id": "b", "label": "Fourteenth Amendment" },
+				{ "id": "c", "label": "Second Amendment" },
+				{ "id": "d", "label": "Twenty-Second Amendment" }
+			],
+			"correctOptionId": "b",
+			"explanation": "The Fourteenth Amendment says people born or naturalized in the United States and subject to its jurisdiction are citizens.",
+			"incorrectExplanation": "Birthright citizenship is not created by a modern policy memo. It comes from the Fourteenth Amendment."
+		},
+		{
+			"id": "government-checks-balances-q21",
+			"category": "first-amendment",
+			"difficulty": "easy",
+			"question": "What does the First Amendment primarily restrict?",
+			"options": [
+				{ "id": "a", "label": "Government punishment of protected speech" },
+				{ "id": "b", "label": "Private criticism from other citizens" },
+				{ "id": "c", "label": "Fact-checking by newspapers" },
+				{ "id": "d", "label": "People disagreeing online" }
+			],
+			"correctOptionId": "a",
+			"explanation": "The First Amendment limits government action against protected speech, religion, press, assembly, and petition.",
+			"incorrectExplanation": "Being criticized, fact-checked, or disagreed with is not the same thing as government censorship."
+		},
+		{
+			"id": "government-checks-balances-q22",
+			"category": "elections",
+			"difficulty": "medium",
+			"question": "Can the Vice President unilaterally reject certified electoral votes?",
+			"options": [
+				{ "id": "a", "label": "Yes, the Vice President can choose the winner" },
+				{ "id": "b", "label": "Yes, if their party objects" },
+				{ "id": "c", "label": "No, the Vice President's role is ministerial" },
+				{ "id": "d", "label": "Only when the popular vote is close" }
+			],
+			"correctOptionId": "c",
+			"explanation": "The Vice President presides over the electoral count but does not have unilateral power to reject certified votes.",
+			"incorrectExplanation": "The Vice President is not a one-person election override. The role in counting electoral votes is limited."
+		},
+		{
+			"id": "government-checks-balances-q23",
+			"category": "presidential-accountability",
+			"difficulty": "medium",
+			"question": "What does a presidential pardon do?",
+			"options": [
+				{ "id": "a", "label": "Declares the person factually innocent" },
+				{ "id": "b", "label": "Forgives or removes federal criminal punishment" },
+				{ "id": "c", "label": "Erases all state charges automatically" },
+				{ "id": "d", "label": "Deletes the historical record" }
+			],
+			"correctOptionId": "b",
+			"explanation": "A presidential pardon can forgive federal criminal punishment, but it does not prove innocence or erase history.",
+			"incorrectExplanation": "A pardon is not a court finding of innocence and generally does not control state criminal cases."
+		},
+		{
+			"id": "government-checks-balances-q24",
+			"category": "judicial-independence",
+			"difficulty": "easy",
+			"question": "Who are federal judges supposed to be loyal to?",
+			"options": [
+				{ "id": "a", "label": "The President who appointed them" },
+				{ "id": "b", "label": "Their political party" },
+				{ "id": "c", "label": "The Constitution and the law" },
+				{ "id": "d", "label": "The loudest voters" }
+			],
+			"correctOptionId": "c",
+			"explanation": "Judges take an oath to the Constitution and law, not personal loyalty to a president or party.",
+			"incorrectExplanation": "A judge ruling against the person who appointed them is not betrayal. It is judicial independence."
+		},
+		{
+			"id": "government-checks-balances-q25",
+			"category": "presidential-power",
+			"difficulty": "medium",
+			"question": "Can the President legally order the Justice Department to prosecute personal enemies because they are enemies?",
+			"options": [
+				{ "id": "a", "label": "Yes, prosecutors work for the President personally" },
+				{ "id": "b", "label": "Yes, if the target is unpopular" },
+				{ "id": "c", "label": "No, prosecutions require law and evidence" },
+				{ "id": "d", "label": "Only after a rally vote" }
+			],
+			"correctOptionId": "c",
+			"explanation": "The Justice Department enforces law, and prosecutions are supposed to be based on evidence and legal standards.",
+			"incorrectExplanation": "Using prosecution as personal revenge is the kind of abuse checks and balances are meant to prevent."
+		},
+		{
+			"id": "government-checks-balances-q26",
+			"category": "military-power",
+			"difficulty": "medium",
+			"question": "What principle keeps the U.S. military under elected civilian leadership?",
+			"options": [
+				{ "id": "a", "label": "Civilian control of the military" },
+				{ "id": "b", "label": "Military control of elections" },
+				{ "id": "c", "label": "Judges commanding troops" },
+				{ "id": "d", "label": "Governors commanding all federal forces" }
+			],
+			"correctOptionId": "a",
+			"explanation": "Civilian control of the military keeps armed power accountable to constitutional government.",
+			"incorrectExplanation": "The military is not supposed to rule the country or decide elections. Civilian control is a core democratic norm."
+		},
+		{
+			"id": "government-checks-balances-q27",
+			"category": "federalism",
+			"difficulty": "medium",
+			"question": "What is federalism?",
+			"options": [
+				{ "id": "a", "label": "Power divided between national and state governments" },
+				{ "id": "b", "label": "The President controlling every state" },
+				{ "id": "c", "label": "States ignoring all federal courts" },
+				{ "id": "d", "label": "Congress replacing state governments" }
+			],
+			"correctOptionId": "a",
+			"explanation": "Federalism divides authority between the federal government and the states.",
+			"incorrectExplanation": "Federalism is shared constitutional power, not a license for either level of government to ignore the Constitution."
+		},
+		{
+			"id": "government-checks-balances-q28",
+			"category": "constitutional-supremacy",
+			"difficulty": "hard",
+			"question": "What does the Supremacy Clause say about valid federal law?",
+			"options": [
+				{ "id": "a", "label": "Valid federal law is the supreme law of the land" },
+				{ "id": "b", "label": "State law always beats federal law" },
+				{ "id": "c", "label": "Executive orders beat the Constitution" },
+				{ "id": "d", "label": "Courts cannot review federal law" }
+			],
+			"correctOptionId": "a",
+			"explanation": "The Supremacy Clause makes the Constitution and valid federal laws supreme over conflicting state laws.",
+			"incorrectExplanation": "States have important powers, but they do not get to override the Constitution or valid federal law."
+		},
+		{
+			"id": "government-checks-balances-q29",
+			"category": "congressional-oversight",
+			"difficulty": "medium",
+			"question": "Why does Congress hold oversight hearings?",
+			"options": [
+				{ "id": "a", "label": "To check how laws and agencies are working" },
+				{ "id": "b", "label": "To replace courts in criminal trials" },
+				{ "id": "c", "label": "To let presidents avoid questions" },
+				{ "id": "d", "label": "To cancel elections" }
+			],
+			"correctOptionId": "a",
+			"explanation": "Congress uses oversight to investigate executive action, agency conduct, spending, and whether laws are being followed.",
+			"incorrectExplanation": "Oversight is not a criminal trial. It is one way Congress checks the executive branch."
+		},
+		{
+			"id": "government-checks-balances-q30",
+			"category": "separation-of-powers",
+			"difficulty": "medium",
+			"question": "What is separation of powers?",
+			"options": [
+				{ "id": "a", "label": "Dividing government power among branches" },
+				{ "id": "b", "label": "Giving all power to one strong leader" },
+				{ "id": "c", "label": "Letting courts write the budget" },
+				{ "id": "d", "label": "Letting agencies cancel Congress" }
+			],
+			"correctOptionId": "a",
+			"explanation": "Separation of powers divides lawmaking, enforcement, and interpretation among different branches.",
+			"incorrectExplanation": "The system was designed to prevent concentrated power, not to hand everything to one person."
+		},
+		{
+			"id": "government-checks-balances-q31",
+			"category": "authoritarian-red-flags",
+			"difficulty": "medium",
+			"question": "Which behavior is an authoritarian red flag in a constitutional system?",
+			"options": [
+				{ "id": "a", "label": "Accepting court rulings while appealing them" },
+				{ "id": "b", "label": "Claiming courts have no authority over the executive" },
+				{ "id": "c", "label": "Submitting budgets to Congress" },
+				{ "id": "d", "label": "Signing bills passed by Congress" }
+			],
+			"correctOptionId": "b",
+			"explanation": "Rejecting judicial authority attacks the constitutional check courts have on unlawful executive action.",
+			"incorrectExplanation": "Appeals are normal. Declaring the executive branch above the courts is the dangerous part."
+		},
+		{
+			"id": "government-checks-balances-q32",
+			"category": "elections",
+			"difficulty": "easy",
+			"question": "What decides the presidency under the current constitutional system?",
+			"options": [
+				{ "id": "a", "label": "The Electoral College" },
+				{ "id": "b", "label": "The national popular vote alone" },
+				{ "id": "c", "label": "The Supreme Court every time" },
+				{ "id": "d", "label": "The outgoing President" }
+			],
+			"correctOptionId": "a",
+			"explanation": "Presidential elections are decided through the Electoral College, not by the outgoing president's preference.",
+			"incorrectExplanation": "The national popular vote matters politically, but the constitutional mechanism is the Electoral College."
+		},
+		{
+			"id": "government-checks-balances-q33",
+			"category": "free-press",
+			"difficulty": "easy",
+			"question": "Why is a free press protected in the First Amendment?",
+			"options": [
+				{ "id": "a", "label": "So the press can investigate and criticize government" },
+				{ "id": "b", "label": "So the President can approve all headlines" },
+				{ "id": "c", "label": "So only government media can publish" },
+				{ "id": "d", "label": "So courts can ban criticism" }
+			],
+			"correctOptionId": "a",
+			"explanation": "A free press helps expose abuse, inform voters, and hold powerful officials accountable.",
+			"incorrectExplanation": "The First Amendment protects press freedom from government control, especially when coverage is critical."
+		},
+		{
+			"id": "government-checks-balances-q34",
+			"category": "right-to-protest",
+			"difficulty": "medium",
+			"question": "Which statement best describes peaceful protest?",
+			"options": [
+				{ "id": "a", "label": "It is protected by the First Amendment" },
+				{ "id": "b", "label": "It is illegal when it criticizes police" },
+				{ "id": "c", "label": "It requires agreement with the President" },
+				{ "id": "d", "label": "It cancels all public safety rules" }
+			],
+			"correctOptionId": "a",
+			"explanation": "Peaceful assembly and petition are protected First Amendment rights.",
+			"incorrectExplanation": "Peaceful protest is protected even when officials dislike the message, though violence and true threats are different."
+		},
+		{
+			"id": "government-checks-balances-q35",
+			"category": "rights-and-limits",
+			"difficulty": "medium",
+			"question": "Which statement about constitutional rights is most accurate?",
+			"options": [
+				{ "id": "a", "label": "Rights can have legal limits, but government must follow the Constitution" },
+				{ "id": "b", "label": "Rights disappear when a president is angry" },
+				{ "id": "c", "label": "Rights only apply to popular speech" },
+				{ "id": "d", "label": "Rights are optional during politics" }
+			],
+			"correctOptionId": "a",
+			"explanation": "Rights are not unlimited, but government restrictions must still meet constitutional standards.",
+			"incorrectExplanation": "Constitutional rights do not depend on whether a leader likes the speaker or the political moment."
+		},
+		{
+			"id": "government-checks-balances-q36",
+			"category": "naturalization",
+			"difficulty": "easy",
+			"question": "What is a naturalized citizen?",
+			"options": [
+				{ "id": "a", "label": "A non-citizen with no rights" },
+				{ "id": "b", "label": "A person who became a citizen through the legal process" },
+				{ "id": "c", "label": "A citizen only during elections" },
+				{ "id": "d", "label": "A person who cannot vote anywhere" }
+			],
+			"correctOptionId": "b",
+			"explanation": "Naturalized citizens become U.S. citizens through the legal naturalization process.",
+			"incorrectExplanation": "Naturalized citizens are citizens. The Constitution recognizes people born or naturalized in the United States as citizens."
+		},
+		{
+			"id": "government-checks-balances-q37",
+			"category": "term-limits",
+			"difficulty": "easy",
+			"question": "Which amendment limits presidents to two elected terms?",
+			"options": [
+				{ "id": "a", "label": "Twenty-Second Amendment" },
+				{ "id": "b", "label": "Tenth Amendment" },
+				{ "id": "c", "label": "Fifth Amendment" },
+				{ "id": "d", "label": "Nineteenth Amendment" }
+			],
+			"correctOptionId": "a",
+			"explanation": "The Twenty-Second Amendment limits a president to two elected terms.",
+			"incorrectExplanation": "A president cannot simply decide to keep serving elected terms beyond the constitutional limit."
+		},
+		{
+			"id": "government-checks-balances-q38",
+			"category": "independent-agencies",
+			"difficulty": "hard",
+			"question": "Why do some independent agencies have protections from direct presidential control?",
+			"options": [
+				{ "id": "a", "label": "To reduce political interference in certain functions" },
+				{ "id": "b", "label": "To let agencies ignore all laws" },
+				{ "id": "c", "label": "To make Congress irrelevant" },
+				{ "id": "d", "label": "To let courts appoint agency heads" }
+			],
+			"correctOptionId": "a",
+			"explanation": "Independent agencies often have structural protections meant to reduce direct political pressure in specialized areas.",
+			"incorrectExplanation": "Independence does not mean lawlessness. It means some agency decisions are insulated from direct presidential pressure."
+		},
+		{
+			"id": "government-checks-balances-q39",
+			"category": "court-orders",
+			"difficulty": "medium",
+			"question": "What should the executive branch generally do when a federal court issues a lawful order?",
+			"options": [
+				{ "id": "a", "label": "Comply or seek lawful appeal" },
+				{ "id": "b", "label": "Ignore it if the President dislikes the judge" },
+				{ "id": "c", "label": "Arrest the judge" },
+				{ "id": "d", "label": "Ask a crowd to overturn it" }
+			],
+			"correctOptionId": "a",
+			"explanation": "The constitutional system expects compliance with court orders or use of the legal appeals process.",
+			"incorrectExplanation": "Disliking a ruling does not place the executive branch above the courts."
+		},
+		{
+			"id": "government-checks-balances-q40",
+			"category": "warrants",
+			"difficulty": "medium",
+			"question": "What does the Fourth Amendment protect against?",
+			"options": [
+				{ "id": "a", "label": "Unreasonable searches and seizures" },
+				{ "id": "b", "label": "Every tax increase" },
+				{ "id": "c", "label": "All newspaper criticism" },
+				{ "id": "d", "label": "Congressional hearings" }
+			],
+			"correctOptionId": "a",
+			"explanation": "The Fourth Amendment protects against unreasonable searches and seizures and is central to warrant rules.",
+			"incorrectExplanation": "The Fourth Amendment is about privacy, searches, seizures, and reasonableness, not taxes or political criticism."
+		},
+		{
+			"id": "government-checks-balances-q41",
+			"category": "voting-rights",
+			"difficulty": "medium",
+			"question": "Which amendment prohibits denying the vote based on race?",
+			"options": [
+				{ "id": "a", "label": "Fifteenth Amendment" },
+				{ "id": "b", "label": "Second Amendment" },
+				{ "id": "c", "label": "Twenty-Second Amendment" },
+				{ "id": "d", "label": "Third Amendment" }
+			],
+			"correctOptionId": "a",
+			"explanation": "The Fifteenth Amendment prohibits denying or abridging the right to vote based on race, color, or previous condition of servitude.",
+			"incorrectExplanation": "Voting rights protections come from several amendments, and race-based vote denial is addressed by the Fifteenth Amendment."
+		},
+		{
+			"id": "government-checks-balances-q42",
+			"category": "women-voting",
+			"difficulty": "easy",
+			"question": "Which amendment protects the right to vote regardless of sex?",
+			"options": [
+				{ "id": "a", "label": "Nineteenth Amendment" },
+				{ "id": "b", "label": "First Amendment" },
+				{ "id": "c", "label": "Sixth Amendment" },
+				{ "id": "d", "label": "Twenty-Fifth Amendment" }
+			],
+			"correctOptionId": "a",
+			"explanation": "The Nineteenth Amendment prohibits denying the right to vote on account of sex.",
+			"incorrectExplanation": "The Nineteenth Amendment is the voting rights amendment tied to sex-based vote denial."
+		},
+		{
+			"id": "government-checks-balances-q43",
+			"category": "presidential-succession",
+			"difficulty": "hard",
+			"question": "Which amendment deals with presidential disability and succession procedures?",
+			"options": [
+				{ "id": "a", "label": "Twenty-Fifth Amendment" },
+				{ "id": "b", "label": "Fourteenth Amendment" },
+				{ "id": "c", "label": "Eighth Amendment" },
+				{ "id": "d", "label": "Seventeenth Amendment" }
+			],
+			"correctOptionId": "a",
+			"explanation": "The Twenty-Fifth Amendment addresses presidential succession and procedures when a president is unable to discharge duties.",
+			"incorrectExplanation": "The Twenty-Fifth Amendment is the key amendment for presidential disability and succession mechanics."
+		},
+		{
+			"id": "government-checks-balances-q44",
+			"category": "senate-appointments",
+			"difficulty": "medium",
+			"question": "What is advice and consent?",
+			"options": [
+				{ "id": "a", "label": "The Senate's role in confirming certain nominations and treaties" },
+				{ "id": "b", "label": "A president's power to skip Congress" },
+				{ "id": "c", "label": "The Supreme Court choosing cabinet members" },
+				{ "id": "d", "label": "A state governor vetoing federal law" }
+			],
+			"correctOptionId": "a",
+			"explanation": "Advice and consent refers to the Senate's constitutional role in confirmations and treaties.",
+			"incorrectExplanation": "Advice and consent is a Senate check on executive power, not a way for presidents to avoid review."
+		},
+		{
+			"id": "government-checks-balances-q45",
+			"category": "senate",
+			"difficulty": "medium",
+			"question": "How long is a U.S. Senator's term?",
+			"options": [
+				{ "id": "a", "label": "2 years" },
+				{ "id": "b", "label": "4 years" },
+				{ "id": "c", "label": "6 years" },
+				{ "id": "d", "label": "10 years" }
+			],
+			"correctOptionId": "c",
+			"explanation": "U.S. Senators serve six-year terms.",
+			"incorrectExplanation": "House members serve two-year terms. Senators serve six-year terms, with staggered elections."
+		},
+		{
+			"id": "government-checks-balances-q46",
+			"category": "house",
+			"difficulty": "medium",
+			"question": "Why do House seat counts vary by state?",
+			"options": [
+				{ "id": "a", "label": "House seats are apportioned by population" },
+				{ "id": "b", "label": "The President assigns them" },
+				{ "id": "c", "label": "Every state gets two House seats" },
+				{ "id": "d", "label": "The Supreme Court redraws them yearly" }
+			],
+			"correctOptionId": "a",
+			"explanation": "House seats are apportioned among states based on population after the census.",
+			"incorrectExplanation": "Every state gets two senators, but House representation is based on population."
+		},
+		{
+			"id": "government-checks-balances-q47",
+			"category": "civic-myths",
+			"difficulty": "hard",
+			"question": "Which statement best describes limited government?",
+			"options": [
+				{ "id": "a", "label": "Government officials have powers limited by law and the Constitution" },
+				{ "id": "b", "label": "The President can do anything if voters are angry" },
+				{ "id": "c", "label": "Courts exist only when Congress approves each ruling" },
+				{ "id": "d", "label": "Rights depend on loyalty to one leader" }
+			],
+			"correctOptionId": "a",
+			"explanation": "Limited government means public officials have legal boundaries and cannot exercise unlimited power.",
+			"incorrectExplanation": "The Constitution does not create a loyalty test for rights or unlimited power for any single official."
 		}
 	]
 }

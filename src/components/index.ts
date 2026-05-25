@@ -59,6 +59,7 @@ export { default as FWTTransition } from './utils/FWTTransition.vue';
 export { default as FWTScrollAnimation } from './utils/FWTScrollAnimation.vue';
 export { default as FWTBackToTopBanner } from './utils/FWTBackToTopBanner.vue';
 export { default as FWTSupportButton } from './utils/FWTSupportButton.vue';
+export { default as FWTDirectionalStepper } from './utils/FWTDirectionalStepper.vue';
 export { default as BaseModal } from './utils/BaseModal.vue';
 export { default as Show } from './utils/Show.vue';
 // ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞

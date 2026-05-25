@@ -37,6 +37,8 @@ const {
 	quizScorePercentage,
 	selectedAnswerCorrect,
 	quizScoreLabel,
+	quizHighScoreAchieved,
+	quizResultMessage,
 	quizStatusTagValue,
 	quizStatusTagStyleClasses,
 	quizFeedbackTitleStyleClasses,
@@ -59,9 +61,14 @@ const {
 	quizResultsContainerStyleClasses,
 	quizCardStyleClasses,
 	quizResultsCardStyleClasses,
+	quizHighScoreCardStyleClasses,
 	quizResultsContentStyleClasses,
 	quizResultsTagStyleClasses,
+	quizHighScoreTagStyleClasses,
+	quizHighScoreSignalGridStyleClasses,
+	quizHighScoreSignalStyleClasses,
 	quizScoreValueStyleClasses,
+	quizHighScoreValueStyleClasses,
 	quizScoreLabelStyleClasses,
 	quizScoreSummaryStyleClasses,
 	quizQuestionContainerStyleClasses,
@@ -87,7 +94,6 @@ const {
 <template>
 	<div :class="quizRootStyleClasses">
 		<!-- QUIZ: START SCREEN -->
-
 		<div v-if="!quizStarted" :class="quizIntroContainerStyleClasses">
 			<div :class="quizEyebrowStyleClasses">
 				Ready Check
@@ -119,21 +125,44 @@ const {
 		</div>
 
 		<!-- QUIZ: RESULTS SCREEN -->
-
 		<div v-else-if="quizCompleted" :class="quizResultsContainerStyleClasses">
 			<Card
 				unstyled
-				:class="quizResultsCardStyleClasses"
+				:class="
+					quizHighScoreAchieved
+						? quizHighScoreCardStyleClasses
+						: quizResultsCardStyleClasses
+				"
 				:pt="quizCardPassThrough"
 			>
 				<template #content>
 					<div :class="quizResultsContentStyleClasses">
 						<Tag
-							:class="quizResultsTagStyleClasses"
-							value="Results"
+							:class="
+								quizHighScoreAchieved
+									? quizHighScoreTagStyleClasses
+									: quizResultsTagStyleClasses
+							"
+							:value="quizHighScoreAchieved ? 'High Score' : 'Results'"
 						/>
 
-						<div :class="quizScoreValueStyleClasses">
+						<!-- QUIZ: HIGH SCORE SIGNAL -->
+						<div
+							v-if="quizHighScoreAchieved"
+							:class="quizHighScoreSignalGridStyleClasses"
+						>
+							<span :class="quizHighScoreSignalStyleClasses"></span>
+							<span :class="quizHighScoreSignalStyleClasses"></span>
+							<span :class="quizHighScoreSignalStyleClasses"></span>
+						</div>
+
+						<div
+							:class="
+								quizHighScoreAchieved
+									? quizHighScoreValueStyleClasses
+									: quizScoreValueStyleClasses
+							"
+						>
 							{{ quizScorePercentage }}%
 						</div>
 
@@ -144,6 +173,10 @@ const {
 						<p :class="quizScoreSummaryStyleClasses">
 							{{ correctAnswerCount }} correct out of
 							{{ totalQuestionCount }} questions.
+						</p>
+
+						<p :class="quizScoreSummaryStyleClasses">
+							{{ quizResultMessage }}
 						</p>
 
 						<Button
@@ -158,10 +191,8 @@ const {
 		</div>
 
 		<!-- QUIZ: QUESTION SCREEN -->
-
 		<div v-else :class="quizQuestionContainerStyleClasses">
 			<!-- QUIZ: QUESTION HEADER -->
-
 			<div :class="quizQuestionHeaderStyleClasses">
 				<div :class="quizQuestionCounterStyleClasses">
 					Question {{ currentQuestionIndex + 1 }} /
@@ -181,7 +212,6 @@ const {
 			/>
 
 			<!-- QUIZ: QUESTION CARD -->
-
 			<Transition
 				mode="out-in"
 				:enter-active-class="quizCardTransitionActiveStyleClasses"
@@ -205,7 +235,6 @@ const {
 							</h3>
 
 							<!-- QUIZ: ANSWER OPTIONS -->
-
 							<div :class="quizAnswerOptionsGridStyleClasses">
 								<button
 									v-for="option in currentQuestion.options"
@@ -227,7 +256,6 @@ const {
 							</div>
 
 							<!-- QUIZ: ANSWER FEEDBACK -->
-
 							<div
 								v-if="currentQuestionAnswered"
 								:class="quizFeedbackStyleClasses"

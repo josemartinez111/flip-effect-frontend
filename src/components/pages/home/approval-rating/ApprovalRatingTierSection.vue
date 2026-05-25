@@ -11,24 +11,32 @@ import {
 	TrumpAdminTimelineModalClick,
 } from '../../../../assets';
 import BaseModal from '../../../utils/BaseModal.vue';
+import FWTDirectionalStepper from '../../../utils/FWTDirectionalStepper.vue';
 import GovernmentChecksBalancesQuiz from './GovernmentChecksBalancesQuiz.vue';
 import { UseApprovalRatingTierComposable } from '../../pages-composables/UseApprovalRatingTierComposable.ts';
 // ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
 
 const approvalTimelineModalOpen = ref(false);
 const approvalQuizModalOpen = ref(false);
+const approvalTierRootElement = ref<HTMLElement>();
+let approvalTierAnimationStarted = false;
+let approvalTierIntersectionObserver: IntersectionObserver | undefined;
 
 const {
 	approvalRatingTierMaps,
 	animatedApprovalRatingPercentage,
+	activeApprovalRatingTierMap,
 	approvalTierCompositionStyleClasses,
 	approvalTierSectionStyleClasses,
 	approvalTierViewportStyleClasses,
 	approvalTierEdgeStyleClasses,
 	approvalTierTearShadowStyleClasses,
 	approvalTierBadgeStyleClasses,
+	approvalTierBadgeRowStyleClasses,
 	approvalTierBadgeValueStyleClasses,
 	approvalTierBadgeLabelStyleClasses,
+	approvalTierBadgeHeadlineStyleClasses,
+	approvalTierBadgeDescriptionStyleClasses,
 	approvalTimelineTriggerButtonStyleClasses,
 	approvalTimelineTriggerImageStyleClasses,
 	approvalQuizTriggerButtonStyleClasses,
@@ -42,26 +50,60 @@ const {
 	approvalTimelineModalCardBodyStyleClasses,
 	approvalTimelineModalCardContentStyleClasses,
 	approvalTimelineModalImageStyleClasses,
+	approvalTimelineStepperStyleClasses,
 	approvalQuizModalRootStyleClasses,
 	getApprovalTierImageStyleClasses,
 	startApprovalRatingAnimation,
 	stopApprovalRatingAnimation,
 } = UseApprovalRatingTierComposable();
 
-onMounted(() => {
+const startApprovalRatingAnimationOnce = () => {
+	if (approvalTierAnimationStarted) {
+		return;
+	}
+
+	approvalTierAnimationStarted = true;
 	startApprovalRatingAnimation();
+};
+
+onMounted(() => {
+	if (
+		!approvalTierRootElement.value ||
+		!('IntersectionObserver' in window)
+	) {
+		startApprovalRatingAnimationOnce();
+		return;
+	}
+
+	approvalTierIntersectionObserver = new IntersectionObserver(
+		([{ isIntersecting }]) => {
+			if (!isIntersecting) {
+				return;
+			}
+
+			startApprovalRatingAnimationOnce();
+			approvalTierIntersectionObserver?.disconnect();
+		},
+		{ threshold: 0.28 },
+	);
+
+	approvalTierIntersectionObserver.observe(approvalTierRootElement.value);
 });
 
 onUnmounted(() => {
+	approvalTierIntersectionObserver?.disconnect();
 	stopApprovalRatingAnimation();
 });
-// ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
+// ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
 </script>
 <!-- ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
                     </>MARKUP</>
 ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞ -->
 <template>
-	<section :class="approvalTierCompositionStyleClasses">
+	<section
+		ref="approvalTierRootElement"
+		:class="approvalTierCompositionStyleClasses"
+	>
 		<button
 			type="button"
 			:class="approvalTimelineTriggerButtonStyleClasses"
@@ -103,12 +145,22 @@ onUnmounted(() => {
 				<div :class="approvalTierEdgeStyleClasses"></div>
 
 				<div :class="approvalTierBadgeStyleClasses">
-					<span :class="approvalTierBadgeValueStyleClasses">
-						{{ animatedApprovalRatingPercentage }}%
-					</span>
-					<span :class="approvalTierBadgeLabelStyleClasses">
-						Approval
-					</span>
+					<div :class="approvalTierBadgeRowStyleClasses">
+						<span :class="approvalTierBadgeValueStyleClasses">
+							{{ animatedApprovalRatingPercentage }}%
+						</span>
+						<span :class="approvalTierBadgeLabelStyleClasses">
+							Approval
+						</span>
+					</div>
+
+					<div :class="approvalTierBadgeHeadlineStyleClasses">
+						{{ activeApprovalRatingTierMap.badgeHeadline }}
+					</div>
+
+					<div :class="approvalTierBadgeDescriptionStyleClasses">
+						{{ activeApprovalRatingTierMap.badgeDescription }}
+					</div>
 				</div>
 			</div>
 		</div>
@@ -130,11 +182,20 @@ onUnmounted(() => {
 				}"
 			>
 				<template #content>
-					<img
-						:src="TrumpAdminTimelineModalClick"
-						alt="Trump administration timeline"
-						:class="approvalTimelineModalImageStyleClasses"
-					/>
+					<div class="relative">
+						<img
+							:src="TrumpAdminTimelineModalClick"
+							alt="Trump administration timeline"
+							:class="approvalTimelineModalImageStyleClasses"
+						/>
+
+						<!-- TIMELINE: TEMPORARY CARD NAVIGATION -->
+						<FWTDirectionalStepper
+							:class="approvalTimelineStepperStyleClasses"
+							previous-aria-label="Go to previous timeline card"
+							next-aria-label="Go to next timeline card"
+						/>
+					</div>
 				</template>
 			</Card>
 		</BaseModal>

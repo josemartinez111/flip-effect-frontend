@@ -9,6 +9,7 @@ export type GovernmentChecksBalancesQuiz = {
 	questions: Array<{
 		id: string;
 		category: string;
+		difficulty?: 'easy' | 'medium' | 'hard';
 		question: string;
 		options: Array<{
 			id: string;

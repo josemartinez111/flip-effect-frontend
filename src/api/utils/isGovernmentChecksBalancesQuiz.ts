@@ -33,9 +33,17 @@ const isGovernmentChecksBalancesQuizQuestion = (
 		return false;
 	}
 	
+	const difficultyValid = (
+		value.difficulty === undefined ||
+		value.difficulty === 'easy' ||
+		value.difficulty === 'medium' ||
+		value.difficulty === 'hard'
+	);
+
 	let result = (
 		typeof value.id === 'string' &&
 		typeof value.category === 'string' &&
+		difficultyValid &&
 		typeof value.question === 'string' &&
 		Array.isArray(value.options) &&
 		value.options.every(isGovernmentChecksBalancesQuizOption) &&
