@@ -11,6 +11,7 @@ import {
 	TrumanAvatar,
 	TrumpAvatar,
 } from '../../../../assets';
+import { CURRENT_TRUMP_APPROVAL_RATING_PERCENTAGE } from '../../pages-composables/UseApprovalRatingTierComposable.ts';
 import { UseHeroApprovalRatingComposable } from '../../pages-composables/UseHeroApprovalRatingComposable.ts';
 // ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
 
@@ -34,7 +35,7 @@ const {
 // --- Static approval animation ---
 // TODO: Replace with the approval API call later. Keep this sourced from
 // the same value as the tier map percentage so the avatar card stays in sync.
-const TRUMP_APPROVAL_RATING = 31;
+const TRUMP_APPROVAL_RATING = CURRENT_TRUMP_APPROVAL_RATING_PERCENTAGE;
 const animatedTrumpApprovalRating = ref(100);
 const trumpApprovalRatingImpacting = ref(false);
 let trumpApprovalRatingAnimationFrameId: number | undefined;

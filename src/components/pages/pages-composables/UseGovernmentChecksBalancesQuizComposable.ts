@@ -29,6 +29,7 @@ type UseGovernmentChecksBalancesQuizComposableProps = {
 export const UseGovernmentChecksBalancesQuizComposable = ({
 	active,
 }: UseGovernmentChecksBalancesQuizComposableProps) => {
+	const QUIZ_QUESTION_COUNT = 17;
 	const quiz = ref<GovernmentChecksBalancesQuiz>();
 	const activeQuizQuestions = ref<Array<QuizQuestion>>([]);
 	const quizLoading = ref(false);
@@ -87,6 +88,14 @@ export const UseGovernmentChecksBalancesQuizComposable = ({
 		}
 	});
 
+	const quizHighScoreAchieved = computed(() => quizScorePercentage.value >= 82);
+
+	const quizResultMessage = computed(() => {
+		return quizHighScoreAchieved.value
+			? 'Civic command confirmed. You know the rules authoritarians hope people skip.'
+			: 'Keep sharpening the fundamentals. The Constitution works better when voters know where power is supposed to stop.';
+	});
+
 	const quizStatusTagValue = computed(() => {
 		if (!currentQuestionAnswered.value) {
 			return 'Choose One';
@@ -132,9 +141,25 @@ export const UseGovernmentChecksBalancesQuizComposable = ({
 	};
 
 	const getShuffledQuizQuestions = (questions: Array<QuizQuestion>) => {
-		return [...questions].sort(() => {
-			return Math.random() - 0.5;
-		});
+		const shuffledQuestions = [...questions];
+
+		for (
+			let currentIndex = shuffledQuestions.length - 1;
+			currentIndex > 0;
+			currentIndex -= 1
+		) {
+			const randomIndex = Math.floor(Math.random() * (currentIndex + 1));
+			const currentQuestion = shuffledQuestions[currentIndex];
+
+			shuffledQuestions[currentIndex] = shuffledQuestions[randomIndex];
+			shuffledQuestions[randomIndex] = currentQuestion;
+		}
+
+		return shuffledQuestions;
+	};
+
+	const getQuizQuestionDeck = (questions: Array<QuizQuestion>) => {
+		return getShuffledQuizQuestions(questions).slice(0, QUIZ_QUESTION_COUNT);
 	};
 
 	const resetQuizState = () => {
@@ -176,9 +201,7 @@ export const UseGovernmentChecksBalancesQuizComposable = ({
 		}
 
 		resetQuizState();
-		activeQuizQuestions.value = getShuffledQuizQuestions(
-			quiz.value.questions,
-		);
+		activeQuizQuestions.value = getQuizQuestionDeck(quiz.value.questions);
 		quizStarted.value = true;
 	};
 
@@ -258,9 +281,14 @@ export const UseGovernmentChecksBalancesQuizComposable = ({
 		quizResultsContainerStyleClasses,
 		quizCardStyleClasses,
 		quizResultsCardStyleClasses,
+		quizHighScoreCardStyleClasses,
 		quizResultsContentStyleClasses,
 		quizResultsTagStyleClasses,
+		quizHighScoreTagStyleClasses,
+		quizHighScoreSignalGridStyleClasses,
+		quizHighScoreSignalStyleClasses,
 		quizScoreValueStyleClasses,
+		quizHighScoreValueStyleClasses,
 		quizScoreLabelStyleClasses,
 		quizScoreSummaryStyleClasses,
 		quizQuestionContainerStyleClasses,
@@ -309,6 +337,8 @@ export const UseGovernmentChecksBalancesQuizComposable = ({
 		quizScorePercentage,
 		selectedAnswerCorrect,
 		quizScoreLabel,
+		quizHighScoreAchieved,
+		quizResultMessage,
 		quizStatusTagValue,
 		quizStatusTagStyleClasses,
 		quizFeedbackTitleStyleClasses,
@@ -331,9 +361,14 @@ export const UseGovernmentChecksBalancesQuizComposable = ({
 		quizResultsContainerStyleClasses,
 		quizCardStyleClasses,
 		quizResultsCardStyleClasses,
+		quizHighScoreCardStyleClasses,
 		quizResultsContentStyleClasses,
 		quizResultsTagStyleClasses,
+		quizHighScoreTagStyleClasses,
+		quizHighScoreSignalGridStyleClasses,
+		quizHighScoreSignalStyleClasses,
 		quizScoreValueStyleClasses,
+		quizHighScoreValueStyleClasses,
 		quizScoreLabelStyleClasses,
 		quizScoreSummaryStyleClasses,
 		quizQuestionContainerStyleClasses,

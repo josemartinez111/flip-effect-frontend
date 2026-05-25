@@ -19,18 +19,30 @@ type ApprovalRatingTierMap = {
 	minApprovalRating: number;
 	image: string;
 	alt: string;
+	badgeHeadline: string;
+	badgeDescription: string;
 };
+
+// ---
+// TODO: Replace this static value with an approval-rating API action.
+// The action should fetch one normalized percentage, cache it if needed,
+// then feed this same source into both the tier map and Trump avatar card.
+// When wired, rename the shared value to lower camelCase, likely
+// `currentTrumpApprovalRatingPercentage`, because it will no longer be a
+// compile-time constant.
+// ---
+export const CURRENT_TRUMP_APPROVAL_RATING_PERCENTAGE = 31;
 
 export const UseApprovalRatingTierComposable = () => {
 	const APPROVAL_RATING_TIER_STEP_DELAY_MS = 2400;
 	const APPROVAL_RATING_TIER_FINAL_SETTLE_DELAY_MS = 200;
 
-	// TODO: Replace with the approval API call later. Keep this sourced from
-	// the same value as the Trump avatar percentage so the tier maps stay in sync.
-	const trumpApprovalRatingPercentage = ref(31);
+	const trumpApprovalRatingPercentage = ref(
+		CURRENT_TRUMP_APPROVAL_RATING_PERCENTAGE,
+	);
 	const activeApprovalRatingTierIndex = ref(0);
 	const approvalRatingTierTimeoutIds: number[] = [];
-	
+
 	const {
 		animatedPercentage: animatedApprovalRatingPercentage,
 		startAnimatedPercentage: startApprovalRatingPercentageAnimation,
@@ -77,26 +89,39 @@ export const UseApprovalRatingTierComposable = () => {
 			minApprovalRating: 45,
 			image: UsaApprovalMapTier1,
 			alt: 'Approval tier one map',
+			badgeHeadline: 'Room to survive',
+			badgeDescription:
+				'Approval is still high enough to protect weak allies.',
 		},
 		{
 			minApprovalRating: 40,
 			image: UsaApprovalMapTier2,
 			alt: 'Approval tier two map',
+			badgeHeadline: 'Coalition cracking',
+			badgeDescription:
+				'Soft supporters start becoming election liabilities.',
 		},
 		{
 			minApprovalRating: 35,
 			image: UsaApprovalMapTier3,
 			alt: 'Approval tier three map',
+			badgeHeadline: 'Backlash spreads',
+			badgeDescription: 'The brand starts dragging down close races.',
 		},
 		{
 			minApprovalRating: 28,
 			image: UsaApprovalMapTier4,
 			alt: 'Approval tier four map',
+			badgeHeadline: 'Majority at risk',
+			badgeDescription: 'Defending the agenda gets harder for every ally.',
 		},
 		{
 			minApprovalRating: 0,
 			image: UsaApprovalMapTier5,
 			alt: 'Approval tier five map',
+			badgeHeadline: 'Political freefall',
+			badgeDescription:
+				'The fight shifts from winning to limiting damage.',
 		},
 	];
 
@@ -106,16 +131,14 @@ export const UseApprovalRatingTierComposable = () => {
 				trumpApprovalRatingPercentage.value >= tierMap.minApprovalRating
 			);
 		});
-
-		return tierIndex === -1 ? approvalRatingTierMaps.length - 1 : tierIndex;
+		return tierIndex === -1
+			? approvalRatingTierMaps.length - 1
+			: tierIndex;
 	});
 
-	const approvalRatingTierAnimationSequence = computed(() => {
-		return approvalRatingTierMaps.slice(
-			0,
-			targetApprovalRatingTierIndex.value + 1,
-		);
-	});
+	const activeApprovalRatingTierMap = computed(
+		() => approvalRatingTierMaps[activeApprovalRatingTierIndex.value],
+	);
 
 	const approvalTierCompositionStyleClasses = twMerge(
 		clsx(
@@ -141,7 +164,7 @@ export const UseApprovalRatingTierComposable = () => {
 			'[clip-path:polygon(2%_13%,10%_5%,18%_10%,28%_3%,41%_8%,52%_2%,63%_9%,76%_4%,88%_12%,97%_7%,94%_23%,99%_39%,95%_54%,98%_72%,90%_84%,82%_96%,70%_90%,58%_98%,45%_92%,35%_99%,24%_90%,13%_96%,5%_82%,9%_66%,1%_51%,7%_35%)]',
 		),
 	);
-	
+
 	const approvalTierImageStyleClasses = twMerge(
 		clsx(
 			'absolute inset-0 w-full h-full object-cover object-center',
@@ -160,7 +183,7 @@ export const UseApprovalRatingTierComposable = () => {
 			'dark:shadow-[inset_0_0_0_2px_rgba(255,255,255,0.22),inset_0_0_42px_rgba(0,0,0,0.58)]',
 		),
 	);
-	
+
 	const approvalTierTearShadowStyleClasses = twMerge(
 		clsx(
 			'pointer-events-none absolute inset-0 -z-10',
@@ -172,10 +195,14 @@ export const UseApprovalRatingTierComposable = () => {
 
 	const approvalTierBadgeStyleClasses = twMerge(
 		clsx(
-			'absolute right-[9%] top-[12%] z-30 flex items-baseline gap-1.5',
-			'rounded-full border-none bg-slate-950/55 px-3 py-1.5',
+			'absolute right-[9%] top-[12%] z-30 flex max-w-[16rem] flex-col',
+			'gap-1 rounded-xl border-none bg-slate-950/62 px-3 py-2',
 			'font-orbitron text-white shadow-lg shadow-black/30 backdrop-blur-md',
 		),
+	);
+
+	const approvalTierBadgeRowStyleClasses = twMerge(
+		clsx('flex items-baseline gap-1.5'),
 	);
 
 	const approvalTierBadgeValueStyleClasses = twMerge(
@@ -190,6 +217,18 @@ export const UseApprovalRatingTierComposable = () => {
 		clsx(
 			'text-[0.58rem] font-bold uppercase text-white/72',
 			'tablet:text-[0.64rem]',
+		),
+	);
+
+	const approvalTierBadgeHeadlineStyleClasses = twMerge(
+		clsx(
+			'text-[0.66rem] font-black uppercase tracking-[0.1em] text-cyan-100',
+		),
+	);
+
+	const approvalTierBadgeDescriptionStyleClasses = twMerge(
+		clsx(
+			'text-[0.58rem] font-bold leading-snug text-white/70 tablet:text-[0.64rem]',
 		),
 	);
 
@@ -281,6 +320,15 @@ export const UseApprovalRatingTierComposable = () => {
 		),
 	);
 
+	const approvalTimelineStepperStyleClasses = twMerge(
+		clsx(
+			'absolute bottom-6 left-1/2 z-40 -translate-x-1/2',
+			'scale-[0.72] rounded-full',
+			'drop-shadow-[0_18px_34px_rgba(0,0,0,0.55)]',
+			'tablet:bottom-8 tablet:scale-[0.82]',
+		),
+	);
+
 	const approvalQuizModalRootStyleClasses = twMerge(
 		clsx(
 			'w-auto overflow-hidden border-none! bg-slate-950! shadow-2xl',
@@ -309,29 +357,30 @@ export const UseApprovalRatingTierComposable = () => {
 	};
 
 	const startApprovalRatingTierAnimation = () => {
-		approvalRatingTierAnimationSequence.value.forEach((_tierMap, index) => {
-			if (index === 0) {
-				return;
-			}
+		approvalRatingTierMaps
+			.slice(0, targetApprovalRatingTierIndex.value + 1)
+			.forEach((_tierMap, index) => {
+				if (index === 0) {
+					return;
+				}
 
-			const delayMs =
-				index * APPROVAL_RATING_TIER_STEP_DELAY_MS +
-				(index === targetApprovalRatingTierIndex.value
-					? APPROVAL_RATING_TIER_FINAL_SETTLE_DELAY_MS
-					: 0);
-			const timeoutId = window.setTimeout(() => {
-				activeApprovalRatingTierIndex.value = index;
-			}, delayMs);
+				const delayMs =
+					index * APPROVAL_RATING_TIER_STEP_DELAY_MS +
+					(index === targetApprovalRatingTierIndex.value
+						? APPROVAL_RATING_TIER_FINAL_SETTLE_DELAY_MS
+						: 0);
+				const timeoutId = window.setTimeout(() => {
+					activeApprovalRatingTierIndex.value = index;
+				}, delayMs);
 
-			approvalRatingTierTimeoutIds.push(timeoutId);
-		});
+				approvalRatingTierTimeoutIds.push(timeoutId);
+			});
 	};
 
 	const stopApprovalRatingTierAnimation = () => {
 		approvalRatingTierTimeoutIds.forEach((timeoutId) => {
 			window.clearTimeout(timeoutId);
 		});
-
 		approvalRatingTierTimeoutIds.length = 0;
 	};
 
@@ -348,14 +397,18 @@ export const UseApprovalRatingTierComposable = () => {
 	return {
 		approvalRatingTierMaps,
 		animatedApprovalRatingPercentage,
+		activeApprovalRatingTierMap,
 		approvalTierCompositionStyleClasses,
 		approvalTierSectionStyleClasses,
 		approvalTierViewportStyleClasses,
 		approvalTierEdgeStyleClasses,
 		approvalTierTearShadowStyleClasses,
 		approvalTierBadgeStyleClasses,
+		approvalTierBadgeRowStyleClasses,
 		approvalTierBadgeValueStyleClasses,
 		approvalTierBadgeLabelStyleClasses,
+		approvalTierBadgeHeadlineStyleClasses,
+		approvalTierBadgeDescriptionStyleClasses,
 		approvalTimelineTriggerButtonStyleClasses,
 		approvalTimelineTriggerImageStyleClasses,
 		approvalQuizTriggerButtonStyleClasses,
@@ -369,6 +422,7 @@ export const UseApprovalRatingTierComposable = () => {
 		approvalTimelineModalCardBodyStyleClasses,
 		approvalTimelineModalCardContentStyleClasses,
 		approvalTimelineModalImageStyleClasses,
+		approvalTimelineStepperStyleClasses,
 		approvalQuizModalRootStyleClasses,
 		getApprovalTierImageStyleClasses,
 		startApprovalRatingAnimation,

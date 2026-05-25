@@ -99,6 +99,16 @@ export const UseGovernmentChecksBalancesQuizStyleComposable = () => {
 		clsx(quizCardStyleClasses, 'shadow-flipeffect-cyan/12'),
 	);
 
+	const quizHighScoreCardStyleClasses = twMerge(
+		clsx(
+			quizCardStyleClasses,
+			'relative border-flipeffect-cyan/55 bg-flipeffect-cyan/10',
+			'shadow-[0_0_42px_rgba(103,232,249,0.22),0_22px_54px_rgba(0,0,0,0.42)]',
+			'before:pointer-events-none before:absolute before:inset-0',
+			'before:bg-[radial-gradient(circle_at_50%_0%,rgba(103,232,249,0.28),transparent_44%)]',
+		),
+	);
+
 	const quizResultsContentStyleClasses = twMerge(
 		clsx('px-6 py-8 text-center tablet:px-8 tablet:py-10'),
 	);
@@ -111,8 +121,37 @@ export const UseGovernmentChecksBalancesQuizStyleComposable = () => {
 		),
 	);
 
+	const quizHighScoreTagStyleClasses = twMerge(
+		clsx(
+			'bg-emerald-300/18! px-3 py-1!',
+			'font-orbitron! text-xs! font-black! uppercase! tracking-[0.2em]',
+			'text-emerald-100!',
+		),
+	);
+
+	const quizHighScoreSignalGridStyleClasses = twMerge(
+		clsx('mt-5 flex items-center justify-center gap-2'),
+	);
+
+	const quizHighScoreSignalStyleClasses = twMerge(
+		clsx(
+			'h-2.5 w-10 rounded-full bg-flipeffect-cyan',
+			'shadow-[0_0_18px_rgba(103,232,249,0.72)]',
+			'animate-pulse',
+		),
+	);
+
 	const quizScoreValueStyleClasses = twMerge(
 		clsx('mt-5 font-orbitron text-6xl font-black text-white tablet:text-7xl'),
+	);
+
+	const quizHighScoreValueStyleClasses = twMerge(
+		clsx(
+			'mt-5 bg-gradient-to-b from-white via-flipeffect-cyan to-emerald-200',
+			'bg-clip-text font-orbitron text-6xl font-black text-transparent',
+			'drop-shadow-[0_0_22px_rgba(103,232,249,0.5)]',
+			'tablet:text-7xl',
+		),
 	);
 
 	const quizScoreLabelStyleClasses = twMerge(
@@ -170,9 +209,14 @@ export const UseGovernmentChecksBalancesQuizStyleComposable = () => {
 		quizResultsContainerStyleClasses,
 		quizCardStyleClasses,
 		quizResultsCardStyleClasses,
+		quizHighScoreCardStyleClasses,
 		quizResultsContentStyleClasses,
 		quizResultsTagStyleClasses,
+		quizHighScoreTagStyleClasses,
+		quizHighScoreSignalGridStyleClasses,
+		quizHighScoreSignalStyleClasses,
 		quizScoreValueStyleClasses,
+		quizHighScoreValueStyleClasses,
 		quizScoreLabelStyleClasses,
 		quizScoreSummaryStyleClasses,
 		quizQuestionContainerStyleClasses,
