@@ -16,7 +16,7 @@ import { UseAnimatedPercentageComposable } from '../../../lib';
 // ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
 
 type ApprovalRatingTierMap = {
-	minApprovalRating: number;
+	minEconomyApprovalRating: number;
 	image: string;
 	alt: string;
 	badgeHeadline: string;
@@ -24,122 +24,119 @@ type ApprovalRatingTierMap = {
 };
 
 // ---
-// TODO: Replace this static value with an approval-rating API action.
-// The action should fetch one normalized percentage, cache it if needed,
-// then feed this same source into both the tier map and Trump avatar card.
-// When wired, rename the shared value to lower camelCase, likely
-// `currentTrumpApprovalRatingPercentage`, because it will no longer be a
-// compile-time constant.
+// TODO: Replace these static values with two separate polling API actions.
+// The Trump approval action should feed the avatar card, and the economy
+// approval action should feed this tier map. When wired, compare/cache the
+// source timestamps so both UI pieces stay in sync even though the calls differ.
 // ---
-export const CURRENT_TRUMP_APPROVAL_RATING_PERCENTAGE = 31;
+export const currentTrumpApprovalRatingPercentage = 31;
+export const currentTrumpEconomyApprovalPercentage = 33;
 
 export const UseApprovalRatingTierComposable = () => {
-	const APPROVAL_RATING_TIER_STEP_DELAY_MS = 2400;
-	const APPROVAL_RATING_TIER_FINAL_SETTLE_DELAY_MS = 200;
+	const APPROVAL_RATING_TIER_STEP_DELAY_MS = 5400;
+	const APPROVAL_RATING_TIER_FINAL_SETTLE_DELAY_MS = 800;
+	const APPROVAL_RATING_FINAL_DROP_DELAY_MS = 7600;
 
-	const trumpApprovalRatingPercentage = ref(
-		CURRENT_TRUMP_APPROVAL_RATING_PERCENTAGE,
+	const economyApprovalRatingPercentage = ref(
+		currentTrumpEconomyApprovalPercentage,
 	);
 	const activeApprovalRatingTierIndex = ref(0);
 	const approvalRatingTierTimeoutIds: number[] = [];
 
+	// --- Each tier describes what the economy number means before the final API action exists. ---
+	const approvalRatingTierMaps: Array<ApprovalRatingTierMap> = [
+		{
+			minEconomyApprovalRating: 45, image: UsaApprovalMapTier1, alt: 'Approval tier one map',
+			badgeHeadline: 'Economy still gives cover',
+			badgeDescription:
+				'Above 45%, Republicans can still argue voters trust Trump on prices, jobs, and household costs.',
+		},
+		{
+			minEconomyApprovalRating: 40, image: UsaApprovalMapTier2, alt: 'Approval tier two map',
+			badgeHeadline: 'Cost pressure breaks through',
+			badgeDescription:
+				'Near 40%, inflation, gas, groceries, and rent stop being background noise and become campaign liabilities.',
+		},
+		{
+			minEconomyApprovalRating: 35, image: UsaApprovalMapTier3, alt: 'Approval tier three map',
+			badgeHeadline: 'Swing districts start slipping',
+			badgeDescription:
+				'In the mid-30s, voters are not just unhappy with prices; they start blaming the party in power.',
+		},
+		{
+			minEconomyApprovalRating: 28, image: UsaApprovalMapTier4, alt: 'Approval tier four map',
+			badgeHeadline: 'House majority exposed',
+			badgeDescription:
+				'At 33%, Quinnipiac shows voters rejecting Trump on the economy, putting vulnerable Republicans on defense.',
+		},
+		{
+			minEconomyApprovalRating: 0, image: UsaApprovalMapTier5, alt: 'Approval tier five map',
+			badgeHeadline: 'Economic collapse territory',
+			badgeDescription:
+				'Below 28%, the economy becomes a ballot-wide anchor: debt, prices, layoffs, and trust all hit at once.',
+		},
+	];
+
+	const getApprovalRatingTierIndex = (approvalRatingPercentage: number) => {
+		const tierIndex = approvalRatingTierMaps.findIndex((tierMap) => {
+			return approvalRatingPercentage >= tierMap.minEconomyApprovalRating;
+		});
+
+		return tierIndex === -1 ? approvalRatingTierMaps.length - 1 : tierIndex;
+	};
+
+	const getApprovalRatingTierResolveDelayMs = (
+		approvalRatingTierIndex: number,
+	) => {
+		if (approvalRatingTierIndex === 0) {
+			return 0;
+		}
+
+		return (
+			approvalRatingTierIndex * APPROVAL_RATING_TIER_STEP_DELAY_MS +
+			APPROVAL_RATING_TIER_FINAL_SETTLE_DELAY_MS
+		);
+	};
+
+	const targetApprovalRatingTierIndex = computed(() => {
+		return getApprovalRatingTierIndex(economyApprovalRatingPercentage.value);
+	});
+
+	// --- The percentage animation resolves when the map tier resolves, so text and image stay aligned. ---
 	const {
 		animatedPercentage: animatedApprovalRatingPercentage,
 		startAnimatedPercentage: startApprovalRatingPercentageAnimation,
 		stopAnimatedPercentage: stopApprovalRatingPercentageAnimation,
 	} = UseAnimatedPercentageComposable({
 		initialPercentage: 100,
-		targetPercentage: trumpApprovalRatingPercentage,
+		targetPercentage: economyApprovalRatingPercentage,
 		getPercentageAnimationSteps: (targetPercentage) => {
+			const targetTierResolveDelayMs = getApprovalRatingTierResolveDelayMs(
+				getApprovalRatingTierIndex(targetPercentage),
+			);
+
 			return [
-				{
-					fromPercentage: 100,
-					toPercentage: 90,
-					delayMs: 300,
-					durationMs: 1900,
-					easing: 'easeInOutSine',
-				},
-				{
-					fromPercentage: 90,
-					toPercentage: 95,
-					delayMs: 1500,
-					durationMs: 1100,
-					easing: 'easeOutCubic',
-				},
-				{
-					fromPercentage: 95,
-					toPercentage: 85,
-					delayMs: 2120,
-					durationMs: 1600,
-					easing: 'easeInOutSine',
-				},
+				{ fromPercentage: 100, toPercentage: 90, delayMs: 300, durationMs: 3600, easing: 'easeInOutSine' },
+				{ fromPercentage: 90, toPercentage: 95, delayMs: 3300, durationMs: 1300, easing: 'easeOutCubic' },
+				{ fromPercentage: 95, toPercentage: 85, delayMs: 4700, durationMs: 3200, easing: 'easeInOutSine' },
 				{
 					fromPercentage: 85,
 					toPercentage: targetPercentage,
-					delayMs: 3600,
-					durationMs: 3800,
+					delayMs: APPROVAL_RATING_FINAL_DROP_DELAY_MS,
+					durationMs: Math.max(
+						targetTierResolveDelayMs -
+							APPROVAL_RATING_FINAL_DROP_DELAY_MS,
+						1600,
+					),
 					easing: 'easeInQuart',
 				},
 			];
 		},
 	});
 
-	const approvalRatingTierMaps: Array<ApprovalRatingTierMap> = [
-		{
-			minApprovalRating: 45,
-			image: UsaApprovalMapTier1,
-			alt: 'Approval tier one map',
-			badgeHeadline: 'Room to survive',
-			badgeDescription:
-				'Approval is still high enough to protect weak allies.',
-		},
-		{
-			minApprovalRating: 40,
-			image: UsaApprovalMapTier2,
-			alt: 'Approval tier two map',
-			badgeHeadline: 'Coalition cracking',
-			badgeDescription:
-				'Soft supporters start becoming election liabilities.',
-		},
-		{
-			minApprovalRating: 35,
-			image: UsaApprovalMapTier3,
-			alt: 'Approval tier three map',
-			badgeHeadline: 'Backlash spreads',
-			badgeDescription: 'The brand starts dragging down close races.',
-		},
-		{
-			minApprovalRating: 28,
-			image: UsaApprovalMapTier4,
-			alt: 'Approval tier four map',
-			badgeHeadline: 'Majority at risk',
-			badgeDescription: 'Defending the agenda gets harder for every ally.',
-		},
-		{
-			minApprovalRating: 0,
-			image: UsaApprovalMapTier5,
-			alt: 'Approval tier five map',
-			badgeHeadline: 'Political freefall',
-			badgeDescription:
-				'The fight shifts from winning to limiting damage.',
-		},
-	];
+	const activeApprovalRatingTierMap = computed(() => approvalRatingTierMaps[activeApprovalRatingTierIndex.value]);
 
-	const targetApprovalRatingTierIndex = computed(() => {
-		const tierIndex = approvalRatingTierMaps.findIndex((tierMap) => {
-			return (
-				trumpApprovalRatingPercentage.value >= tierMap.minApprovalRating
-			);
-		});
-		return tierIndex === -1
-			? approvalRatingTierMaps.length - 1
-			: tierIndex;
-	});
-
-	const activeApprovalRatingTierMap = computed(
-		() => approvalRatingTierMaps[activeApprovalRatingTierIndex.value],
-	);
-
+	// --- Page-owned class constants stay here because the tier section is a custom homepage surface. ---
 	const approvalTierCompositionStyleClasses = twMerge(
 		clsx(
 			'relative z-20 mx-auto -mt-44 w-[min(98vw,100rem)]',
@@ -195,40 +192,44 @@ export const UseApprovalRatingTierComposable = () => {
 
 	const approvalTierBadgeStyleClasses = twMerge(
 		clsx(
-			'absolute right-[9%] top-[12%] z-30 flex max-w-[16rem] flex-col',
-			'gap-1 rounded-xl border-none bg-slate-950/62 px-3 py-2',
-			'font-orbitron text-white shadow-lg shadow-black/30 backdrop-blur-md',
+			'absolute right-[6%] top-[9%] z-30 flex max-w-[28rem] flex-col',
+			'gap-2 rounded-2xl border border-white/14 bg-slate-950/48',
+			'px-5 py-4 font-orbitron text-white shadow-2xl shadow-black/34',
+			'backdrop-blur-[2px] tablet:right-[7%] tablet:top-[10%] tablet:px-6',
 		),
 	);
 
-	const approvalTierBadgeRowStyleClasses = twMerge(
-		clsx('flex items-baseline gap-1.5'),
-	);
+	const approvalTierBadgeRowStyleClasses = twMerge(clsx('flex items-center gap-3'));
 
 	const approvalTierBadgeValueStyleClasses = twMerge(
 		clsx(
 			'bg-gradient-to-b from-rose-200 via-flipeffect-flip to-rose-500',
-			'bg-clip-text text-xl font-black leading-none text-transparent',
-			'drop-shadow-[0_0_10px_rgba(244,63,94,0.72)] tablet:text-2xl',
+			'bg-clip-text text-4xl font-black leading-none text-transparent',
+			'drop-shadow-[0_0_14px_rgba(244,63,94,0.76)]',
+			'tablet:text-5xl laptop:text-6xl',
 		),
 	);
 
 	const approvalTierBadgeLabelStyleClasses = twMerge(
 		clsx(
-			'text-[0.58rem] font-bold uppercase text-white/72',
-			'tablet:text-[0.64rem]',
+			'rounded-lg border border-cyan-200/24 bg-cyan-300/12 px-3 py-2',
+			'text-base font-black uppercase leading-none tracking-[0.2em]',
+			'text-cyan-100 drop-shadow-[0_0_12px_rgba(103,232,249,0.6)]',
+			'tablet:text-xl laptop:text-2xl',
 		),
 	);
 
 	const approvalTierBadgeHeadlineStyleClasses = twMerge(
 		clsx(
-			'text-[0.66rem] font-black uppercase tracking-[0.1em] text-cyan-100',
+			'text-base font-black uppercase tracking-[0.12em] text-cyan-100',
+			'drop-shadow-[0_0_12px_rgba(103,232,249,0.45)] tablet:text-xl',
 		),
 	);
 
 	const approvalTierBadgeDescriptionStyleClasses = twMerge(
 		clsx(
-			'text-[0.58rem] font-bold leading-snug text-white/70 tablet:text-[0.64rem]',
+			'max-w-[26rem] text-sm font-extrabold leading-6 text-white/88',
+			'drop-shadow-[0_1px_8px_rgba(0,0,0,0.75)] tablet:text-base tablet:leading-7',
 		),
 	);
 
@@ -275,9 +276,7 @@ export const UseApprovalRatingTierComposable = () => {
 		),
 	);
 
-	const approvalTimelineModalContentWrapperStyleClasses = twMerge(
-		clsx('max-h-[90vh] bg-transparent! p-0!'),
-	);
+	const approvalTimelineModalContentWrapperStyleClasses = twMerge(clsx('max-h-[90vh] bg-transparent! p-0!'));
 
 	const approvalTimelineModalHeaderStyleClasses = twMerge(
 		clsx(
@@ -298,36 +297,7 @@ export const UseApprovalRatingTierComposable = () => {
 		),
 	);
 
-	const approvalTimelineModalCloseIconStyleClasses = twMerge(
-		clsx('text-white! dark:text-white!'),
-	);
-
-	const approvalTimelineModalCardStyleClasses = twMerge(
-		clsx('relative overflow-hidden bg-transparent! shadow-none!'),
-	);
-
-	const approvalTimelineModalCardBodyStyleClasses = twMerge(clsx('p-0!'));
-
-	const approvalTimelineModalCardContentStyleClasses = twMerge(
-		clsx('relative p-0!'),
-	);
-
-	const approvalTimelineModalImageStyleClasses = twMerge(
-		clsx(
-			'relative z-10 max-h-[86vh] w-[min(92vw,62rem)] object-contain',
-			'drop-shadow-[0_24px_48px_rgba(15,23,42,0.25)]',
-			'dark:drop-shadow-[0_24px_48px_rgba(0,0,0,0.45)]',
-		),
-	);
-
-	const approvalTimelineStepperStyleClasses = twMerge(
-		clsx(
-			'absolute bottom-6 left-1/2 z-40 -translate-x-1/2',
-			'scale-[0.72] rounded-full',
-			'drop-shadow-[0_18px_34px_rgba(0,0,0,0.55)]',
-			'tablet:bottom-8 tablet:scale-[0.82]',
-		),
-	);
+	const approvalTimelineModalCloseIconStyleClasses = twMerge(clsx('text-white! dark:text-white!'));
 
 	const approvalQuizModalRootStyleClasses = twMerge(
 		clsx(
@@ -337,13 +307,9 @@ export const UseApprovalRatingTierComposable = () => {
 		),
 	);
 
-	const approvalTierActiveImageStyleClasses = twMerge(
-		clsx('opacity-100 scale-100 blur-0 saturate-100'),
-	);
+	const approvalTierActiveImageStyleClasses = twMerge(clsx('opacity-100 scale-100 blur-0 saturate-100'));
 
-	const approvalTierInactiveImageStyleClasses = twMerge(
-		clsx('opacity-0 scale-[1.02] blur-[2px] saturate-75'),
-	);
+	const approvalTierInactiveImageStyleClasses = twMerge(clsx('opacity-0 scale-[1.02] blur-[2px] saturate-75'));
 
 	const getApprovalTierImageStyleClasses = (index: number) => {
 		return twMerge(
@@ -356,6 +322,7 @@ export const UseApprovalRatingTierComposable = () => {
 		);
 	};
 
+	// --- Tier images advance on timers that match the animated economy approval value. ---
 	const startApprovalRatingTierAnimation = () => {
 		approvalRatingTierMaps
 			.slice(0, targetApprovalRatingTierIndex.value + 1)
@@ -384,15 +351,9 @@ export const UseApprovalRatingTierComposable = () => {
 		approvalRatingTierTimeoutIds.length = 0;
 	};
 
-	const startApprovalRatingAnimation = () => {
-		startApprovalRatingTierAnimation();
-		startApprovalRatingPercentageAnimation();
-	};
+	const startApprovalRatingAnimation = () => { startApprovalRatingTierAnimation(); startApprovalRatingPercentageAnimation(); };
 
-	const stopApprovalRatingAnimation = () => {
-		stopApprovalRatingTierAnimation();
-		stopApprovalRatingPercentageAnimation();
-	};
+	const stopApprovalRatingAnimation = () => { stopApprovalRatingTierAnimation(); stopApprovalRatingPercentageAnimation(); };
 
 	return {
 		approvalRatingTierMaps,
@@ -418,11 +379,6 @@ export const UseApprovalRatingTierComposable = () => {
 		approvalTimelineModalHeaderStyleClasses,
 		approvalTimelineModalCloseButtonStyleClasses,
 		approvalTimelineModalCloseIconStyleClasses,
-		approvalTimelineModalCardStyleClasses,
-		approvalTimelineModalCardBodyStyleClasses,
-		approvalTimelineModalCardContentStyleClasses,
-		approvalTimelineModalImageStyleClasses,
-		approvalTimelineStepperStyleClasses,
 		approvalQuizModalRootStyleClasses,
 		getApprovalTierImageStyleClasses,
 		startApprovalRatingAnimation,

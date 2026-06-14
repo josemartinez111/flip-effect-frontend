@@ -27,6 +27,18 @@ export * from './actions/auth/signoutAction.ts';
 // actions/quiz api->actions
 // ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
 export * from './actions/quiz/getGovernmentChecksBalancesQuizAction.ts';
+// ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
+// actions/civic-representatives api->actions
+// ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
+export * from './actions/civic-representatives/getCivicRepresentativesAction.ts';
+// ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
+// action-results/civic-representatives api->action-results
+// ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
+export type * from './action-results/CivicRepresentativeActionResult.ts';
+// ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
+// models/civic-representatives api->models
+// ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
+export type * from './models/CivicRepresentativeModel.ts';
 // ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
 // actions/database api->actions
 // ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞

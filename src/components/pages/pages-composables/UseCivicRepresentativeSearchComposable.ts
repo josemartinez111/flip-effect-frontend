@@ -71,6 +71,29 @@ export const UseCivicRepresentativeSearchComposable = () => {
 		),
 	);
 
+	const civicSearchApiNoteStyleClasses = twMerge(
+		clsx(
+			'rounded-xl border px-3 py-2 text-xs font-bold leading-5',
+			'border-cyan-700/18 bg-cyan-50/62 text-slate-700',
+			'shadow-[inset_0_0_0_1px_rgba(255,255,255,0.22)]',
+			'dark:border-cyan-200/12 dark:bg-slate-950/46 dark:text-slate-200/82',
+		),
+	);
+
+	const civicSearchApiNoteLabelStyleClasses = twMerge(
+		clsx(
+			'font-orbitron text-[0.62rem] font-black uppercase tracking-[0.14em]',
+			'text-cyan-700 dark:text-cyan-100',
+		),
+	);
+
+	const civicSearchApiNoteLinkStyleClasses = twMerge(
+		clsx(
+			'cursor-pointer font-black text-cyan-700 underline underline-offset-4',
+			'hover:text-slate-950 dark:text-cyan-100 dark:hover:text-white',
+		),
+	);
+
 	return {
 		civicSearchSectionStyleClasses,
 		civicSearchShellStyleClasses,
@@ -80,6 +103,9 @@ export const UseCivicRepresentativeSearchComposable = () => {
 		civicSearchFiltersStyleClasses,
 		civicSearchFilterItemStyleClasses,
 		civicSearchFilterLabelStyleClasses,
+		civicSearchApiNoteStyleClasses,
+		civicSearchApiNoteLabelStyleClasses,
+		civicSearchApiNoteLinkStyleClasses,
 	};
 };
 // ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞

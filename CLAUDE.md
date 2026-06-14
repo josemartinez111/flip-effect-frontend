@@ -1,6 +1,7 @@
 # 🎨 CLAUDE.md - AI Assistant Context & Instructions
 
 > !!NOTE!! **"no code" rule — when active: ANSWER ALL USER QUESTIONS FIRST, then DO NOT generate or modify ANY code whatsoever. Wait for explicit user instruction before writing a single line. Questions always come before code.**
+> !!NOTE!! **"ttm" means "talk to me" — treat it exactly like the no-code rule. Brainstorm, reason, and ask/answer questions only. Do not edit, create, delete, move, or generate code until the user explicitly releases the no-code/ttm constraint.**
 
 > 🔥🔥🔥 !!!NEVER EVER WRITE, EDIT, CREATE, OR TOUCH ANY FILE OUTSIDE THE PROJECT DIRECTORY WITHOUT EXPLICIT USER PERMISSION!!! This includes `~/.config/`, `~/.claude/`, or ANY path outside the current project root. ASK FIRST. ALWAYS. NO EXCEPTIONS. 🔥🔥🔥
 
@@ -572,7 +573,7 @@ pm preview          # Preview production locally
 
 **CRITICAL:**
 - Don't assume anything. Wait for user instructions.
-- Respect "no code" rule = ANSWER ALL QUESTIONS FIRST, then DO NOT generate/modify code at all
+- Respect "no code" and "ttm" rules = ANSWER ALL QUESTIONS FIRST, then DO NOT generate/modify code at all
 - **ALWAYS end every response with all files touched — no inline comments, just paths:**
   - List every file modified, created, or deleted with relative paths
   - No descriptions, no line numbers, just the clean path list

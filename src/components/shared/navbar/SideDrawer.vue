@@ -8,6 +8,8 @@ import { computed } from 'vue';
 import { useRouter } from 'vue-router';
 import Drawer from 'primevue/drawer';
 import Button from 'primevue/button';
+import clsx from 'clsx';
+import { twMerge } from 'tailwind-merge';
 import type { NavLinkType } from '../../../router/composables/UseNavLinksComposable.ts';
 import NavBrand from './NavBrand.vue';
 import DarkmodeToggleSwitch from './DarkmodeToggleSwitch.vue';
@@ -24,6 +26,18 @@ const emit = defineEmits<{ close: [] }>();
 
 const router = useRouter();
 
+const externalNavLinks = computed(() => {
+  return navLinks.filter((link) => {
+    return link.external;
+  });
+});
+
+const internalNavLinks = computed(() => {
+  return navLinks.filter((link) => {
+    return !link.external;
+  });
+});
+
 // --- Bridge one-way prop → PrimeVue two-way v-model:visible ---
 const visible = computed({
   get: () => isOpen,
@@ -34,6 +48,20 @@ const navigateTo = (path: string): void => {
   router.push(path);
   emit('close');
 };
+
+const handleExternalLinkClick = (): void => {
+  emit('close');
+};
+
+const drawerNavLinkStyleClasses = twMerge(
+  clsx(
+    'w-full cursor-pointer rounded-lg px-3 py-2 text-left',
+    'font-orbitron text-sm font-black uppercase tracking-[0.12em]',
+    'text-gray-700 transition',
+    'hover:bg-gray-100 hover:text-gray-950',
+    'dark:text-gray-200 dark:hover:bg-white/8 dark:hover:text-white',
+  ),
+);
 // ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
 </script>
 <!-- ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞ -->
@@ -75,13 +103,25 @@ const navigateTo = (path: string): void => {
     <!-- ∞∞∞∞∞∞∞∞ NAV LINKS ∞∞∞∞∞∞∞∞ -->
     <nav class="flex flex-col gap-1 py-4">
       <Button
-        v-for="link in navLinks"
+        v-for="link in internalNavLinks"
         :key="link.path"
         text
         :label="link.label"
-        class="w-full! justify-start! font-medium! text-gray-700! dark:text-gray-200!"
+        class="font-orbitron! w-full! justify-start! text-sm! font-black! tracking-[0.12em]! text-gray-700! uppercase! dark:text-gray-200!"
         @click="navigateTo(link.path)"
       />
+
+      <a
+        v-for="link in externalNavLinks"
+        :key="link.path"
+        :href="link.path"
+        :class="drawerNavLinkStyleClasses"
+        target="_blank"
+        rel="noopener noreferrer"
+        @click="handleExternalLinkClick"
+      >
+        {{ link.label }}
+      </a>
     </nav>
   </Drawer>
   <!-- ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞ -->
