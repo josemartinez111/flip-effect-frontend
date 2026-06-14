@@ -25,10 +25,6 @@ const bgImageStyleClasses = twMerge(
 		'absolute -top-10 left-1/2 h-auto w-full max-w-none',
 		'tablet:-top-16 laptop:-top-24',
 		'-translate-x-1/2 object-contain object-top',
-		'blur-[0.35px] saturate-[0.92] contrast-[0.98] brightness-[1.16]',
-		'opacity-[0.52] mix-blend-multiply',
-		'dark:opacity-[0.5] dark:mix-blend-screen dark:brightness-[1.5]',
-		'dark:saturate-[0.88] dark:contrast-[0.9]',
 	),
 );
 // ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞

@@ -11,7 +11,7 @@ import {
 	TrumanAvatar,
 	TrumpAvatar,
 } from '../../../../assets';
-import { CURRENT_TRUMP_APPROVAL_RATING_PERCENTAGE } from '../../pages-composables/UseApprovalRatingTierComposable.ts';
+import { currentTrumpApprovalRatingPercentage } from '../../pages-composables/UseApprovalRatingTierComposable.ts';
 import { UseHeroApprovalRatingComposable } from '../../pages-composables/UseHeroApprovalRatingComposable.ts';
 // ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
 
@@ -33,9 +33,9 @@ const {
 } = UseHeroApprovalRatingComposable();
 
 // --- Static approval animation ---
-// TODO: Replace with the approval API call later. Keep this sourced from
-// the same value as the tier map percentage so the avatar card stays in sync.
-const TRUMP_APPROVAL_RATING = CURRENT_TRUMP_APPROVAL_RATING_PERCENTAGE;
+// TODO: Replace with the Trump approval API action later. Keep its source
+// timestamp checked against the economy approval action used by the tier map.
+const trumpApprovalRatingPercentage = currentTrumpApprovalRatingPercentage;
 const animatedTrumpApprovalRating = ref(100);
 const trumpApprovalRatingImpacting = ref(false);
 let trumpApprovalRatingAnimationFrameId: number | undefined;
@@ -122,7 +122,7 @@ onMounted(() => {
 	});
 	queueTrumpApprovalRatingAnimation(3000, {
 		from: 85,
-		to: TRUMP_APPROVAL_RATING,
+		to: trumpApprovalRatingPercentage,
 		durationMs: 1250,
 		easing: easeInQuart,
 		onComplete: () => {

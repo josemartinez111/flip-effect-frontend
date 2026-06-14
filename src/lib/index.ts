@@ -47,6 +47,7 @@ export type { ApiActionResult } from './types/ApiActionResult';
 // constants lib->constants
 // ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
 export { Constants as EL } from './constants/constants';
+export { GlobalEnvs } from './constants/GlobalEnvs';
 // ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
 // status-codes lib->utils
 // ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞

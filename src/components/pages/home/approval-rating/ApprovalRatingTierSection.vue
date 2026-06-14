@@ -4,18 +4,18 @@
 ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞ -->
 <script setup lang="ts">
 // ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
-import Card from 'primevue/card';
 import { onMounted, onUnmounted, ref } from 'vue';
 import {
 	GovernmentChecksBalancesClick,
 	TrumpAdminTimelineModalClick,
 } from '../../../../assets';
 import BaseModal from '../../../utils/BaseModal.vue';
-import FWTDirectionalStepper from '../../../utils/FWTDirectionalStepper.vue';
 import GovernmentChecksBalancesQuiz from './GovernmentChecksBalancesQuiz.vue';
+import GovernmentCorruptionTimelineDeck from './GovernmentCorruptionTimelineDeck.vue';
 import { UseApprovalRatingTierComposable } from '../../pages-composables/UseApprovalRatingTierComposable.ts';
 // ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
 
+// --- Modal state stays local because each trigger only belongs to this homepage section. ---
 const approvalTimelineModalOpen = ref(false);
 const approvalQuizModalOpen = ref(false);
 const approvalTierRootElement = ref<HTMLElement>();
@@ -46,17 +46,13 @@ const {
 	approvalTimelineModalHeaderStyleClasses,
 	approvalTimelineModalCloseButtonStyleClasses,
 	approvalTimelineModalCloseIconStyleClasses,
-	approvalTimelineModalCardStyleClasses,
-	approvalTimelineModalCardBodyStyleClasses,
-	approvalTimelineModalCardContentStyleClasses,
-	approvalTimelineModalImageStyleClasses,
-	approvalTimelineStepperStyleClasses,
 	approvalQuizModalRootStyleClasses,
 	getApprovalTierImageStyleClasses,
 	startApprovalRatingAnimation,
 	stopApprovalRatingAnimation,
 } = UseApprovalRatingTierComposable();
 
+// --- The approval drop should begin only once the tier map is actually in view. ---
 const startApprovalRatingAnimationOnce = () => {
 	if (approvalTierAnimationStarted) {
 		return;
@@ -66,6 +62,7 @@ const startApprovalRatingAnimationOnce = () => {
 	startApprovalRatingAnimation();
 };
 
+// --- IntersectionObserver prevents the map/percentage story from playing off-screen. ---
 onMounted(() => {
 	if (
 		!approvalTierRootElement.value ||
@@ -104,6 +101,7 @@ onUnmounted(() => {
 		ref="approvalTierRootElement"
 		:class="approvalTierCompositionStyleClasses"
 	>
+		<!-- APPROVAL TIER: TIMELINE TRIGGER -->
 		<button
 			type="button"
 			:class="approvalTimelineTriggerButtonStyleClasses"
@@ -117,6 +115,7 @@ onUnmounted(() => {
 			/>
 		</button>
 
+		<!-- APPROVAL TIER: QUIZ TRIGGER -->
 		<button
 			type="button"
 			:class="approvalQuizTriggerButtonStyleClasses"
@@ -130,6 +129,7 @@ onUnmounted(() => {
 			/>
 		</button>
 
+		<!-- APPROVAL TIER: ECONOMY MAP STORY -->
 		<div :class="approvalTierSectionStyleClasses">
 			<div :class="approvalTierTearShadowStyleClasses"></div>
 
@@ -150,7 +150,7 @@ onUnmounted(() => {
 							{{ animatedApprovalRatingPercentage }}%
 						</span>
 						<span :class="approvalTierBadgeLabelStyleClasses">
-							Approval
+							Economy approval
 						</span>
 					</div>
 
@@ -165,6 +165,7 @@ onUnmounted(() => {
 			</div>
 		</div>
 
+		<!-- APPROVAL TIER: TIMELINE MODAL -->
 		<BaseModal
 			v-model:visible="approvalTimelineModalOpen"
 			:root-class="approvalTimelineModalRootStyleClasses"
@@ -173,33 +174,12 @@ onUnmounted(() => {
 			:close-button-class="approvalTimelineModalCloseButtonStyleClasses"
 			:close-button-icon-class="approvalTimelineModalCloseIconStyleClasses"
 		>
-			<Card
-				unstyled
-				:class="approvalTimelineModalCardStyleClasses"
-				:pt="{
-					body: { class: approvalTimelineModalCardBodyStyleClasses },
-					content: { class: approvalTimelineModalCardContentStyleClasses },
-				}"
-			>
-				<template #content>
-					<div class="relative">
-						<img
-							:src="TrumpAdminTimelineModalClick"
-							alt="Trump administration timeline"
-							:class="approvalTimelineModalImageStyleClasses"
-						/>
-
-						<!-- TIMELINE: TEMPORARY CARD NAVIGATION -->
-						<FWTDirectionalStepper
-							:class="approvalTimelineStepperStyleClasses"
-							previous-aria-label="Go to previous timeline card"
-							next-aria-label="Go to next timeline card"
-						/>
-					</div>
-				</template>
-			</Card>
+			<GovernmentCorruptionTimelineDeck
+				:active="approvalTimelineModalOpen"
+			/>
 		</BaseModal>
 
+		<!-- APPROVAL TIER: QUIZ MODAL -->
 		<BaseModal
 			v-model:visible="approvalQuizModalOpen"
 			:root-class="approvalQuizModalRootStyleClasses"
