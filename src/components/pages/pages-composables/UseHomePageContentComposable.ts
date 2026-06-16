@@ -9,9 +9,16 @@ import {
 } from './UseCongressionalControlComposable.ts';
 // ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
 
+type CivicRepresentativeSearchFilterValue =
+	| 'federal'
+	| 'state'
+	| 'all';
+
 type CivicRepresentativeSearchFilterOption = {
 	label: string;
-	value: string;
+	value: CivicRepresentativeSearchFilterValue;
+	description: string;
+	helpText: string;
 };
 
 const getCongressionalSeatRange = ({
@@ -84,16 +91,31 @@ export const UseHomePageContentComposable = () => {
 		'Search by ZIP, city, state, or representative';
 	const civicRepresentativeSearchFilterOptions: Array<CivicRepresentativeSearchFilterOption> =
 		[
-			{ label: 'Federal', value: 'federal' },
-			{ label: 'House', value: 'house' },
-			{ label: 'Senate', value: 'senate' },
-			{ label: 'State', value: 'state' },
+			{
+				label: 'US Congress',
+				value: 'federal',
+				description: 'House + Senate',
+				helpText:
+					'Congress means your U.S. House representative and your two U.S. senators in Washington, DC.',
+			},
+			{
+				label: 'State Lawmakers',
+				value: 'state',
+				description: 'Your state capitol',
+				helpText:
+					'State lawmakers are your state capitol representatives, usually a state House or Assembly member and a state senator.',
+			},
+			{
+				label: 'Both Levels',
+				value: 'all',
+				description: 'Congress + state',
+				helpText:
+					'Both Levels searches Congress and state lawmakers together, so you can see both systems.',
+			},
 		];
 
-	const civicRepresentativeSearchDefaultFilters: Array<string> = [
-		'federal',
-		'house',
-	];
+	const civicRepresentativeSearchDefaultFilters: Array<CivicRepresentativeSearchFilterValue> =
+		['federal'];
 
 	const congressionalControlChambers: Array<CongressionalControlChamber> = [
 		{

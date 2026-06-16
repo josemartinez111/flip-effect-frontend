@@ -894,6 +894,33 @@
 			"correctOptionId": "a",
 			"explanation": "Limited government means public officials have legal boundaries and cannot exercise unlimited power.",
 			"incorrectExplanation": "The Constitution does not create a loyalty test for rights or unlimited power for any single official."
+		},
+		{
+			"id": "government-checks-balances-q48",
+			"category": "representation",
+			"difficulty": "medium",
+			"question": "What is the difference between U.S. Congress and state lawmakers?",
+			"options": [
+				{
+					"id": "a",
+					"label": "U.S. Congress means the federal House and Senate in Washington; state lawmakers serve in your state legislature"
+				},
+				{
+					"id": "b",
+					"label": "U.S. Congress means only the President; state lawmakers are federal judges"
+				},
+				{
+					"id": "c",
+					"label": "U.S. Congress and state lawmakers are the same offices with different names"
+				},
+				{
+					"id": "d",
+					"label": "State lawmakers vote in the U.S. House and U.S. Senate"
+				}
+			],
+			"correctOptionId": "a",
+			"explanation": "U.S. Congress is the federal legislature: the House of Representatives and the Senate in Washington, DC. State lawmakers serve in your state capitol and make state law.",
+			"incorrectExplanation": "Congress and state legislatures are different systems. Congress is federal; state lawmakers serve in the state legislature."
 		}
 	]
 }

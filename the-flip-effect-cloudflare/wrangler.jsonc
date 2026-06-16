@@ -1,0 +1,39 @@
+{
+	"$schema": "node_modules/wrangler/config-schema.json",
+	"name": "the-flip-effect-worker",
+	"main": "api/server.ts",
+	"compatibility_date": "2026-06-14",
+	"compatibility_flags": ["nodejs_compat"],
+	"observability": {
+		"enabled": true
+	},
+
+	// --- Public, non-secret vars. The API key is a Worker secret, not here. ---
+	"vars": {
+		"OPEN_STATES_API_URL": "https://v3.openstates.org",
+		"CONGRESS_LEGISLATORS_CURRENT_URL": "https://unitedstates.github.io/congress-legislators/legislators-current.json",
+		"CONGRESS_LEGISLATOR_IMAGE_BASE_URL": "https://unitedstates.github.io/images/congress/225x275",
+		"CENSUS_GEOCODER_API_URL": "https://geocoding.geo.census.gov/geocoder/geographies/onelineaddress"
+	},
+
+	// --- Same-domain route so the frontend hits /api/* with no CORS. ---
+	"routes": [
+		{
+			"pattern": "theflipeffect.us/api/*",
+			"zone_name": "theflipeffect.us"
+		}
+	],
+
+	// --- KV: rep blob cache keyed by state. Replace id after `wrangler kv namespace create`. ---
+	"kv_namespaces": [
+		{
+			"binding": "REPRESENTATIVES_CACHE",
+			"id": "fc1e439de10f4201b7d180da8fdf951e"
+		}
+	],
+
+	// --- Weekly get-all: refresh every state in KV (Mondays 09:00 UTC). ---
+	"triggers": {
+		"crons": ["0 9 * * 1"]
+	}
+}

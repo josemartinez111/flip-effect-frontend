@@ -1,0 +1,32 @@
+{
+	"name": "the-flip-effect-cloudflare",
+	"version": "1.0.0",
+	"description": "Cloudflare Worker: rep API key proxy, KV blob cache, R2 hero image serving.",
+	"private": true,
+	"type": "module",
+	"scripts": {
+		"run:worker": "wrangler dev",
+		"run:worker:cache": "wrangler dev --test-scheduled",
+		"build:worker": "tsc --noEmit",
+		"deploy:worker": "wrangler deploy",
+		"types:worker": "wrangler types",
+		"create:cache": "wrangler kv namespace create the-flip-effect-representatives-cache",
+		"secret:worker": "wrangler secret put OPEN_STATES_API_KEY",
+		"format:worker": "prettier --write \"api/**/*.ts\"",
+		"format:worker:check": "prettier --check \"api/**/*.ts\"",
+		"upgrade:all": "pnpm up"
+	},
+	"keywords": [],
+	"author": "",
+	"license": "ISC",
+	"dependencies": {
+		"ky": "^2.0.2",
+		"ts-pattern": "^5.9.0"
+	},
+	"devDependencies": {
+		"@cloudflare/workers-types": "^4.20260613.1",
+		"prettier": "^3.8.3",
+		"typescript": "~6.0.3",
+		"wrangler": "^4.100.0"
+	}
+}

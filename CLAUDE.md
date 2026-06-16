@@ -5,6 +5,8 @@
 
 > 🔥🔥🔥 !!!NEVER EVER WRITE, EDIT, CREATE, OR TOUCH ANY FILE OUTSIDE THE PROJECT DIRECTORY WITHOUT EXPLICIT USER PERMISSION!!! This includes `~/.config/`, `~/.claude/`, or ANY path outside the current project root. ASK FIRST. ALWAYS. NO EXCEPTIONS. 🔥🔥🔥
 
+> 🔁 **Scaffold back-port (explicitly permitted on request):** The user may ask to port a breakthrough fix/pattern from this project back into the source scaffold at `/Users/josemartinez/Desktop/Business Fantum Wave Software/FantumWaveTech/vuejs-frontend-template` (code **and** its docs), to keep that template current for future projects. This is the one standing exception to the "no files outside the project root" rule above — but **only** when the user explicitly asks for that port in the current instruction. Mirror the change faithfully, update the template's docs too, typecheck it, and never delete/move template artifacts.
+
 > ❗️❗️❗️ **NEVER delete or move existing files unless the user explicitly requests it.** Preserve every scaffolded artifact and historical document.
 > **Audience:** claude-code | **Project:** Vue.js Frontend Template
 > **Type:** Reusable scaffold for FantumWave Vue 3 projects
@@ -101,6 +103,13 @@ vuejs-frontend-template/
 **Auth:** Supabase (magic link, password reset)
 **Privacy:** All POST requests with JSON body (no sensitive GET params)
 
+### ☁️ Cloudflare (Workers / Proxies)
+
+- **Everything Cloudflare-related lives in `the-flip-effect-cloudflare/`** at the repo root. Worker TypeScript code, `wrangler.toml`, and Cloudflare docs all belong there — not under `src/`.
+- Worker TypeScript source goes in `the-flip-effect-cloudflare/api/`.
+- Cloudflare-specific docs go in `the-flip-effect-cloudflare/documentation/` (e.g. `CIVIC_REPRESENTATIVE_WORKER.md`).
+- Secrets (e.g. the Open States API key) live as **Worker secrets** (`wrangler secret put`), never as `VITE_` env vars. The frontend keeps only the public Worker URL (`VITE_CIVIC_WORKER_URL`).
+
 ### API Action Pattern
 
 ```zsh
@@ -111,6 +120,12 @@ export type ApiActionResult<T> = {
   error?: Error;
 };
 ```
+
+### API Naming Rule
+
+- New API actions, API helpers, and API-facing sync/async functions created from this point forward should use the `fetch...` prefix, regardless of HTTP method or whether the source is static JSON, public data, Supabase, or a backend endpoint.
+- Do not rename legacy scaffold API/auth utilities just to satisfy this rule. Leave existing scaffold names alone unless the user explicitly asks for a migration.
+- Avoid `get...`, `post...`, `put...`, `patch...`, or `delete...` prefixes for new API names unless the user specifically requests that naming.
 
 ### TypeScript Action Organization
 
@@ -359,6 +374,56 @@ export const use$STORE_NAME$Store = defineStore('$storeName$', () => {
 ```
 
 **NEVER:** `/* block comments */` (except JSDoc), `//` without dashes
+
+### Control Flow & Block Spacing (CRITICAL)
+
+- **Always use braces** on every `if`/`else`/`for`/`while` — never single-line brace-less statements like `if (x) return;`. The body goes on its own braced line.
+- **Always give a blank line above and below** a braced control block, so each block breathes. The only exception is when the block is the very first statement inside its parent (no blank needed directly under the opening `{`) or the last before a closing `}`.
+
+```ts
+// ❌ WRONG — lazy, no braces, cramped
+const trimmed = query.trim();
+if (!trimmed) return 'name';
+if (isZip(trimmed)) return 'zip';
+
+// ✅ CORRECT — braces + blank line above/below each block
+const trimmed = query.trim();
+
+if (!trimmed) {
+  return 'name';
+}
+
+if (isZip(trimmed)) {
+  return 'zip';
+}
+```
+
+### No Mini-Functions / Named Returns (CRITICAL)
+
+- **Do not extract single-use or trivial helper functions.** Inline the logic into its one caller. A file should be **one or two real functions**, not a swarm of tiny `const foo = () => oneThing` wrappers — those are more surface to maintain and read, not less. Only factor something out when it is genuinely reused or is a real, self-contained unit. Never make pure pass-through wrappers (`const refresh = (env) => seedAll(env)`) — call the underlying function directly.
+- **Named returns.** Don't return a freshly constructed object/response inline. Bind it to a typed, named variable (e.g. `const result: T = { ... }`), leave a blank line, then `return result`. This applies to every constructed return (success **and** failure objects, `new Response(...)`, etc.) so each outcome is greppable and debuggable. Trivial primitive bails (`return []`, `return undefined`, `return null`) may stay inline.
+
+```ts
+// ❌ WRONG — tiny one-use helper + inline object return
+const fail = (message: string) => ({ success: false, message });
+export const handle = () => {
+  if (bad) return fail('nope');
+  return { success: true };
+};
+
+// ✅ CORRECT — inlined, named returns
+export const handle = (): Result => {
+  if (bad) {
+    const result: Result = { success: false, message: 'nope' };
+
+    return result;
+  }
+
+  const result: Result = { success: true };
+
+  return result;
+};
+```
 
 ---
 

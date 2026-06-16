@@ -123,7 +123,7 @@ The homepage search UI now displays a small API status note:
 Wire the existing action into the UI:
 
 ```ts
-getCivicRepresentativesAction({
+fetchCivicRepresentativesAction({
 	query,
 	filters,
 });

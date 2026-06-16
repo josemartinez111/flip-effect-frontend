@@ -26,11 +26,11 @@ export * from './actions/auth/signoutAction.ts';
 // ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
 // actions/quiz api->actions
 // ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
-export * from './actions/quiz/getGovernmentChecksBalancesQuizAction.ts';
+export * from './actions/quiz/fetchGovernmentChecksBalancesQuizAction.ts';
 // ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
 // actions/civic-representatives api->actions
 // ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
-export * from './actions/civic-representatives/getCivicRepresentativesAction.ts';
+export * from './actions/civic-representatives/fetchCivicRepresentativesAction.ts';
 // ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
 // action-results/civic-representatives api->action-results
 // ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
