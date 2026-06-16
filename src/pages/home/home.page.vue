@@ -57,7 +57,6 @@ onUnmounted(() => {
 				:placeholder="civicRepresentativeSearchPlaceholder"
 				:filter-options="civicRepresentativeSearchFilterOptions"
 				:default-selected-filters="civicRepresentativeSearchDefaultFilters"
-				checkbox-name="civic-representative-search-filter"
 			/>
 		</FWTScrollAnimation>
 

@@ -85,10 +85,11 @@ export async function tryCatchHandler<TData>({
     const result = await asyncActionCallback();
     return result;
   } catch (error: unknown) {
+    // --- Log the full cause (stack, not just a friendly message) so the real problem bubbles up across every caller. ---
     const errorMessage = error instanceof Error
-      ? `[ERROR ${ errorContext }]: ${ error.message }`
+      ? `[ERROR ${ errorContext }]: ${ error.stack ?? error.message }`
       : `[UNKNOWN ERROR ${ errorContext }]: ${ JSON.stringify(error) }`;
-    
+
     console.error(errorMessage);
     // Instead of throwing, just return undefined so caller can handle it
     return undefined;

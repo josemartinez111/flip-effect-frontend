@@ -19,11 +19,7 @@ type GlobalEnvKey =
 	| 'VITE_SUPABASE_URL'
 	| 'VITE_SUPABASE_ANON_KEY'
 	| 'VITE_EPSTEIN_FILES_URL'
-	| 'VITE_CONGRESS_LEGISLATORS_CURRENT_URL'
-	| 'VITE_CONGRESS_LEGISLATOR_IMAGE_BASE_URL'
-	| 'VITE_CENSUS_GEOCODER_API_URL'
-	| 'VITE_OPEN_STATES_API_URL'
-	| 'VITE_OPEN_STATES_API_KEY';
+	| 'VITE_CIVIC_WORKER_URL';
 
 type EnvValue = string | boolean | undefined;
 type EnvMap = Record<string, EnvValue>;
@@ -84,20 +80,10 @@ export class GlobalEnvs {
 	);
 
 	// --- Civic Representative Environment Variables ---
-	static readonly CongressLegislatorsCurrentUrl = GlobalEnvs.getEnv(
-		'VITE_CONGRESS_LEGISLATORS_CURRENT_URL',
-	);
-	static readonly CongressLegislatorImageBaseUrl = GlobalEnvs.getEnv(
-		'VITE_CONGRESS_LEGISLATOR_IMAGE_BASE_URL',
-	);
-	static readonly CensusGeocoderApiUrl = GlobalEnvs.getEnv(
-		'VITE_CENSUS_GEOCODER_API_URL',
-	);
-	static readonly OpenStatesApiUrl = GlobalEnvs.getEnv(
-		'VITE_OPEN_STATES_API_URL',
-	);
-	static readonly OpenStatesApiKey = GlobalEnvs.getEnv(
-		'VITE_OPEN_STATES_API_KEY',
+	// --- Single Worker origin; the Worker owns the civic sources + the Open States key. ---
+	static readonly CivicWorkerUrl = GlobalEnvs.getEnv(
+		'VITE_CIVIC_WORKER_URL',
+		'http://localhost:8787',
 	);
 
 	private static getEnv(key: GlobalEnvKey, fallback = ''): string {

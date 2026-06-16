@@ -1,0 +1,3 @@
+# Local-only Worker secrets for `wrangler dev`. Copy to `.dev.vars` and fill in.
+# `.dev.vars` is gitignored. In production use: wrangler secret put OPEN_STATES_API_KEY
+OPEN_STATES_API_KEY=replace_with_open_states_api_key

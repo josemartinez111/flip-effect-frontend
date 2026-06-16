@@ -1,5 +1,5 @@
 // ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
-//   API >> ACTIONS >> QUIZ >> GET-GOVERNMENT-CHECKS-BALANCES-QUIZ-ACTION.TS
+//   API >> ACTIONS >> QUIZ >> FETCH-GOVERNMENT-CHECKS-BALANCES-QUIZ-ACTION.TS
 // ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
 
 import kyMap from 'ky';
@@ -9,8 +9,8 @@ import { isGovernmentChecksBalancesQuiz } from '../../utils/isGovernmentChecksBa
 import type { GovernmentChecksBalancesQuizActionResult } from '../../types/GovernmentChecksBalancesQuizType';
 // ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
 
-export async function getGovernmentChecksBalancesQuizAction(): Promise<GovernmentChecksBalancesQuizActionResult> {
-	const getGovernmentChecksBalancesQuizRequest =
+export async function fetchGovernmentChecksBalancesQuizAction(): Promise<GovernmentChecksBalancesQuizActionResult> {
+	const fetchGovernmentChecksBalancesQuizRequest =
 		async (): Promise<GovernmentChecksBalancesQuizActionResult> => {
 			const response = await kyMap.get(governmentChecksBalancesQuizUrl, {
 				throwHttpErrors: false,
@@ -41,7 +41,7 @@ export async function getGovernmentChecksBalancesQuizAction(): Promise<Governmen
 
 	const result =
 		await tryCatchHandler<GovernmentChecksBalancesQuizActionResult>({
-			asyncActionCallback: getGovernmentChecksBalancesQuizRequest,
+			asyncActionCallback: fetchGovernmentChecksBalancesQuizRequest,
 			errorContext: 'Error loading government checks and balances quiz',
 		});
 

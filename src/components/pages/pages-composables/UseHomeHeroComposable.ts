@@ -9,7 +9,7 @@ export const UseHomeHeroComposable = () => {
 	const heroSectionStyleClasses = twMerge(
 		clsx(
 			'relative isolate flex min-h-[calc(100vh-4rem)] items-center',
-			'px-5 pb-20 pt-40 tablet:px-8 tablet:pt-36 laptop:pb-24 laptop:pt-34',
+			'px-5 pb-20 pt-60 tablet:px-8 tablet:pt-56 laptop:pb-24 laptop:pt-52',
 		),
 	);
 

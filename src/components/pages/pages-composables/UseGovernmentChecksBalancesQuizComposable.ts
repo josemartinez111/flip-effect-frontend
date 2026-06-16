@@ -13,7 +13,7 @@ import {
 	type MaybeRefOrGetter,
 } from 'vue';
 import {
-	getGovernmentChecksBalancesQuizAction,
+	fetchGovernmentChecksBalancesQuizAction,
 	type GovernmentChecksBalancesQuiz,
 } from '../../../api';
 import { UseGovernmentChecksBalancesQuizStyleComposable } from './UseGovernmentChecksBalancesQuizStyleComposable.ts';
@@ -181,7 +181,7 @@ export const UseGovernmentChecksBalancesQuizComposable = ({
 		quizLoading.value = true;
 		quizLoadMessage.value = '';
 
-		const result = await getGovernmentChecksBalancesQuizAction();
+		const result = await fetchGovernmentChecksBalancesQuizAction();
 
 		if (result.success && result.quiz) {
 			quiz.value = result.quiz;
