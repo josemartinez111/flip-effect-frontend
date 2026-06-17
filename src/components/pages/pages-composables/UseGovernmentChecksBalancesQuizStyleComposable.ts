@@ -34,7 +34,7 @@ export const UseGovernmentChecksBalancesQuizStyleComposable = () => {
 	const quizRootStyleClasses = twMerge(
 		clsx(
 			'flex min-h-[min(72vh,42rem)] w-[min(92vw,62rem)] flex-col',
-			'bg-slate-950! px-5 py-7 text-white dark:bg-black!',
+			'bg-slate-950! px-4 py-5 text-white tablet:px-5 tablet:py-7 dark:bg-black!',
 		),
 	);
 
@@ -46,7 +46,7 @@ export const UseGovernmentChecksBalancesQuizStyleComposable = () => {
 	const quizFeedbackStyleClasses = twMerge(clsx('rounded-xl border border-white/10 bg-slate-950/58 px-4 py-4'));
 	const quizFeedbackCopyStyleClasses = twMerge(clsx('mt-2 text-sm font-semibold leading-6 text-slate-200/84'));
 	const quizProgressBarStyleClasses = twMerge(clsx('mb-5 h-2! overflow-hidden rounded-full! bg-white/10!'));
-	const quizQuestionCardContentStyleClasses = twMerge(clsx('grid gap-6 px-5 py-6 tablet:px-7 tablet:py-8'));
+	const quizQuestionCardContentStyleClasses = twMerge(clsx('grid gap-4 px-4 py-5 tablet:gap-6 tablet:px-7 tablet:py-8'));
 	const quizAnswerOptionLabelStyleClasses = twMerge(clsx('text-sm font-bold tablet:text-base'));
 
 	const quizEyebrowStyleClasses = twMerge(

@@ -1,5 +1,6 @@
 // ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
-// PAGES: HOME > COMPOSABLES > USE_MIDTERMS_COUNTDOWN_COMPOSABLE.TS 
+// PAGES: HOME > COMPOSABLES 
+// > USE_MIDTERMS_COUNTDOWN_COMPOSABLE.TS 
 // ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
 import clsx from 'clsx';
 import { twMerge } from 'tailwind-merge';
@@ -8,10 +9,11 @@ import { twMerge } from 'tailwind-merge';
 export const UseMidtermsCountdownComposable = () => {
 	const countdownCardStyleClasses = twMerge(
 		clsx(
-			'absolute left-4 top-4 z-30 h-40 w-28 overflow-hidden rounded-xl',
+			'relative z-30 h-40 w-28 overflow-hidden rounded-xl',
 			'border border-white/18 bg-slate-950/42 text-white shadow-2xl',
 			'shadow-slate-950/25 backdrop-blur-md',
-			'tablet:left-8 tablet:h-56 tablet:w-38 laptop:h-72 laptop:w-48',
+			'tablet:h-56 tablet:w-38',
+			'laptop:absolute laptop:left-8 laptop:top-4 laptop:h-72 laptop:w-48',
 			'dark:border-white/12 dark:bg-slate-950/38 dark:shadow-black/45',
 		),
 	);

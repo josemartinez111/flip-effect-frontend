@@ -8,8 +8,9 @@ import { twMerge } from 'tailwind-merge';
 export const UseHomeHeroComposable = () => {
 	const heroSectionStyleClasses = twMerge(
 		clsx(
-			'relative isolate flex min-h-[calc(100vh-4rem)] items-center',
-			'px-5 pb-20 pt-60 tablet:px-8 tablet:pt-56 laptop:pb-24 laptop:pt-52',
+			'relative isolate flex items-center',
+			'px-5 pb-4 pt-4 tablet:px-8 tablet:pb-6 tablet:pt-6',
+			'laptop:min-h-[calc(100vh-4rem)] laptop:pb-24 laptop:pt-52',
 		),
 	);
 
@@ -43,11 +44,12 @@ export const UseHomeHeroComposable = () => {
 
 	const branchesTriggerButtonStyleClasses = twMerge(
 		clsx(
-			'absolute right-4 top-4 z-30 flex h-40 w-28 cursor-pointer overflow-hidden',
+			'relative z-30 flex h-40 w-28 cursor-pointer overflow-hidden',
 			'origin-top-right items-center justify-center rounded-xl bg-transparent p-0',
 			'transition duration-300 hover:z-50 hover:scale-[1.55] hover:opacity-100',
 			'active:scale-95 active:opacity-75',
-			'tablet:right-8 tablet:h-56 tablet:w-38 laptop:h-72 laptop:w-48',
+			'tablet:h-56 tablet:w-38',
+			'laptop:absolute laptop:right-8 laptop:top-4 laptop:h-72 laptop:w-48',
 		),
 	);
 

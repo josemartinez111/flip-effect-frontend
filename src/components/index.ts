@@ -14,6 +14,7 @@ export { default as CivicRepresentativeSearchSection } from './pages/home/search
 // home components->hero
 // ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
 export { default as HomeHeroSection } from './pages/home/hero/HomeHeroSection.vue';
+export { default as HomeBranchesBadge } from './pages/home/hero/HomeBranchesBadge.vue';
 // ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
 // home components->approval-rating
 // ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞

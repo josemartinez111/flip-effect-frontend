@@ -1,14 +1,24 @@
 // ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
-// CLOUDFLARE: API > WORKER_ENV.TS
+// CLOUDFLARE: APP > API-MODULES > SHARED-MODULE > WORKER_ENV.TS
 // ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
 
 // --- Worker bindings. Secrets never live in code; set via `wrangler secret put`. ---
 export type WorkerEnv = {
 	REPRESENTATIVES_CACHE: KVNamespace;
+	APPROVAL_CACHE: KVNamespace;
+	ALLOWED_ORIGINS: Array<string>;
 	OPEN_STATES_API_URL: string;
 	OPEN_STATES_API_KEY: string;
 	CONGRESS_LEGISLATORS_CURRENT_URL: string;
 	CONGRESS_LEGISLATOR_IMAGE_BASE_URL: string;
 	CENSUS_GEOCODER_API_URL: string;
+	// --- Approval feeds (both public, no key). Switched on ApprovalType in approval-module. ---
+	VOTEHUB_API_URL: string;
+	ECONOMY_API_URL: string;
+};
+
+// --- Hono env generic: every `new Hono<WorkerHonoEnv>()` types `ctx.env` as the bindings above. ---
+export type WorkerHonoEnv = {
+	Bindings: WorkerEnv;
 };
 // ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞

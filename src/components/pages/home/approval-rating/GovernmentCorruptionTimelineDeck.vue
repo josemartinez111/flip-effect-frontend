@@ -9,7 +9,7 @@ import Tag from 'primevue/tag';
 import Timeline from 'primevue/timeline';
 import type { TimelinePassThroughOptions } from 'primevue/timeline';
 import { twMerge } from 'tailwind-merge';
-import { computed, onUnmounted, ref, watch } from 'vue';
+import { computed, onMounted, onUnmounted, ref, watch } from 'vue';
 import type { GovernmentCorruptionTimelineEvent } from '../../../../app/models/GovernmentCorruptionTimelineModel';
 import {
 	governmentCorruptionTimeline,
@@ -20,10 +20,10 @@ import BaseModal from '../../../utils/BaseModal.vue';
 
 type GovernmentCorruptionTimelineDeckProps = { active?: boolean };
 
-const { active = false } = defineProps<GovernmentCorruptionTimelineDeckProps>();
+const { active = false } =
+	defineProps<GovernmentCorruptionTimelineDeckProps>();
 
 // --- The deck pages multiple events at once so the modal feels like a timeline, not one isolated card. ---
-const TIMELINE_EVENTS_PER_PAGE = 3;
 const timelineEvents = governmentCorruptionTimeline.events;
 const activeTimelinePageIndex = ref(0);
 const timelineCardKey = ref(0);
@@ -31,25 +31,59 @@ const timelineMoveDirection = ref<'previous' | 'next'>('next');
 const focusedTimelineEvent = ref<GovernmentCorruptionTimelineEvent>();
 const focusedTimelineEventModalOpen = ref(false);
 
+// --- Below laptop the deck stays horizontal but pages one scaled-down card at a time. ---
+const isCompactTimeline = ref(false);
+let compactTimelineMediaQuery: MediaQueryList | undefined;
+// ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
+
+const syncCompactTimeline = (
+	event: MediaQueryListEvent | MediaQueryList,
+) => {
+	isCompactTimeline.value = event.matches;
+};
+
+// --- One card per page on phone/tablet, three across on desktop. ---
+const timelineEventsPerPage = computed(() => {
+	return isCompactTimeline.value ? 1 : 3;
+});
+
 const timelinePageCount = computed(() => {
-	return Math.ceil(timelineEvents.length / TIMELINE_EVENTS_PER_PAGE);
+	return Math.ceil(timelineEvents.length / timelineEventsPerPage.value);
 });
 
 const activeTimelineEvents = computed(() => {
-	const startIndex = activeTimelinePageIndex.value * TIMELINE_EVENTS_PER_PAGE;
-	return timelineEvents.slice(startIndex, startIndex + TIMELINE_EVENTS_PER_PAGE);
+	const startIndex =
+		activeTimelinePageIndex.value * timelineEventsPerPage.value;
+	return timelineEvents.slice(
+		startIndex,
+		startIndex + timelineEventsPerPage.value,
+	);
 });
 
 const activeTimelinePageLabel = computed(() => {
-	const startEventNumber = activeTimelinePageIndex.value * TIMELINE_EVENTS_PER_PAGE + 1;
+	const startEventNumber =
+		activeTimelinePageIndex.value * timelineEventsPerPage.value + 1;
 	const endEventNumber = Math.min(
-		startEventNumber + TIMELINE_EVENTS_PER_PAGE - 1,
+		startEventNumber + timelineEventsPerPage.value - 1,
 		timelineEvents.length,
 	);
+
+	if (startEventNumber === endEventNumber) {
+		return `${startEventNumber} / ${timelineEvents.length}`;
+	}
+
 	return `${startEventNumber}-${endEventNumber} / ${timelineEvents.length}`;
 });
 
-const getTimelineEventImage = (timelineEvent: GovernmentCorruptionTimelineEvent) => {
+// --- Page index is sized per page; reset to the first card when the layout flips. ---
+watch(isCompactTimeline, () => {
+	activeTimelinePageIndex.value = 0;
+	timelineCardKey.value += 1;
+});
+
+const getTimelineEventImage = (
+	timelineEvent: GovernmentCorruptionTimelineEvent,
+) => {
 	return governmentCorruptionTimelineImageMap[timelineEvent.imageKey];
 };
 
@@ -71,7 +105,8 @@ const moveTimelinePage = (direction: 'previous' | 'next') => {
 
 const goToTimelinePage = (pageIndex: number) => {
 	if (pageIndex === activeTimelinePageIndex.value) return;
-	timelineMoveDirection.value = pageIndex > activeTimelinePageIndex.value ? 'next' : 'previous';
+	timelineMoveDirection.value =
+		pageIndex > activeTimelinePageIndex.value ? 'next' : 'previous';
 	activeTimelinePageIndex.value = pageIndex;
 	timelineCardKey.value += 1;
 	startAutoAdvance();
@@ -107,10 +142,27 @@ const stopAutoAdvance = () => {
 
 const startAutoAdvance = () => {
 	stopAutoAdvance();
-	autoAdvanceTimer = setInterval(() => { moveTimelinePage('next'); }, TIMELINE_AUTO_ADVANCE_INTERVAL_MS);
+	autoAdvanceTimer = setInterval(() => {
+		moveTimelinePage('next');
+	}, TIMELINE_AUTO_ADVANCE_INTERVAL_MS);
 };
 
-onUnmounted(() => { stopAutoAdvance(); });
+onMounted(() => {
+	compactTimelineMediaQuery = window.matchMedia('(max-width: 1023px)');
+	syncCompactTimeline(compactTimelineMediaQuery);
+	compactTimelineMediaQuery.addEventListener(
+		'change',
+		syncCompactTimeline,
+	);
+});
+
+onUnmounted(() => {
+	compactTimelineMediaQuery?.removeEventListener(
+		'change',
+		syncCompactTimeline,
+	);
+	stopAutoAdvance();
+});
 
 const getSeverityTagStyleClasses = (
 	severity: GovernmentCorruptionTimelineEvent['severity'],
@@ -134,7 +186,9 @@ const getSeverityTagLabel = (
 	return severity.toUpperCase();
 };
 
-const getTimelineMarkerIcon = (timelineEvent: GovernmentCorruptionTimelineEvent) => {
+const getTimelineMarkerIcon = (
+	timelineEvent: GovernmentCorruptionTimelineEvent,
+) => {
 	const iconByCategory: Partial<
 		Record<GovernmentCorruptionTimelineEvent['category'], string>
 	> = {
@@ -171,19 +225,21 @@ const rootStyleClasses = twMerge(
 );
 const headerStyleClasses = twMerge(
 	clsx(
-		'flex items-start justify-between gap-4 border-b border-white/10 px-5 py-3 pr-18 tablet:px-7 tablet:pr-20',
+		'flex items-start justify-between gap-3 border-b border-white/10 px-4 py-2.5 pr-14 tablet:px-7 tablet:py-3 tablet:pr-20',
 	),
 );
 const titleStyleClasses = twMerge(
-	clsx('font-orbitron text-xl font-black uppercase tablet:text-3xl'),
+	clsx('font-orbitron text-base font-black uppercase tablet:text-3xl'),
 );
 const subtitleStyleClasses = twMerge(
-	clsx('mt-1 max-w-4xl text-sm font-semibold leading-5 text-slate-300/82'),
+	clsx(
+		'mt-1 max-w-4xl text-[0.7rem] font-semibold leading-4 text-slate-300/82 tablet:text-sm tablet:leading-5',
+	),
 );
 const subtitleCallToActionStyleClasses = twMerge(
 	clsx(
-		'mt-1 block font-orbitron font-black uppercase tracking-[0.12em]',
-		'text-flipeffect-cyan',
+		'mt-1 block font-orbitron text-[0.7rem] font-black uppercase tracking-[0.12em]',
+		'text-flipeffect-cyan tablet:text-sm',
 	),
 );
 const pageBadgeStyleClasses = twMerge(
@@ -199,23 +255,53 @@ const surfaceStyleClasses = twMerge(
 		'overflow-hidden rounded-xl border border-white/12 bg-white/7',
 	),
 );
-const timelineViewportStyleClasses = twMerge(clsx('min-w-0 overflow-hidden'));
-const timelinePageStyleClasses = twMerge(clsx('h-full overflow-x-auto'));
-const timelineScaleShellStyleClasses = twMerge(
-	clsx('h-[111.12%] w-[111.12%] origin-top-left scale-[0.9]'),
+const timelineViewportStyleClasses = twMerge(
+	clsx('min-w-0 overflow-hidden'),
 );
 
+const timelinePageStyleClasses = computed(() => {
+	return twMerge(
+		clsx(
+			'h-full',
+			isCompactTimeline.value ? 'overflow-hidden' : 'overflow-x-auto',
+		),
+	);
+});
+
+const timelineScaleShellStyleClasses = computed(() => {
+	return isCompactTimeline.value
+		? twMerge(clsx('h-full w-full'))
+		: twMerge(clsx('h-[111.12%] w-[111.12%] origin-top-left scale-[0.9]'));
+});
+
 // --- PrimeVue owns the timeline line/marker structure; Tailwind owns the sizing and cards. ---
-const timelinePassThrough: TimelinePassThroughOptions = {
-	root: { class: 'h-full min-w-[64rem] px-4 py-4' },
-	event: {
-		class: 'w-1/3! max-w-[33.333333%]! min-w-[20rem] flex-none! basis-1/3! px-3',
-	},
-	eventOpposite: { class: 'hidden' },
-	eventSeparator: { class: 'items-center' },
-	eventConnector: { class: 'bg-white/18' },
-	eventContent: { class: 'min-h-0 pt-3' },
-};
+// --- Compact = one full-width horizontal card per page; desktop = three fixed-width events. ---
+const timelinePassThrough = computed<TimelinePassThroughOptions>(() => {
+	if (isCompactTimeline.value) {
+		return {
+			root: { class: 'h-full w-full px-2 py-2' },
+			event: {
+				class: 'w-full! max-w-full! min-w-0! flex-none! basis-full! px-1',
+			},
+			eventOpposite: { class: 'hidden' },
+			eventSeparator: { class: 'items-center' },
+			eventConnector: { class: 'bg-white/18' },
+			eventContent: { class: 'min-h-0 pt-3' },
+		};
+	}
+
+	return {
+		root: { class: 'h-full min-w-[64rem] px-4 py-4' },
+		event: {
+			class:
+				'w-1/3! max-w-[33.333333%]! min-w-[20rem] flex-none! basis-1/3! px-3',
+		},
+		eventOpposite: { class: 'hidden' },
+		eventSeparator: { class: 'items-center' },
+		eventConnector: { class: 'bg-white/18' },
+		eventContent: { class: 'min-h-0 pt-3' },
+	};
+});
 
 const markerButtonStyleClasses = twMerge(
 	clsx(
@@ -225,21 +311,26 @@ const markerButtonStyleClasses = twMerge(
 		'shadow-[0_0_18px_rgba(103,232,249,0.36)]',
 	),
 );
-const eventCardStyleClasses = twMerge(
-	clsx(
-		'group grid h-[min(62vh,36rem)] grid-rows-[auto_minmax(0,1fr)]',
-		'overflow-hidden rounded-xl border border-white/10',
-		'bg-slate-950/72 shadow-xl shadow-black/28',
-		'cursor-pointer transition duration-300 hover:z-50 hover:scale-[1.18]',
-		'hover:border-flipeffect-cyan/45 hover:shadow-2xl hover:shadow-black/40',
-	),
-);
+const eventCardStyleClasses = computed(() => {
+	return twMerge(
+		clsx(
+			'group grid grid-rows-[auto_minmax(0,1fr)]',
+			'overflow-hidden rounded-xl border border-white/10',
+			'bg-slate-950/72 shadow-xl shadow-black/28',
+			'cursor-pointer transition duration-300 hover:z-50',
+			'hover:border-flipeffect-cyan/45 hover:shadow-2xl hover:shadow-black/40',
+			isCompactTimeline.value
+				? 'h-[min(60vh,30rem)]'
+				: 'h-[min(62vh,36rem)] hover:scale-[1.18]',
+		),
+	);
+});
 const getTimelineEventImageStyleClasses = (
 	timelineEvent: GovernmentCorruptionTimelineEvent,
 ) => {
 	return twMerge(
 		clsx(
-			'h-48 w-full bg-black object-contain object-center',
+			'h-40 w-full bg-black object-contain object-center tablet:h-48',
 			'transition duration-300 group-hover:scale-[1.05]',
 			timelineEvent.imageKey === 'tulsi-gabbard-beginning-end'
 				? 'p-1'
@@ -247,25 +338,36 @@ const getTimelineEventImageStyleClasses = (
 		),
 	);
 };
-const eventBodyStyleClasses = twMerge(clsx('grid gap-2 overflow-y-auto p-4'));
+
+const eventBodyStyleClasses = twMerge(
+	clsx('grid gap-2 overflow-y-auto p-4'),
+);
+
 const eventMetaStyleClasses = twMerge(
 	clsx('flex flex-wrap items-center gap-x-2 gap-y-1'),
 );
+
 const eventDateStyleClasses = twMerge(
 	clsx(
 		'min-w-0 font-orbitron text-[0.62rem] font-black uppercase',
 		'tracking-[0.14em] text-cyan-100',
 	),
 );
+
 const eventTitleStyleClasses = twMerge(
-	clsx('font-orbitron text-lg font-black uppercase leading-tight text-white'),
+	clsx(
+		'font-orbitron text-lg font-black uppercase leading-tight text-white',
+	),
 );
+
 const eventCopyStyleClasses = twMerge(
 	clsx('text-xs font-semibold leading-5 text-slate-200/84 tablet:text-sm'),
 );
+
 const eventWhyStyleClasses = twMerge(
 	clsx('rounded-lg border border-white/10 bg-black/22 px-3 py-2'),
 );
+
 const eventWhyTitleStyleClasses = twMerge(
 	clsx(
 		'font-orbitron text-[0.62rem] font-black uppercase tracking-[0.14em] text-flipeffect-cyan',
@@ -277,9 +379,11 @@ const timelineTransitionActiveStyleClasses = twMerge(
 		'transition-[transform,opacity] duration-[520ms] ease-[cubic-bezier(0.22,1,0.36,1)]',
 	),
 );
+
 const timelineTransitionDefaultStyleClasses = twMerge(
 	clsx('translate-x-0 rotate-0 scale-100 opacity-100'),
 );
+
 const timelineTransitionEnterFromStyleClasses = computed(() => {
 	return twMerge(
 		clsx(
@@ -290,6 +394,7 @@ const timelineTransitionEnterFromStyleClasses = computed(() => {
 		),
 	);
 });
+
 const timelineTransitionLeaveToStyleClasses = computed(() => {
 	return twMerge(
 		clsx(
@@ -317,7 +422,9 @@ const navButtonStyleClasses = twMerge(
 		'active:scale-95',
 	),
 );
-const pageDotsContainerStyleClasses = twMerge(clsx('flex items-center gap-1.5'));
+const pageDotsContainerStyleClasses = twMerge(
+	clsx('hidden items-center gap-1.5 laptop:flex'),
+);
 
 const focusedModalRootStyleClasses = twMerge(
 	clsx(
@@ -335,11 +442,14 @@ const focusedModalHeaderStyleClasses = twMerge(
 	),
 );
 
-const focusedModalContentStyleClasses = twMerge(clsx('overflow-visible! p-0!'));
+const focusedModalContentStyleClasses = twMerge(
+	clsx('overflow-visible! p-0!'),
+);
 
 const focusedModalCloseButtonStyleClasses = twMerge(
 	clsx(
 		'cursor-pointer border border-slate-300/70! bg-white/80! text-slate-700!',
+		'h-8! w-8! tablet:h-10! tablet:w-10!',
 		'shadow-lg shadow-slate-950/12!',
 		'transition duration-200 hover:border-flipeffect-cyan/70!',
 		'hover:bg-flipeffect-cyan/14! hover:text-flipeffect-cyan!',
@@ -348,7 +458,9 @@ const focusedModalCloseButtonStyleClasses = twMerge(
 );
 
 const focusedModalCloseButtonIconStyleClasses = twMerge(
-	clsx('text-slate-700! hover:text-flipeffect-cyan! dark:text-white!'),
+	clsx(
+		'text-xs! text-slate-700! hover:text-flipeffect-cyan! tablet:text-sm! dark:text-white!',
+	),
 );
 
 const focusedModalGridStyleClasses = twMerge(
@@ -360,21 +472,21 @@ const focusedModalGridStyleClasses = twMerge(
 
 const focusedModalImageStyleClasses = twMerge(
 	clsx(
-		'h-full min-h-80 w-full bg-black object-contain object-center',
+		'h-full min-h-52 w-full bg-black object-contain object-center tablet:min-h-80',
 	),
 );
 
 const focusedModalCopyStyleClasses = twMerge(
 	clsx(
 		'grid content-center gap-4 overflow-y-auto',
-		'bg-gradient-to-br from-slate-100 via-slate-50 to-cyan-50/62 p-5',
+		'bg-gradient-to-br from-slate-100 via-slate-50 to-cyan-50/62 p-4',
 		'dark:bg-none dark:bg-slate-950 tablet:p-7',
 	),
 );
 
 const focusedModalTitleStyleClasses = twMerge(
 	clsx(
-		'font-orbitron text-2xl font-black uppercase leading-tight',
+		'font-orbitron text-xl font-black uppercase leading-tight',
 		'text-slate-950 drop-shadow-[0_0_14px_rgba(14,165,233,0.18)]',
 		'dark:text-white dark:drop-shadow-none tablet:text-4xl',
 	),
@@ -443,7 +555,10 @@ watch(
 				</p>
 			</div>
 
-			<Tag :value="activeTimelinePageLabel" :class="pageBadgeStyleClasses" />
+			<Tag
+				:value="activeTimelinePageLabel"
+				:class="pageBadgeStyleClasses"
+			/>
 		</header>
 
 		<!-- TIMELINE: PAGED EVENT GROUP -->
@@ -484,7 +599,9 @@ watch(
 											tabindex="0"
 											@click="openFocusedTimelineEventModal(item)"
 											@keydown.enter="openFocusedTimelineEventModal(item)"
-											@keydown.space.prevent="openFocusedTimelineEventModal(item)"
+											@keydown.space.prevent="
+												openFocusedTimelineEventModal(item)
+											"
 										>
 											<img
 												:src="getTimelineEventImage(item)"
@@ -496,7 +613,9 @@ watch(
 												<div :class="eventMetaStyleClasses">
 													<Tag
 														:value="getSeverityTagLabel(item.severity)"
-														:class="getSeverityTagStyleClasses(item.severity)"
+														:class="
+															getSeverityTagStyleClasses(item.severity)
+														"
 													/>
 													<span :class="eventDateStyleClasses">{{
 														item.dateLabel
@@ -586,7 +705,9 @@ watch(
 					<div :class="focusedModalMetaStyleClasses">
 						<Tag
 							:value="getSeverityTagLabel(focusedTimelineEvent.severity)"
-							:class="getSeverityTagStyleClasses(focusedTimelineEvent.severity)"
+							:class="
+								getSeverityTagStyleClasses(focusedTimelineEvent.severity)
+							"
 						/>
 
 						<span :class="focusedModalDateStyleClasses">
@@ -603,9 +724,7 @@ watch(
 					</p>
 
 					<div :class="focusedModalWhyStyleClasses">
-						<div :class="eventWhyTitleStyleClasses">
-							Why it matters
-						</div>
+						<div :class="eventWhyTitleStyleClasses"> Why it matters </div>
 
 						<p :class="focusedModalCopyTextStyleClasses">
 							{{ focusedTimelineEvent.whyItMatters }}

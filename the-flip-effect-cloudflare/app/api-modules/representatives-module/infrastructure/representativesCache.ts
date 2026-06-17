@@ -1,22 +1,22 @@
 // ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
-// CLOUDFLARE: API > REPRESENTATIVES_CACHE
+// CLOUDFLARE: APP > API-MODULES > REPRESENTATIVES-MODULE > INFRASTRUCTURE
 // > REPRESENTATIVES_CACHE.TS
 // ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
-import type { WorkerEnv } from '../worker-env';
+import type { WorkerEnv } from '@shared-module/worker-env';
 import type {
 	CongressLegislator,
 	OpenStatesPerson,
-} from '../shared';
+} from '@representatives-module/domain/civicUpstreamModel';
 import {
 	CACHE_TTL_SECONDS,
 	FEDERAL_LEGISLATORS_KEY,
 	US_STATE_CODES,
 	stateCacheKey,
-} from '../shared';
+} from '@representatives-module/domain/representativeConstants';
 import {
 	fetchFederalLegislators,
 	fetchStateRosterByCode,
-} from '../data-providers/civicDataProviders';
+} from '@representatives-module/infrastructure/civicDataProviders';
 // ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
 
 const putWeekly = (env: WorkerEnv, key: string, value: unknown): Promise<void> =>

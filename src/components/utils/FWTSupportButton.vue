@@ -1,12 +1,12 @@
 <!-- ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
     COMPONENTS: UTILS > FWT_SUPPORT_BUTTON.VUE
-∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞ -->
+∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞ -->
 <script setup lang="ts">
-// ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
+// ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
 import clsx from 'clsx';
 import { twMerge } from 'tailwind-merge';
 import { computed } from 'vue';
-// ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
+// ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
 
 type FWTSupportButtonProps = {
 	label?: string;
@@ -17,6 +17,7 @@ type FWTSupportButtonProps = {
 	rootClass?: string;
 	disabled?: boolean;
 };
+// ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
 
 const {
 	label = 'Support us',
@@ -31,6 +32,7 @@ const {
 const emit = defineEmits<{
 	click: [];
 }>();
+
 // -- ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞ Usage ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞ --
 // <FWTSupportButton @click="startStripeCheckout" />
 //
@@ -45,15 +47,16 @@ const emit = defineEmits<{
 // once and Stripe can be configured through env later. Listen to `click` only
 // when the call site needs tracking before the donation redirect.
 // -- ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞ Usage ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞ --
-
 const resolvedStripeDonationUrl = computed(() => {
-	return stripeDonationUrl ?? import.meta.env.VITE_STRIPE_DONATION_URL ?? '/';
+	return (
+		stripeDonationUrl ?? import.meta.env.VITE_STRIPE_DONATION_URL ?? '/'
+	);
 });
 
 const supportButtonStyleClasses = computed(() => {
 	return twMerge(
 		clsx(
-			'fixed bottom-0 right-56 z-[70]',
+			'fixed bottom-0 left-2 z-[70] tablet:left-auto tablet:right-56',
 			'flex cursor-pointer items-center gap-2 rounded-t-xl border px-4 py-2',
 			'font-orbitron text-[0.65rem] font-black uppercase tracking-[0.18em]',
 			'border-flipeffect-rose-bright/45 bg-flipeffect-ink/78',
@@ -91,9 +94,9 @@ const handleSupportClick = () => {
 };
 // ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
 </script>
-<!-- ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
-                </>MARKUP</>
-∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞ -->
+<!-- ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
+                   </>MARKUP</>
+∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞ -->
 <template>
 	<button
 		type="button"
@@ -102,14 +105,17 @@ const handleSupportClick = () => {
 		:disabled="disabled"
 		@click="handleSupportClick"
 	>
-		<i :class="[iconClass, 'text-xs text-flipeffect-rose-bright']" aria-hidden="true" />
+		<i
+			:class="[iconClass, 'text-flipeffect-rose-bright text-xs']"
+			aria-hidden="true"
+		/>
 		<span>{{ label }}</span>
 	</button>
 </template>
-<!-- ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
+<!-- ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
                      STYLES
-∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞ -->
+∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞ -->
 <style scoped lang="postcss">
 /* prettier-ignore */
 </style>
-<!-- ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞ -->
+<!-- ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞ -->
