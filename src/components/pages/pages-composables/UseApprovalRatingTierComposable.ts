@@ -22,6 +22,7 @@ type ApprovalRatingTierMap = {
 	badgeHeadline: string;
 	badgeDescription: string;
 };
+// ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
 
 // ---
 // TODO: Replace these static values with two separate polling API actions.
@@ -31,6 +32,7 @@ type ApprovalRatingTierMap = {
 // ---
 export const currentTrumpApprovalRatingPercentage = 31;
 export const currentTrumpEconomyApprovalPercentage = 33;
+// ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
 
 export const UseApprovalRatingTierComposable = () => {
 	const APPROVAL_RATING_TIER_STEP_DELAY_MS = 5400;
@@ -139,15 +141,17 @@ export const UseApprovalRatingTierComposable = () => {
 	// --- Page-owned class constants stay here because the tier section is a custom homepage surface. ---
 	const approvalTierCompositionStyleClasses = twMerge(
 		clsx(
-			'relative z-20 mx-auto -mt-44 w-[min(98vw,100rem)]',
-			'overflow-visible bg-transparent px-4 pb-4 pt-10',
-			'tablet:-mt-52 tablet:px-6 tablet:pb-6 tablet:pt-14 laptop:-mt-60',
+			'relative z-20 mx-auto w-[min(98vw,100rem)]',
+			'overflow-visible bg-transparent px-4 pb-6 pt-2',
+			'tablet:px-6 tablet:pb-8 tablet:pt-3',
+			'laptop:-mt-60 laptop:pb-6 laptop:pt-14',
 		),
 	);
 
 	const approvalTierSectionStyleClasses = twMerge(
 		clsx(
-			'relative scale-[0.70] origin-top overflow-visible',
+			'relative overflow-visible',
+			'laptop:origin-top laptop:scale-[0.70]',
 			'dark:overflow-hidden',
 		),
 	);
@@ -192,10 +196,11 @@ export const UseApprovalRatingTierComposable = () => {
 
 	const approvalTierBadgeStyleClasses = twMerge(
 		clsx(
-			'absolute right-[6%] top-[9%] z-30 flex max-w-[28rem] flex-col',
+			'relative z-30 mt-4 flex w-full max-w-none flex-col',
 			'gap-2 rounded-2xl border border-white/14 bg-slate-950/48',
 			'px-5 py-4 font-orbitron text-white shadow-2xl shadow-black/34',
-			'backdrop-blur-[2px] tablet:right-[7%] tablet:top-[10%] tablet:px-6',
+			'backdrop-blur-[2px]',
+			'laptop:absolute laptop:right-[7%] laptop:top-[10%] laptop:mt-0 laptop:w-auto laptop:max-w-[28rem] laptop:px-6',
 		),
 	);
 
@@ -235,11 +240,12 @@ export const UseApprovalRatingTierComposable = () => {
 
 	const approvalTimelineTriggerButtonStyleClasses = twMerge(
 		clsx(
-			'absolute right-4 top-4 z-40 flex h-40 w-28 cursor-pointer overflow-hidden',
+			'relative z-40 flex h-40 w-28 cursor-pointer overflow-hidden',
 			'origin-top-right items-center justify-center rounded-xl bg-transparent p-0',
 			'transition duration-300 hover:z-50 hover:scale-[1.55] hover:opacity-100',
 			'active:scale-95 active:opacity-75',
-			'tablet:right-8 tablet:h-56 tablet:w-38 laptop:h-72 laptop:w-48',
+			'tablet:h-56 tablet:w-38',
+			'laptop:absolute laptop:right-8 laptop:top-4 laptop:h-72 laptop:w-48',
 		),
 	);
 
@@ -253,11 +259,12 @@ export const UseApprovalRatingTierComposable = () => {
 
 	const approvalQuizTriggerButtonStyleClasses = twMerge(
 		clsx(
-			'absolute left-4 top-4 z-40 flex h-40 w-[6rem] cursor-pointer overflow-hidden',
+			'relative z-40 flex h-40 w-[6rem] cursor-pointer overflow-hidden',
 			'origin-top-left items-center justify-center rounded-xl bg-transparent p-0',
 			'transition duration-300 hover:z-50 hover:scale-[1.55] hover:opacity-100',
 			'active:scale-95 active:opacity-75',
-			'tablet:left-8 tablet:h-56 tablet:w-[8rem] laptop:h-72 laptop:w-[10.5rem]',
+			'tablet:h-56 tablet:w-[8rem]',
+			'laptop:absolute laptop:left-8 laptop:top-4 laptop:h-72 laptop:w-[10.5rem]',
 		),
 	);
 
@@ -288,6 +295,7 @@ export const UseApprovalRatingTierComposable = () => {
 	const approvalTimelineModalCloseButtonStyleClasses = twMerge(
 		clsx(
 			'cursor-pointer border! border-white/35! bg-slate-950/72! text-white!',
+			'h-8! w-8! tablet:h-10! tablet:w-10!',
 			'shadow-lg shadow-black/35 backdrop-blur-md',
 			'hover:border-flipeffect-rose-bright/80! hover:bg-slate-950/90!',
 			'hover:text-flipeffect-rose-bright!',
@@ -297,7 +305,7 @@ export const UseApprovalRatingTierComposable = () => {
 		),
 	);
 
-	const approvalTimelineModalCloseIconStyleClasses = twMerge(clsx('text-white! dark:text-white!'));
+	const approvalTimelineModalCloseIconStyleClasses = twMerge(clsx('text-xs! text-white! tablet:text-sm! dark:text-white!'));
 
 	const approvalQuizModalRootStyleClasses = twMerge(
 		clsx(

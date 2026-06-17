@@ -81,10 +81,10 @@ const footerLogoStyleClasses = twMerge(
 		<Divider class="m-0! border-slate-200! dark:border-slate-700/60!" />
 
 		<!-- ∞∞∞∞∞∞∞∞ LINK SECTIONS ∞∞∞∞∞∞∞∞ -->
-		<div class="mx-auto max-w-7xl px-6 py-12">
-			<div class="mb-10 grid grid-cols-2 gap-10 md:grid-cols-4">
+		<div class="mx-auto max-w-7xl px-5 py-10 tablet-landscape:px-6 tablet-landscape:py-12">
+			<div class="mb-8 grid grid-cols-2 gap-x-8 gap-y-8 tablet-landscape:mb-10 tablet-landscape:grid-cols-4 tablet-landscape:gap-10">
 				<!-- --- Brand column --- -->
-				<div class="col-span-2 flex flex-col gap-3 md:col-span-1">
+				<div class="col-span-2 flex flex-col gap-3 tablet-landscape:col-span-1">
 					<div class="flex items-center gap-3">
 						<RouterLink to="/" :class="footerBrandLinkStyleClasses">
 							<img

@@ -10,13 +10,16 @@ export type CongressionalSeatParty =
 	| 'republican'
 	| 'independent'
 	| 'vacant';
+// ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
 
 export type CongressionalSeatSize = 'house' | 'senate';
+// ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
 
 export type CongressionalSeat = {
 	id: string;
 	party: CongressionalSeatParty;
 };
+// ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
 
 export type CongressionalControlChamber = {
 	key: CongressionalSeatSize;
@@ -34,6 +37,7 @@ export type CongressionalControlChamber = {
 	pathSummary: string;
 	seats: Array<CongressionalSeat>;
 };
+// ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
 
 type CongressionalSeatAvatarStyleClasses = {
 	seatBackStyleClasses: string;
@@ -42,12 +46,14 @@ type CongressionalSeatAvatarStyleClasses = {
 	iconStyleClasses?: string;
 	hideIcon?: boolean;
 };
+// ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
 
 export const UseCongressionalControlComposable = () => {
 	const congressionalControlSectionStyleClasses = twMerge(
 		clsx(
-			'relative z-20 mx-auto w-full max-w-[96rem] px-4 pb-24',
-			'-mt-32 tablet:px-6 tablet:-mt-36 laptop:-mt-44 laptop:pb-32',
+			'relative z-20 mx-auto w-full max-w-[96rem] px-4 pb-12',
+			'tablet:px-6 tablet:pb-16',
+			'laptop:-mt-44 laptop:pb-32',
 		),
 	);
 

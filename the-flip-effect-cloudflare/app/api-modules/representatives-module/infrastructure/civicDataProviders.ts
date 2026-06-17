@@ -1,27 +1,29 @@
 // ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
-// CLOUDFLARE: API > DATA_PROVIDERS
+// CLOUDFLARE: APP > API-MODULES > REPRESENTATIVES-MODULE > INFRASTRUCTURE
 // > CIVIC_DATA_PROVIDERS.TS
 // ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
 import ky from 'ky';
-import type { WorkerEnv } from '../worker-env';
+import type { WorkerEnv } from '@shared-module/worker-env';
+import { STATUS } from '@shared-module/httpStatus';
 import type {
-	CensusGeocoderResponse,
 	CensusRepresentativeLocation,
 	CivicRepresentativeRecord,
 	CivicRepresentativeSearchParams,
 	CivicRepresentativeSearchQueryType,
+} from '@representatives-module/domain/representativeModel';
+import type {
+	CensusGeocoderResponse,
 	CongressLegislator,
 	OpenStatesPeopleResponse,
 	OpenStatesPerson,
-} from '../shared';
+} from '@representatives-module/domain/civicUpstreamModel';
 import {
 	CENSUS_LOCATION_FIELDS,
 	OPEN_STATES_INCLUDE,
-	STATUS,
 	US_STATE_CODE_TO_NAME,
 	US_STATE_NAME_TO_CODE,
 	ZIP_PREFIX_RANGES,
-} from '../shared';
+} from '@representatives-module/domain/representativeConstants';
 // ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
 
 const cleanUrl = (url: string): string => (

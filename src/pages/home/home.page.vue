@@ -9,6 +9,7 @@ import {
 	CongressionalControlSection,
 	CivicRepresentativeSearchSection,
 	FWTScrollAnimation,
+	HomeBranchesBadge,
 	HomeHeroSection,
 	MidtermsCountdownSection,
 } from '../../components';
@@ -50,6 +51,24 @@ onUnmounted(() => {
 ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞ -->
 <template>
 	<main :class="mainContainerStyleClasses">
+		<!-- COMPONENT-GROUP: top badge row (countdown + branches) -->
+		<div
+			class="flex items-start justify-between gap-2 px-4 pt-4 laptop:block laptop:px-0 laptop:pt-0"
+		>
+			<FWTScrollAnimation direction="none" :duration-ms="820" :delay-ms="120">
+				<!-- COMPONENT: MidtermsCountdownSection -->
+				<MidtermsCountdownSection
+					:midterms-countdown="midtermsCountdown"
+					:midterms-date-label="midtermsDateLabel"
+				/>
+			</FWTScrollAnimation>
+
+			<FWTScrollAnimation direction="none" :duration-ms="820" :delay-ms="160">
+				<!-- COMPONENT: HomeBranchesBadge -->
+				<HomeBranchesBadge />
+			</FWTScrollAnimation>
+		</div>
+
 		<FWTScrollAnimation direction="none" :duration-ms="780">
 			<!-- COMPONENT: CivicRepresentativeSearchSection -->
 			<CivicRepresentativeSearchSection
@@ -57,14 +76,6 @@ onUnmounted(() => {
 				:placeholder="civicRepresentativeSearchPlaceholder"
 				:filter-options="civicRepresentativeSearchFilterOptions"
 				:default-selected-filters="civicRepresentativeSearchDefaultFilters"
-			/>
-		</FWTScrollAnimation>
-
-		<FWTScrollAnimation direction="none" :duration-ms="820" :delay-ms="120">
-			<!-- COMPONENT: MidtermsCountdownSection -->
-			<MidtermsCountdownSection
-				:midterms-countdown="midtermsCountdown"
-				:midterms-date-label="midtermsDateLabel"
 			/>
 		</FWTScrollAnimation>
 

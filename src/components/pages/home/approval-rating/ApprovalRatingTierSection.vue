@@ -51,6 +51,7 @@ const {
 	startApprovalRatingAnimation,
 	stopApprovalRatingAnimation,
 } = UseApprovalRatingTierComposable();
+// ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
 
 // --- The approval drop should begin only once the tier map is actually in view. ---
 const startApprovalRatingAnimationOnce = () => {
@@ -101,33 +102,36 @@ onUnmounted(() => {
 		ref="approvalTierRootElement"
 		:class="approvalTierCompositionStyleClasses"
 	>
-		<!-- APPROVAL TIER: TIMELINE TRIGGER -->
-		<button
-			type="button"
-			:class="approvalTimelineTriggerButtonStyleClasses"
-			aria-label="Open Trump administration timeline"
-			@click="approvalTimelineModalOpen = true"
-		>
-			<img
-				:src="TrumpAdminTimelineModalClick"
-				alt="Trump administration timeline"
-				:class="approvalTimelineTriggerImageStyleClasses"
-			/>
-		</button>
+		<!-- APPROVAL TIER: TRIGGER ROW (quiz + timeline) -->
+		<div class="laptop:block flex items-start justify-center gap-4">
+			<!-- APPROVAL TIER: QUIZ TRIGGER -->
+			<button
+				type="button"
+				:class="approvalQuizTriggerButtonStyleClasses"
+				aria-label="Open government checks and balances quiz"
+				@click="approvalQuizModalOpen = true"
+			>
+				<img
+					:src="GovernmentChecksBalancesClick"
+					alt="Government checks and balances quiz"
+					:class="approvalQuizTriggerImageStyleClasses"
+				/>
+			</button>
 
-		<!-- APPROVAL TIER: QUIZ TRIGGER -->
-		<button
-			type="button"
-			:class="approvalQuizTriggerButtonStyleClasses"
-			aria-label="Open government checks and balances quiz"
-			@click="approvalQuizModalOpen = true"
-		>
-			<img
-				:src="GovernmentChecksBalancesClick"
-				alt="Government checks and balances quiz"
-				:class="approvalQuizTriggerImageStyleClasses"
-			/>
-		</button>
+			<!-- APPROVAL TIER: TIMELINE TRIGGER -->
+			<button
+				type="button"
+				:class="approvalTimelineTriggerButtonStyleClasses"
+				aria-label="Open Trump administration timeline"
+				@click="approvalTimelineModalOpen = true"
+			>
+				<img
+					:src="TrumpAdminTimelineModalClick"
+					alt="Trump administration timeline"
+					:class="approvalTimelineTriggerImageStyleClasses"
+				/>
+			</button>
+		</div>
 
 		<!-- APPROVAL TIER: ECONOMY MAP STORY -->
 		<div :class="approvalTierSectionStyleClasses">
@@ -143,24 +147,25 @@ onUnmounted(() => {
 				/>
 
 				<div :class="approvalTierEdgeStyleClasses"></div>
+			</div>
 
-				<div :class="approvalTierBadgeStyleClasses">
-					<div :class="approvalTierBadgeRowStyleClasses">
-						<span :class="approvalTierBadgeValueStyleClasses">
-							{{ animatedApprovalRatingPercentage }}%
-						</span>
-						<span :class="approvalTierBadgeLabelStyleClasses">
-							Economy approval
-						</span>
-					</div>
+			<!-- APPROVAL TIER: ECONOMY BADGE -->
+			<div :class="approvalTierBadgeStyleClasses">
+				<div :class="approvalTierBadgeRowStyleClasses">
+					<span :class="approvalTierBadgeValueStyleClasses">
+						{{ animatedApprovalRatingPercentage }}%
+					</span>
+					<span :class="approvalTierBadgeLabelStyleClasses">
+						Economy approval
+					</span>
+				</div>
 
-					<div :class="approvalTierBadgeHeadlineStyleClasses">
-						{{ activeApprovalRatingTierMap.badgeHeadline }}
-					</div>
+				<div :class="approvalTierBadgeHeadlineStyleClasses">
+					{{ activeApprovalRatingTierMap.badgeHeadline }}
+				</div>
 
-					<div :class="approvalTierBadgeDescriptionStyleClasses">
-						{{ activeApprovalRatingTierMap.badgeDescription }}
-					</div>
+				<div :class="approvalTierBadgeDescriptionStyleClasses">
+					{{ activeApprovalRatingTierMap.badgeDescription }}
 				</div>
 			</div>
 		</div>

@@ -10,23 +10,27 @@
 		"build:worker": "tsc --noEmit",
 		"deploy:worker": "wrangler deploy",
 		"types:worker": "wrangler types",
+		"test:worker": "vitest run",
+		"test:watch:worker": "vitest",
 		"create:cache": "wrangler kv namespace create the-flip-effect-representatives-cache",
 		"secret:worker": "wrangler secret put OPEN_STATES_API_KEY",
-		"format:worker": "prettier --write \"api/**/*.ts\"",
-		"format:worker:check": "prettier --check \"api/**/*.ts\"",
+		"format:worker": "prettier --write \"{app,test}/**/*.ts\"",
+		"format:worker:check": "prettier --check \"{app,test}/**/*.ts\"",
 		"upgrade:all": "pnpm up"
 	},
 	"keywords": [],
 	"author": "",
 	"license": "ISC",
 	"dependencies": {
-		"ky": "^2.0.2",
-		"ts-pattern": "^5.9.0"
+		"hono": "^4.12.25",
+		"ky": "^2.0.2"
 	},
 	"devDependencies": {
+		"@cloudflare/vitest-pool-workers": "^0.16.16",
 		"@cloudflare/workers-types": "^4.20260613.1",
 		"prettier": "^3.8.3",
 		"typescript": "~6.0.3",
+		"vitest": "^4.1.6",
 		"wrangler": "^4.100.0"
 	}
 }

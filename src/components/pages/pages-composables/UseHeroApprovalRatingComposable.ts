@@ -9,10 +9,11 @@ import { twMerge } from 'tailwind-merge';
 export const UseHeroApprovalRatingComposable = () => {
 	const cardContainerStyleClasses = twMerge(
 		clsx(
-			'relative mx-auto mt-20 h-[28rem] w-[min(98vw,100rem)] scale-[0.76] overflow-hidden',
-			'origin-top rounded-[1.6rem] border-none bg-white/20',
+			'relative mx-auto mt-3 h-[28rem] w-full overflow-hidden',
+			'rounded-[1.6rem] border-none bg-white/20',
 			'backdrop-blur-sm',
-			'tablet:h-[34rem] laptop:h-[40rem]',
+			'tablet:mt-6 tablet:h-[34rem]',
+			'laptop:mt-20 laptop:h-[40rem] laptop:w-[min(98vw,100rem)] laptop:origin-top laptop:scale-[0.76]',
 			'dark:bg-slate-950/25',
 		),
 	);
@@ -84,11 +85,11 @@ export const UseHeroApprovalRatingComposable = () => {
 
 	const trumpPercentageStyleClasses = twMerge(
 		clsx(
-			'absolute right-[calc(19%+min(10vw,11.5rem))] top-[57%] z-30 translate-x-1/2',
+			'absolute right-[calc(22%+min(10vw,11.5rem))] top-[57%] z-30 translate-x-1/2',
 			'bg-gradient-to-b from-flipeffect-rose-bright via-flipeffect-flip to-flipeffect-rose',
 			'bg-clip-text font-[Impact] text-4xl leading-none text-transparent',
 			'drop-shadow-[0_5px_12px_rgba(225,29,72,0.58)]',
-			'tablet:text-5xl laptop:text-6xl',
+			'tablet:text-5xl laptop:text-6xl laptop:right-[calc(19%+min(10vw,11.5rem))]',
 		),
 	);
 

@@ -9,8 +9,8 @@ import { twMerge } from 'tailwind-merge';
 export const UseCivicRepresentativeSearchComposable = () => {
 	const civicSearchSectionStyleClasses = twMerge(
 		clsx(
-			'absolute left-1/2 top-20 z-40 w-[92vw] max-w-5xl -translate-x-1/2',
-			'px-3 pb-6 tablet:top-18 laptop:top-16',
+			'relative z-40 mx-auto w-[92vw] max-w-5xl px-3 pb-6',
+			'laptop:absolute laptop:left-1/2 laptop:top-16 laptop:-translate-x-1/2',
 		),
 	);
 
@@ -41,7 +41,7 @@ export const UseCivicRepresentativeSearchComposable = () => {
 
 	const civicSearchInputStyleClasses = twMerge(
 		clsx(
-			'h-10 w-full rounded-xl border px-4 font-bold text-slate-950',
+			'h-10 w-full rounded-xl border px-4 text-xs! font-bold text-slate-950 tablet:text-sm! laptop:text-base!',
 			'border-slate-300/90 bg-white/94 shadow-[inset_0_1px_3px_rgba(15,23,42,0.12),0_10px_22px_rgba(15,23,42,0.08)]',
 			'placeholder:text-slate-500 focus:shadow-[inset_0_1px_3px_rgba(15,23,42,0.12),0_0_0_3px_rgba(14,165,233,0.16)]',
 			'focus:outline-none',
