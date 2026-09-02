@@ -10,6 +10,7 @@ import { app, scheduled } from '@app/server';
 import { healthCheckRoutes } from '@health-check-module/presentation/healthCheckEndpoint';
 import { representativeRoutes } from '@representatives-module/presentation/representativesEndpoint';
 import { approvalRoutes } from '@approval-module/presentation/approvalEndpoint';
+import { seedRepresentativesOnNewVersion } from '@representatives-module/application/representativesSeedOnDeploy';
 // ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
 //                        MIDDLEWARE
 // ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
@@ -27,6 +28,17 @@ app.use('/api/*', (ctx, next: () => Promise<void>) => {
 	});
 
 	return allowlistCors(ctx, next);
+});
+// ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
+
+// ---
+// Deploy-bound cache refresh: the first request after a new Worker version kicks the
+// representatives get-all once, in the background (ctx.waitUntil) — never blocks the response.
+// ---
+app.use('*', async (ctx, next: () => Promise<void>) => {
+	seedRepresentativesOnNewVersion(ctx.env, ctx.executionCtx);
+
+	await next();
 });
 // ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
 //                    HTTP_HANDLERS/ROUTES

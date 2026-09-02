@@ -6,9 +6,26 @@
 
 /* Shared: components */
 // ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
+// countdown components->shared
+// ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
+export { default as CountdownCard } from './shared/countdown/CountdownCard.vue';
+// ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
+// seat-grid-card components->shared
+// ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
+export { default as SeatGridCard } from './shared/seat-grid-card/SeatGridCard.vue';
+export type {
+	SeatGridCardAvatarSize,
+	SeatGridCardBar,
+	SeatGridCardLayout,
+	SeatGridCardMetadata,
+	SeatGridCardModel,
+	SeatGridCardSeat,
+	SeatGridCardSeatStyleClasses,
+} from './shared/seat-grid-card/SeatGridCardTypes.ts';
+// ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
 // home components
 // ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
-export { default as MidtermsCountdownSection } from './pages/home/MidtermsCountdownSection.vue';
+export { default as GeneralElectionCountdownSection } from './pages/home/GeneralElectionCountdownSection.vue';
 export { default as CivicRepresentativeSearchSection } from './pages/home/search/CivicRepresentativeSearchSection.vue';
 // ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
 // home components->hero

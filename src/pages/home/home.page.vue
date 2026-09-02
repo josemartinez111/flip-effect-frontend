@@ -3,31 +3,22 @@ PAGES: HOME > HOME_PAGE.VUE
 ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞ -->
 <script setup lang="ts">
 // ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
-import { onMounted, onUnmounted } from 'vue';
+import { onMounted } from 'vue';
 import {
 	ApprovalRatingTierSection,
 	CongressionalControlSection,
 	CivicRepresentativeSearchSection,
 	FWTScrollAnimation,
+	GeneralElectionCountdownSection,
 	HomeBranchesBadge,
 	HomeHeroSection,
-	MidtermsCountdownSection,
 } from '../../components';
-import {
-	UseHomeComposable,
-} from '../../components/pages/pages-composables/UseHomeComposable.ts';
-import {
-	UseHomePageContentComposable,
-} from '../../components/pages/pages-composables/UseHomePageContentComposable.ts';
+import { UseHomeComposable } from '../../components/pages/pages-composables/UseHomeComposable.ts';
+import { UseHomePageContentComposable } from '../../components/pages/pages-composables/UseHomePageContentComposable.ts';
+import { useApprovalStore } from '../../lib/stores/UseApprovalStore.ts';
 // ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
 
-const {
-	mainContainerStyleClasses,
-	midtermsCountdown,
-	midtermsDateLabel,
-	startMidtermsCountdown,
-	stopMidtermsCountdown,
-} = UseHomeComposable();
+const { mainContainerStyleClasses } = UseHomeComposable();
 
 const {
 	civicRepresentativeSearchTitle,
@@ -39,11 +30,8 @@ const {
 // ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
 
 onMounted(() => {
-	startMidtermsCountdown();
-});
-
-onUnmounted(() => {
-	stopMidtermsCountdown();
+	// --- One fetch fills both feeds in the store; the hero card + tier map read them reactively. ---
+	useApprovalStore().fetchApprovalRatings();
 });
 </script>
 <!-- ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
@@ -53,17 +41,22 @@ onUnmounted(() => {
 	<main :class="mainContainerStyleClasses">
 		<!-- COMPONENT-GROUP: top badge row (countdown + branches) -->
 		<div
-			class="flex items-start justify-between gap-2 px-4 pt-4 laptop:block laptop:px-0 laptop:pt-0"
+			class="laptop:block laptop:px-0 laptop:pt-0 flex items-start justify-between gap-2 px-4 pt-4"
 		>
-			<FWTScrollAnimation direction="none" :duration-ms="820" :delay-ms="120">
-				<!-- COMPONENT: MidtermsCountdownSection -->
-				<MidtermsCountdownSection
-					:midterms-countdown="midtermsCountdown"
-					:midterms-date-label="midtermsDateLabel"
-				/>
+			<FWTScrollAnimation
+				direction="none"
+				:duration-ms="820"
+				:delay-ms="120"
+			>
+				<!-- COMPONENT: GeneralElectionCountdownSection -->
+				<GeneralElectionCountdownSection />
 			</FWTScrollAnimation>
 
-			<FWTScrollAnimation direction="none" :duration-ms="820" :delay-ms="160">
+			<FWTScrollAnimation
+				direction="none"
+				:duration-ms="820"
+				:delay-ms="160"
+			>
 				<!-- COMPONENT: HomeBranchesBadge -->
 				<HomeBranchesBadge />
 			</FWTScrollAnimation>
@@ -89,7 +82,11 @@ onUnmounted(() => {
 			<ApprovalRatingTierSection />
 		</FWTScrollAnimation>
 
-		<FWTScrollAnimation direction="right" :distance="64" :duration-ms="980">
+		<FWTScrollAnimation
+			direction="right"
+			:distance="64"
+			:duration-ms="980"
+		>
 			<!-- COMPONENT: CongressionalControlSection -->
 			<CongressionalControlSection
 				eyebrow="Congressional Balance"

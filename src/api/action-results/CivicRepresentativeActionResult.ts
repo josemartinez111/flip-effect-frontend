@@ -4,7 +4,7 @@
 // ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
 
 import type { CivicRepresentative } from '../models/CivicRepresentativeModel';
-import type { StatusCodeType } from '../../lib/utils/status-codes';
+import type { StatusCodeType } from '../../lib/types/HttpStatusTypes';
 // ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
 
 export type CivicRepresentativeActionResult = {

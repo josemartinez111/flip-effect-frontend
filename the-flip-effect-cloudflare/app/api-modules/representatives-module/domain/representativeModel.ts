@@ -6,9 +6,13 @@ import type { HttpStatus } from '@shared-module/httpStatus';
 // ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
 
 // --- Search input (must match the frontend CivicRepresentative search model) ---
-export type CivicRepresentativeSource = 'federal' | 'state';
-export type CivicRepresentativeSearchFilter = 'federal' | 'house' | 'senate' | 'state';
-export type CivicRepresentativeSearchQueryType = 'address' | 'city' | 'name' | 'state' | 'zip' | 'unknown';
+type CivicRepresentativeSource = 'federal' | 'state';
+
+export type CivicRepresentativeSearchFilter =
+	'federal' | 'house' | 'senate' | 'state';
+
+export type CivicRepresentativeSearchQueryType =
+	'address' | 'city' | 'name' | 'state' | 'zip' | 'unknown';
 
 export type CivicRepresentativeSearchParams = {
 	query: string;
@@ -47,7 +51,7 @@ export type CensusRepresentativeLocation = {
 	longitude?: number;
 };
 
-export type CivicRepresentative = {
+type CivicRepresentative = {
 	representatives: Array<CivicRepresentativeRecord>;
 	location?: CensusRepresentativeLocation;
 };

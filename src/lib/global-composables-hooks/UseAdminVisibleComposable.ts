@@ -6,7 +6,7 @@ import { UseSessionStore } from '../stores/UseSessionStore';
 
 // ---
 // Shared admin visibility gate used across components that live
-// outside protected route guards (e.g. FoodbankAlertBanner, BlogAnnouncementsPage).
+// outside protected route guards (e.g. FoodbankAlertBanner, BlogBlogPostsPage).
 //
 // isMaintenance: pass true to force-show admin controls during
 // maintenance without requiring a logged-in session.

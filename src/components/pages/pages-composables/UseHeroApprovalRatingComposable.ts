@@ -9,7 +9,7 @@ import { twMerge } from 'tailwind-merge';
 export const UseHeroApprovalRatingComposable = () => {
 	const cardContainerStyleClasses = twMerge(
 		clsx(
-			'relative mx-auto mt-3 h-[28rem] w-full overflow-hidden',
+			'relative mx-auto mt-3 h-[28rem] w-full',
 			'rounded-[1.6rem] border-none bg-white/20',
 			'backdrop-blur-sm',
 			'tablet:mt-6 tablet:h-[34rem]',
@@ -62,7 +62,7 @@ export const UseHeroApprovalRatingComposable = () => {
 		),
 	);
 
-	const trumanNameStyleClasses = twMerge(
+	const nixonNameStyleClasses = twMerge(
 		clsx(presidentNameStyleClasses, 'left-[calc(21%+min(10vw,11.5rem))]'),
 	);
 
@@ -73,10 +73,10 @@ export const UseHeroApprovalRatingComposable = () => {
 		),
 	);
 
-	const trumanPercentageStyleClasses = twMerge(
+	const nixonPercentageStyleClasses = twMerge(
 		clsx(
 			'absolute left-[calc(22%+min(10vw,11.5rem))] top-[57%] z-30 -translate-x-1/2',
-			'bg-gradient-to-b from-flipeffect-truman-gold via-flipeffect-truman-amber to-flipeffect-truman-bronze',
+			'bg-gradient-to-b from-flipeffect-nixon-gold via-flipeffect-nixon-amber to-flipeffect-nixon-bronze',
 			'bg-clip-text font-[Impact] text-4xl leading-none text-transparent',
 			'drop-shadow-[0_5px_12px_rgba(245,158,11,0.55)]',
 			'tablet:text-5xl laptop:text-6xl',
@@ -100,12 +100,23 @@ export const UseHeroApprovalRatingComposable = () => {
 		),
 	);
 
-	const trumanAvatarStyleClasses = twMerge(
+	const nixonAvatarStyleClasses = twMerge(
 		clsx(avatarImageStyleClasses, 'left-[21%]'),
 	);
 
 	const trumpAvatarStyleClasses = twMerge(
 		clsx(avatarImageStyleClasses, 'right-[21%]'),
+	);
+
+	const trumpSourceTooltipStyleClasses = twMerge(
+		clsx(
+			'pointer-events-none absolute left-full top-full z-50 mt-4',
+			'w-max max-w-[22rem] -translate-x-1/4 whitespace-normal',
+			'rounded-xl border border-white/25 bg-slate-950/95 px-5 py-3',
+			'font-sans text-sm font-bold leading-snug text-white',
+			'opacity-0 shadow-2xl backdrop-blur-md transition-opacity duration-200',
+			'group-hover:opacity-100',
+		),
 	);
 
 	return {
@@ -116,12 +127,13 @@ export const UseHeroApprovalRatingComposable = () => {
 		cardSlotLayerStyleClasses,
 		cardHeaderStyleClasses,
 		cardExplanationStyleClasses,
-		trumanNameStyleClasses,
+		nixonNameStyleClasses,
 		trumpNameStyleClasses,
-		trumanPercentageStyleClasses,
+		nixonPercentageStyleClasses,
 		trumpPercentageStyleClasses,
-		trumanAvatarStyleClasses,
+		nixonAvatarStyleClasses,
 		trumpAvatarStyleClasses,
+		trumpSourceTooltipStyleClasses,
 	};
 };
 // ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞

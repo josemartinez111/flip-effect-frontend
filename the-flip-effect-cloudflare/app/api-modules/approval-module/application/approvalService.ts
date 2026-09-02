@@ -6,78 +6,86 @@ import type { WorkerEnv } from '@shared-module/worker-env';
 import { STATUS } from '@shared-module/httpStatus';
 import type {
 	ApprovalActionResult,
-	ApprovalPoll,
-	ApprovalRating,
 	ApprovalType,
 } from '@approval-module/domain/approvalModel';
+import { APPROVAL_FRESH_WINDOW_MS } from '@approval-module/domain/approvalConstants';
+import {
+	readApproval,
+	writeApproval,
+} from '@approval-module/infrastructure/approvalCache';
+import {
+	fetchApnorcEconomy,
+	fetchNytTrump,
+} from '@approval-module/infrastructure/approvalSources';
 // ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
 
 // ---
-// Orchestration + I/O inlined (no separate provider). The ApprovalType discriminator
-// picks which PUBLIC feed to hit:
-//   - 'trump'   → env.VOTEHUB_API_URL  (VoteHub: ?poll_type=approval&subject=donald-trump)
-//   - 'economy' → env.ECONOMY_API_URL  (TODO: confirm the public economy-approval source)
-// TODO: real ky.get per branch + KV read-through (env.APPROVAL_CACHE via approvalCacheKey),
-// then average approve/disapprove. Rename `_env` → `env` once a binding is read.
+// Read-through with a last-good fail-safe. A fresh cache hit serves instantly; a miss or stale
+// entry re-pulls the source (VoteHub for trump, AP-NORC for economy). If that pull throws, the
+// last cached rating is served instead — never zeros — so the frontend always has a real number.
 // ---
 export const fetchApprovalRating = async (
-	_env: WorkerEnv,
+	env: WorkerEnv,
 	approvalType: ApprovalType,
 ): Promise<ApprovalActionResult> => {
-	try {
-		// --- Pick the feed by discriminator + fetch (placeholder). ---
-		let polls: Array<ApprovalPoll> = [];
+	const cached = await readApproval(env, approvalType);
 
-		switch (approvalType) {
-			case 'trump': {
-				// TODO: polls = await ky.get(env.VOTEHUB_API_URL, { searchParams: VOTEHUB_TRUMP_QUERY, throwHttpErrors: false }).json<Array<ApprovalPoll>>();
-				break;
-			}
-
-			case 'economy': {
-				// TODO: polls = await ky.get(env.ECONOMY_API_URL, { ... }).json<Array<ApprovalPoll>>();
-				break;
-			}
-		}
-
-		// --- TODO: average across polls; placeholder zeros until the fetch is wired. ---
-		const rating: ApprovalRating = {
-			approvalType,
-			approve: 0,
-			disapprove: 0,
-			polls,
+	// --- Fresh cache hit → serve immediately, no upstream call. ---
+	if (
+		cached &&
+		Date.now() - Date.parse(cached.fetchedAt) < APPROVAL_FRESH_WINDOW_MS
+	) {
+		const hit: ApprovalActionResult = {
+			success: true,
+			statusCode: STATUS.OK,
+			message: 'Approval rating loaded.',
+			rating: cached,
 		};
 
-		// --- Empty → 404 (still echo the type); else 200. ---
-		const result: ApprovalActionResult =
-			polls.length === 0
-				? {
-						success: false,
-						statusCode: STATUS.NOT_FOUND,
-						message: 'No approval data available yet.',
-						rating,
-					}
-				: {
-						success: true,
-						statusCode: STATUS.OK,
-						message: 'Approval rating loaded.',
-						rating,
-					};
+		return hit;
+	}
 
-		return result;
+	try {
+		// --- Miss or stale → pull the source for this discriminator, then cache it. ---
+		const fresh =
+			approvalType === 'trump'
+				? await fetchNytTrump(env)
+				: await fetchApnorcEconomy(env);
+
+		await writeApproval(env, approvalType, fresh);
+
+		const ok: ApprovalActionResult = {
+			success: true,
+			statusCode: STATUS.OK,
+			message: 'Approval rating loaded.',
+			rating: fresh,
+		};
+
+		return ok;
 	} catch (error: unknown) {
-		// --- Any upstream throw lands here as a 500 with the raw cause attached. ---
 		const cause = error instanceof Error ? error.message : String(error);
-		console.error(cause);
+		console.error(`[approval ${approvalType}] ${cause}`);
 
-		const result: ApprovalActionResult = {
+		// --- Fail-safe: serve the last-good cache rather than zeros. ---
+		if (cached) {
+			const stale: ApprovalActionResult = {
+				success: true,
+				statusCode: STATUS.OK,
+				message: 'Approval rating loaded (cached).',
+				rating: cached,
+			};
+
+			return stale;
+		}
+
+		const dead: ApprovalActionResult = {
 			success: false,
-			statusCode: STATUS.INTERNAL_SERVER_ERROR,
-			message: 'Approval lookup failed.',
+			statusCode: STATUS.SERVICE_UNAVAILABLE,
+			message: 'Approval rating is temporarily unavailable.',
 			error: cause,
 		};
 
-		return result;
+		return dead;
 	}
 };
 // ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞

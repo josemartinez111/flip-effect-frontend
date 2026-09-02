@@ -8,6 +8,17 @@ export { default as ThreeBranchesOfGovernmentClick } from './general/ThreeBranch
 export { default as TrumpAdminTimelineModalClick } from './general/TrumpAdminTimelineModalClick.png?format=webp';
 export { default as GovernmentChecksBalancesClick } from './general/GovernmentChecksBalancesClick.png?format=webp';
 export { default as RepresentativePlaceholder } from './general/RepresentativePlaceholder.png?format=webp';
+/* ∞∞∞∞∞∞∞∞∞∞∞∞∞ Auth ∞∞∞∞∞∞∞∞∞∞∞∞∞  */
+export { default as AuthPanelBackground } from './auth/auth-panel-background.png?format=webp';
+export { default as AuthLogoMark } from './auth/auth-logo-mark.png?format=webp';
+export { default as AuthLogoBackdrop } from './auth/auth-logo-backdrop.svg';
+export { default as AuthCircuitArtwork } from './auth/auth-circuit-artwork.png?format=webp';
+export { default as AuthQrArtwork } from './auth/auth-qr-artwork.png?format=webp';
+export { default as AuthAccessDeniedArtwork } from './auth/auth-access-denied-artwork.png?format=webp';
+/* ∞∞∞∞∞∞∞∞∞∞∞∞∞ Blog ∞∞∞∞∞∞∞∞∞∞∞∞∞  */
+export { default as DefaultBlogImage1 } from './blog/default-blog1.png?format=webp';
+export { default as DefaultBlogImage2 } from './blog/default-blog2.png?format=webp';
+export { default as DefaultBlogImage3 } from './blog/default-blog3.png?format=webp';
 /* ∞∞∞∞∞∞∞∞∞∞∞∞∞ App Reusable Backgrounds ∞∞∞∞∞∞∞∞∞∞∞∞∞  */
 export { default as DominoEffectBGHomePage } from './app-reusable-bg/DominoEffectBGHomePage.png?format=webp';
 export { default as ApprovalRatingCardBG } from './app-reusable-bg/ApprovalRatingCardBG.png?format=webp';
@@ -19,11 +30,15 @@ export { default as UsaApprovalMapTier3 } from './approval-rating/usaApprovalMap
 export { default as UsaApprovalMapTier4 } from './approval-rating/usaApprovalMapTier4.png?format=webp';
 export { default as UsaApprovalMapTier5 } from './approval-rating/usaApprovalMapTier5.png?format=webp';
 /* ∞∞∞∞∞∞∞∞∞∞∞∞∞ Brand ∞∞∞∞∞∞∞∞∞∞∞∞∞  */
+export { default as NixonAvatar } from './avatars/NixonAvatar.png?format=webp';
 export { default as TrumpAvatar } from './avatars/TrumpAvatar.png?format=webp';
-export { default as TrumanAvatar } from './avatars/TrumanAvatar.png?format=webp';
+export { default as DummyAvatar } from './misc/dummy-avatar.png?format=webp';
 /* ∞∞∞∞∞∞∞∞∞∞∞∞∞ Brand ∞∞∞∞∞∞∞∞∞∞∞∞∞  */
 // export { default as FantumWaveLogo } from './brand/fantum-wave-circuit-logo.png?format=webp';
 export { default as FlipEffectLogo } from './brand/flipEffectLogo.png?format=webp';
+/* ∞∞∞∞∞∞∞∞∞∞∞∞∞ Error Pages ∞∞∞∞∞∞∞∞∞∞∞∞∞  */
+export { default as Image404 } from './error-pages/404-image.png?format=webp';
+export { default as Forbidden403 } from './error-pages/403-forbidden.png?format=webp';
 /* ∞∞∞∞∞∞∞∞∞∞∞∞∞ Timeline ∞∞∞∞∞∞∞∞∞∞∞∞∞  */
 export { default as CivilServantsFiredTimeline } from './timeline/CivilServantsFiredTimeline.png?format=webp';
 export { default as CourtsAttackedTimeline } from './timeline/CourtsAttackedTimeline.png?format=webp';

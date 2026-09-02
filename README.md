@@ -58,7 +58,7 @@ Full-width section at the top. Displays one of 20-30 pre-rendered AI-generated i
 **Approval-to-image mapping:**
 
 | Approval % | Visual State                                           |
-|------------|--------------------------------------------------------|
+| ---------- | ------------------------------------------------------ |
 | 50%+       | Vibrant, full color, healthy America                   |
 | 45–49%     | Slight fade, sky hazing                                |
 | 40–44%     | City lights dimming, greens shifting yellow            |
@@ -71,14 +71,14 @@ Full-width section at the top. Displays one of 20-30 pre-rendered AI-generated i
 **Hero supporting elements:**
 
 - Current approval rating displayed prominently
-- Truman Line indicator showing distance to the 22% historical low (Truman's record)
+- Nixon comparison showing distance to his 24% final approval rating
 - 90-day approval trajectory sparkline
 - Source attribution and last updated timestamp
-- Permanent commemorative state if approval drops below 22% — red marker with date stamp and explainer linking to Truman historical context
+- Permanent warning state if approval drops below 24% — red marker with date stamp and an explainer linking to Nixon's Watergate-era collapse
 
-### 2. Trump vs Truman Approval Comparison
+### 2. Trump vs Nixon Approval Comparison
 
-Side-by-side data visualization comparing Trump's current approval rating trajectory against Truman's historic low of 22% — the lowest presidential approval ever recorded. PrimeVue Charts line chart with both data series. Permanent reference point on the page that gives the Truman Line in the hero its narrative weight.
+Side-by-side data visualization comparing Trump's current approval rating trajectory against Nixon's final Gallup approval rating of 24%, measured days before Nixon resigned amid Watergate. PrimeVue Charts line chart with both data series. The permanent reference point gives the hero a corruption-era historical comparison.
 
 ### 3. The Margin
 
@@ -149,7 +149,7 @@ Backlink directory. Free listings for watchdog organizations and journalists. Pa
 ## Data Sources
 
 - Approval rating: VoteHub polling API — fetched directly by frontend action or utility for now; no full backend API is required yet
-- Truman historical data: static reference data
+- Nixon historical data: static Gallup reference data
 - Polling, gas prices, generic ballot, consumer sentiment: public APIs where available
 - Representative lookup: ProPublica Congress API
 - Timeline nodes, scandals, retirements, protest data: structured content stored in Supabase later (deferred from launch)

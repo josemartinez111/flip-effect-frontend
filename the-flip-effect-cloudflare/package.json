@@ -23,7 +23,8 @@
 	"license": "ISC",
 	"dependencies": {
 		"hono": "^4.12.25",
-		"ky": "^2.0.2"
+		"ky": "^2.0.2",
+		"unpdf": "^1.6.2"
 	},
 	"devDependencies": {
 		"@cloudflare/vitest-pool-workers": "^0.16.16",

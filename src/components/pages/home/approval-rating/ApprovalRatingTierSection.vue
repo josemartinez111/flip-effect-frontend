@@ -25,6 +25,7 @@ let approvalTierIntersectionObserver: IntersectionObserver | undefined;
 const {
 	approvalRatingTierMaps,
 	animatedApprovalRatingPercentage,
+	economyApprovalSourceCaption,
 	activeApprovalRatingTierMap,
 	approvalTierCompositionStyleClasses,
 	approvalTierSectionStyleClasses,
@@ -34,6 +35,7 @@ const {
 	approvalTierBadgeStyleClasses,
 	approvalTierBadgeRowStyleClasses,
 	approvalTierBadgeValueStyleClasses,
+	economySourceTooltipStyleClasses,
 	approvalTierBadgeLabelStyleClasses,
 	approvalTierBadgeHeadlineStyleClasses,
 	approvalTierBadgeDescriptionStyleClasses,
@@ -152,8 +154,16 @@ onUnmounted(() => {
 			<!-- APPROVAL TIER: ECONOMY BADGE -->
 			<div :class="approvalTierBadgeStyleClasses">
 				<div :class="approvalTierBadgeRowStyleClasses">
-					<span :class="approvalTierBadgeValueStyleClasses">
+					<span
+						:class="[
+							approvalTierBadgeValueStyleClasses,
+							'group relative cursor-pointer',
+						]"
+					>
 						{{ animatedApprovalRatingPercentage }}%
+						<span :class="economySourceTooltipStyleClasses">
+							{{ economyApprovalSourceCaption }}
+						</span>
 					</span>
 					<span :class="approvalTierBadgeLabelStyleClasses">
 						Economy approval

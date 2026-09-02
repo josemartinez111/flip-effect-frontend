@@ -5,7 +5,7 @@ import { defineConfig } from 'vitest/config';
 import vue from '@vitejs/plugin-vue';
 import tailwindcss from '@tailwindcss/vite';
 import { visualizer } from 'rollup-plugin-visualizer';
-import { ImageTools, ImageOptimizer, MissionReport } from './build-utils';
+import { ImageTools, ImageOptimizer, MissionReport } from './build-utils.ts';
 // ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
 
 export default defineConfig({
@@ -17,6 +17,27 @@ export default defineConfig({
     MissionReport,
     visualizer({ open: false, gzipSize: true, brotliSize: true }),
   ],
+
+  optimizeDeps: {
+    include: [
+      '@primeuix/themes/aura',
+      'primevue/button',
+      'primevue/card',
+      'primevue/checkbox',
+      'primevue/config',
+      'primevue/dialog',
+      'primevue/divider',
+      'primevue/drawer',
+      'primevue/inputtext',
+      'primevue/progressbar',
+      'primevue/select',
+      'primevue/tag',
+      'primevue/timeline',
+      'primevue/toast',
+      'primevue/toastservice',
+      'primevue/usetoast',
+    ],
+  },
 
   build: {
     chunkSizeWarningLimit: 1600,

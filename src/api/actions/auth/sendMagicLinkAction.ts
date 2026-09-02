@@ -3,53 +3,61 @@
 // ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
 
 import kyMap from 'ky';
-import { tryCatchHandler } from '../../../lib';
+import { GlobalEnvs, Utils } from '../../../lib';
 import type { VerificationLinkResultType } from '../../types/VerificationLinkResultType';
 // ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
 
 export async function sendMagicLinkAction(
-  email: string,
+	email: string,
 ): Promise<VerificationLinkResultType> {
-  const { VITE_MAGIC_LINK_API_URL } = import.meta.env;
-  
-  const sendMagicLinkRequest = async (): Promise<VerificationLinkResultType> => {
-    if (!email?.includes('@') || !VITE_MAGIC_LINK_API_URL) {
-      return {
-        success: false,
-        message: !email ? 'Invalid email address.' : 'API URL not configured.',
-      };
-    }
-    
-    const payloadReqBody = {
-      json: {
-        email,
-      },
-    };
-    
-    const data = await kyMap.post(
-      VITE_MAGIC_LINK_API_URL,
-      payloadReqBody,
-    ).json<VerificationLinkResultType>();
-    
-    const result = {
-      success: !!data?.success,
-      message: data?.message || 'Magic link sent!',
-    };
-    
-    return result;
-  };
-  
-  const result = await tryCatchHandler<VerificationLinkResultType>({
-    asyncActionCallback: sendMagicLinkRequest,
-    errorContext: 'Error sending magic link',
-  });
-  
-  const error403 = {
-    success: false,
-    message: '403 Forbidden: You do not have permission to access this resource.',
-  };
-  
-  return result ?? error403;
+	const magicLinkApiUrl = GlobalEnvs.MagicLinkApiUrl;
+
+	const sendMagicLinkCallback =
+		async (): Promise<VerificationLinkResultType> => {
+			if (!email?.includes('@') || !magicLinkApiUrl) {
+				return {
+					success: false,
+					message: !email
+						? 'Invalid email address.'
+						: 'API URL not configured.',
+				};
+			}
+
+			const payloadReqBody = {
+				json: {
+					email,
+				},
+			};
+
+			const data = await kyMap
+				.post(magicLinkApiUrl, payloadReqBody)
+				.json<VerificationLinkResultType>();
+
+			const result = {
+				success: !!data?.success,
+				message: data?.message || 'Magic link sent!',
+			};
+
+			return result;
+		};
+
+	const sendMagicLinkResults =
+		await Utils.runTryCatch<VerificationLinkResultType>({
+			callback: sendMagicLinkCallback,
+			errorContext: 'Error sending magic link',
+		});
+
+	if (sendMagicLinkResults.error !== undefined) {
+		const failed: VerificationLinkResultType = {
+			success: false,
+			message:
+				'403 Forbidden: You do not have permission to access this resource.',
+		};
+
+		return failed;
+	}
+
+	return sendMagicLinkResults.result;
 }
 
 // ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞

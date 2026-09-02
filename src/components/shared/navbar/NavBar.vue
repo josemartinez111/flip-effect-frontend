@@ -4,7 +4,7 @@
 ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞ -->
 <script setup lang="ts">
 // ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
-import { computed, ref } from 'vue';
+import { ref } from 'vue';
 import { UseNavLinksComposable } from '../../../router/composables/UseNavLinksComposable.ts';
 import NavBrand from './NavBrand.vue';
 import DarkmodeToggleSwitch from './DarkmodeToggleSwitch.vue';
@@ -16,12 +16,6 @@ import { twMerge } from 'tailwind-merge';
 
 const drawerOpen = ref<boolean>(false);
 const navLinks = UseNavLinksComposable();
-
-const epsteinFilesNavLink = computed(() => {
-	return navLinks.find((link) => {
-		return link.label === 'Epstein Files';
-	});
-});
 // ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
 
 const headerStyleClasses = twMerge(
@@ -49,19 +43,6 @@ const navbarContentStyleClasses = twMerge(
 	),
 );
 
-const epsteinFilesLinkStyleClasses = twMerge(
-	clsx(
-		'hidden cursor-pointer rounded-full border px-4 py-2',
-		'font-orbitron text-[0.65rem] font-black! uppercase tracking-[0.16em]',
-		'border-slate-950/12 bg-white/42 text-slate-950 shadow-lg',
-		'shadow-slate-950/8 backdrop-blur-md transition duration-200',
-		'hover:border-flipeffect-cyan/60 hover:bg-flipeffect-cyan/18',
-		'hover:text-slate-950 tablet:inline-flex',
-		'dark:border-white/12 dark:bg-slate-950/48 dark:text-white',
-		'dark:shadow-black/25 dark:hover:border-flipeffect-cyan/70',
-		'dark:hover:bg-flipeffect-cyan/14 dark:hover:text-flipeffect-cyan',
-	),
-);
 // ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
 </script>
 
@@ -75,16 +56,6 @@ const epsteinFilesLinkStyleClasses = twMerge(
 
 			<!-- --- Actions (right) --- -->
 			<div class="flex items-center gap-3">
-				<a
-					v-if="epsteinFilesNavLink"
-					:href="epsteinFilesNavLink.path"
-					:class="epsteinFilesLinkStyleClasses"
-					target="_blank"
-					rel="noopener noreferrer"
-				>
-					{{ epsteinFilesNavLink.label }}
-				</a>
-
 				<!-- --- Dark mode toggle: always visible, hidden on phone landscape --- -->
 				<div class="block phone-landscape:hidden">
 					<DarkmodeToggleSwitch />

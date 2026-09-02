@@ -26,13 +26,16 @@ import {
 } from '@representatives-module/domain/representativeConstants';
 // ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
 
-const cleanUrl = (url: string): string => (
-	url.replace(/\/+$/, '')
-);
+type OpenStatesEnv = Pick<
+	WorkerEnv,
+	'OPEN_STATES_API_KEY' | 'OPEN_STATES_API_URL'
+>;
+// ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
 
-const jurisdictionId = (code: string): string => (
-	`ocd-jurisdiction/country:us/state:${code.toLowerCase()}/government`
-);
+const cleanUrl = (url: string): string => url.replace(/\/+$/, '');
+
+const jurisdictionId = (code: string): string =>
+	`ocd-jurisdiction/country:us/state:${code.toLowerCase()}/government`;
 
 // --- Decide which public source can answer the query (guards, not a match ladder). ---
 const classifyQuery = ({
@@ -49,7 +52,10 @@ const classifyQuery = ({
 		return 'zip';
 	}
 
-	if (/^[A-Za-z]{2}$/.test(trimmed) || US_STATE_NAME_TO_CODE[trimmed.toLowerCase()]) {
+	if (
+		/^[A-Za-z]{2}$/.test(trimmed) ||
+		US_STATE_NAME_TO_CODE[trimmed.toLowerCase()]
+	) {
 		return 'state';
 	}
 
@@ -71,7 +77,11 @@ export const fetchAddressLocation = async (
 ): Promise<CensusRepresentativeLocation> => {
 	const queryType = classifyQuery(searchParams);
 
-	if (queryType !== 'address' && queryType !== 'city' && queryType !== 'zip') {
+	if (
+		queryType !== 'address' &&
+		queryType !== 'city' &&
+		queryType !== 'zip'
+	) {
 		const normalized = searchParams.query.trim().toLowerCase();
 		const result: CensusRepresentativeLocation = {
 			state: /^[a-z]{2}$/.test(normalized)
@@ -85,7 +95,9 @@ export const fetchAddressLocation = async (
 	if (queryType === 'zip') {
 		const prefix = Number(searchParams.query.trim().slice(0, 3));
 		const result: CensusRepresentativeLocation = {
-			state: ZIP_PREFIX_RANGES.find(([min, max]) => prefix >= min && prefix <= max)?.[2],
+			state: ZIP_PREFIX_RANGES.find(
+				([min, max]) => prefix >= min && prefix <= max,
+			)?.[2],
 		};
 
 		return result;
@@ -103,7 +115,9 @@ export const fetchAddressLocation = async (
 
 	if (response.status !== STATUS.OK) {
 		// --- Keyless public source: log the real status but degrade gracefully so federal/state can still answer. ---
-		console.error(`[Census ${response.status}] ${env.CENSUS_GEOCODER_API_URL}`);
+		console.error(
+			`[Census ${response.status}] ${env.CENSUS_GEOCODER_API_URL}`,
+		);
 
 		return {};
 	}
@@ -116,13 +130,22 @@ export const fetchAddressLocation = async (
 		longitude: match?.coordinates?.x,
 	};
 
-	for (const { locationKey, geographyNameIncludes, valueKeys } of CENSUS_LOCATION_FIELDS) {
-		const record = Object.entries(match?.geographies ?? {}).find(([name]) =>
-			geographyNameIncludes.some((part) => name.toLowerCase().includes(part)),
+	for (const {
+		locationKey,
+		geographyNameIncludes,
+		valueKeys,
+	} of CENSUS_LOCATION_FIELDS) {
+		const record = Object.entries(match?.geographies ?? {}).find(
+			([name]) =>
+				geographyNameIncludes.some((part) =>
+					name.toLowerCase().includes(part),
+				),
 		)?.[1]?.[0];
 		const value = valueKeys
 			.map((key) => record?.[key])
-			.find((entry) => entry !== undefined && `${entry}`.trim().length > 0);
+			.find(
+				(entry) => entry !== undefined && `${entry}`.trim().length > 0,
+			);
 		location[locationKey] = value === undefined ? undefined : `${value}`;
 	}
 
@@ -143,7 +166,9 @@ export const fetchFederalLegislators = async (
 
 	if (response.status !== STATUS.OK) {
 		// --- Keyless public source: log the real status but degrade gracefully rather than fail the whole lookup. ---
-		console.error(`[CongressLegislators ${response.status}] ${env.CONGRESS_LEGISLATORS_CURRENT_URL}`);
+		console.error(
+			`[CongressLegislators ${response.status}] ${env.CONGRESS_LEGISLATORS_CURRENT_URL}`,
+		);
 
 		return [];
 	}
@@ -164,7 +189,8 @@ export const selectFederalRepresentatives = ({
 	imageBaseUrl: string;
 }): Array<CivicRepresentativeRecord> => {
 	const wantsFederal = searchParams.filters.some(
-		(filter) => filter === 'federal' || filter === 'house' || filter === 'senate',
+		(filter) =>
+			filter === 'federal' || filter === 'house' || filter === 'senate',
 	);
 
 	if (!wantsFederal) {
@@ -173,7 +199,8 @@ export const selectFederalRepresentatives = ({
 
 	const isNameQuery = classifyQuery(searchParams) === 'name';
 	const selectedChambers = searchParams.filters.filter(
-		(filter): filter is 'house' | 'senate' => filter === 'house' || filter === 'senate',
+		(filter): filter is 'house' | 'senate' =>
+			filter === 'house' || filter === 'senate',
 	);
 	const allowedChambers: Array<string> =
 		selectedChambers.length > 0 ? selectedChambers : ['house', 'senate'];
@@ -212,7 +239,10 @@ export const selectFederalRepresentatives = ({
 
 			return record;
 		})
-		.filter((record): record is CivicRepresentativeRecord => record !== undefined)
+		.filter(
+			(record): record is CivicRepresentativeRecord =>
+				record !== undefined,
+		)
 		.filter((record) => {
 			if (record.chamber !== 'house' && record.chamber !== 'senate') {
 				return false;
@@ -243,12 +273,14 @@ export const selectFederalRepresentatives = ({
 
 // --- Key injected here from the Worker secret, never in the client. ---
 const openStatesGet = async (
-	env: WorkerEnv,
+	env: OpenStatesEnv,
 	endpoint: string,
 	params: Record<string, string | Array<string>>,
-): Promise<Array<OpenStatesPerson>> => {
+): Promise<OpenStatesPeopleResponse> => {
 	if (!env.OPEN_STATES_API_KEY) {
-		return [];
+		const result: OpenStatesPeopleResponse = { results: [] };
+
+		return result;
 	}
 
 	// --- Array values repeat the key (include=offices&include=links); a comma value 422s. ---
@@ -278,20 +310,57 @@ const openStatesGet = async (
 	}
 
 	const data = await response.json<OpenStatesPeopleResponse>();
-	return data.results ?? [];
+
+	return data;
+};
+
+// --- Fetch every Open States page for one jurisdiction; state chambers routinely exceed one 50-person page. ---
+const fetchStateRosterPages = async (
+	env: OpenStatesEnv,
+	endpoint: string,
+	jurisdiction: string,
+): Promise<Array<OpenStatesPerson>> => {
+	const firstResponse = await openStatesGet(env, endpoint, {
+		jurisdiction,
+		include: OPEN_STATES_INCLUDE,
+		page: '1',
+		per_page: '50',
+	});
+	const people = [...(firstResponse.results ?? [])];
+	const maxPage = firstResponse.pagination?.max_page ?? 1;
+	const remainingPageNumbers = Array.from(
+		{ length: Math.max(maxPage - 1, 0) },
+		(_, index) => index + 2,
+	);
+	const remainingResponses = await Promise.all(
+		remainingPageNumbers.map((page) =>
+			openStatesGet(env, endpoint, {
+				jurisdiction,
+				include: OPEN_STATES_INCLUDE,
+				page: `${page}`,
+				per_page: '50',
+			}),
+		),
+	);
+
+	for (const response of remainingResponses) {
+		people.push(...(response.results ?? []));
+	}
+
+	return people;
 };
 
 // --- Full state roster by code. Cacheable per state (cron seeds these). ---
 export const fetchStateRosterByCode = async (
-	env: WorkerEnv,
+	env: OpenStatesEnv,
 	code: string,
 ): Promise<Array<OpenStatesPerson>> => {
 	const endpoint = `${cleanUrl(env.OPEN_STATES_API_URL)}/people`;
-	const ocdJurisdictionResults = await openStatesGet(env, endpoint, {
-		jurisdiction: jurisdictionId(code),
-		include: OPEN_STATES_INCLUDE,
-		per_page: '50',
-	});
+	const ocdJurisdictionResults = await fetchStateRosterPages(
+		env,
+		endpoint,
+		jurisdictionId(code),
+	);
 
 	if (ocdJurisdictionResults.length > 0) {
 		return ocdJurisdictionResults;
@@ -300,19 +369,61 @@ export const fetchStateRosterByCode = async (
 	// --- Open States REST search can return empty for OCD ids; retry with state name. ---
 	const stateName = US_STATE_CODE_TO_NAME[code.toUpperCase()];
 	const result = stateName
-		? await openStatesGet(env, endpoint, {
-				jurisdiction: stateName,
-				include: OPEN_STATES_INCLUDE,
-				per_page: '50',
-			})
+		? await fetchStateRosterPages(env, endpoint, stateName)
 		: [];
 
 	return result;
 };
 
+// --- Cold address lookup: request only the two Census-matched districts instead of blocking on a full state roster. ---
+export const fetchStatePeopleByDistricts = async (
+	env: OpenStatesEnv,
+	location: CensusRepresentativeLocation,
+): Promise<Array<OpenStatesPerson>> => {
+	const endpoint = `${cleanUrl(env.OPEN_STATES_API_URL)}/people`;
+	const state = location.state;
+	const districtRequests: Array<{
+		orgClassification: 'lower' | 'upper';
+		district: string;
+	}> = [];
+
+	if (location.stateHouseDistrict) {
+		districtRequests.push({
+			orgClassification: 'lower',
+			district: location.stateHouseDistrict.replace(/^0+(?=\d)/, ''),
+		});
+	}
+
+	if (location.stateSenateDistrict) {
+		districtRequests.push({
+			orgClassification: 'upper',
+			district: location.stateSenateDistrict.replace(/^0+(?=\d)/, ''),
+		});
+	}
+
+	if (!state || districtRequests.length === 0) {
+		return [];
+	}
+
+	const responses = await Promise.all(
+		districtRequests.map(({ orgClassification, district }) =>
+			openStatesGet(env, endpoint, {
+				jurisdiction: jurisdictionId(state),
+				org_classification: orgClassification,
+				district,
+				include: OPEN_STATES_INCLUDE,
+				per_page: '5',
+			}),
+		),
+	);
+	const result = responses.flatMap((response) => response.results ?? []);
+
+	return result;
+};
+
 // --- Address-specific (geo) or name lookups. Live, not cached. ---
-export const fetchStatePeopleByQuery = (
-	env: WorkerEnv,
+export const fetchStatePeopleByQuery = async (
+	env: OpenStatesEnv,
 	{
 		location,
 		searchParams,
@@ -322,21 +433,95 @@ export const fetchStatePeopleByQuery = (
 	},
 ): Promise<Array<OpenStatesPerson>> => {
 	const base = cleanUrl(env.OPEN_STATES_API_URL);
+	const isNameQuery = classifyQuery(searchParams) === 'name';
 
-	if (location.latitude !== undefined && location.longitude !== undefined) {
-		return openStatesGet(env, `${base}/people.geo`, {
+	if (
+		location.latitude !== undefined &&
+		location.longitude !== undefined
+	) {
+		const response = await openStatesGet(env, `${base}/people.geo`, {
 			lat: `${location.latitude}`,
 			lng: `${location.longitude}`,
 			include: OPEN_STATES_INCLUDE,
 		});
+		const result = response.results ?? [];
+
+		return result;
 	}
 
-	return openStatesGet(env, `${base}/people`, {
-		...(classifyQuery(searchParams) === 'name' ? { name: searchParams.query } : {}),
-		...(location.state ? { jurisdiction: jurisdictionId(location.state) } : {}),
+	// --- Broad state/ZIP lookup: guarantee a fast page from each legislative chamber without requiring an address. ---
+	if (location.state && !isNameQuery) {
+		const chamberClassifications: Array<'lower' | 'upper'> = [
+			'lower',
+			'upper',
+		];
+		const responses = await Promise.all(
+			chamberClassifications.map((orgClassification) =>
+				openStatesGet(env, `${base}/people`, {
+					jurisdiction: jurisdictionId(location.state ?? ''),
+					org_classification: orgClassification,
+					include: OPEN_STATES_INCLUDE,
+					per_page: '50',
+				}),
+			),
+		);
+		const result = responses.flatMap((response) => response.results ?? []);
+
+		return result;
+	}
+
+	const response = await openStatesGet(env, `${base}/people`, {
+		...(isNameQuery ? { name: searchParams.query } : {}),
+		...(location.state
+			? { jurisdiction: jurisdictionId(location.state) }
+			: {}),
 		include: OPEN_STATES_INCLUDE,
 		per_page: '20',
 	});
+	const result = response.results ?? [];
+
+	return result;
+};
+
+// --- Census gives district numbers; match those against the complete state roster already stored in KV. ---
+export const selectStateRepresentatives = ({
+	people,
+	location,
+}: {
+	people: Array<OpenStatesPerson>;
+	location: CensusRepresentativeLocation;
+}): Array<OpenStatesPerson> => {
+	const normalizedHouseDistrict = location.stateHouseDistrict?.replace(
+		/^0+(?=\d)/,
+		'',
+	);
+	const normalizedSenateDistrict = location.stateSenateDistrict?.replace(
+		/^0+(?=\d)/,
+		'',
+	);
+	const result = people.filter((person) => {
+		const chamber = person.current_role?.org_classification;
+		const district = person.current_role?.district?.replace(
+			/^0+(?=\d)/,
+			'',
+		);
+
+		if (!district) {
+			return false;
+		}
+
+		if (chamber === 'lower') {
+			return district === normalizedHouseDistrict;
+		}
+
+		if (chamber === 'upper') {
+			return district === normalizedSenateDistrict;
+		}
+
+		return false;
+	});
+
+	return result;
 };
 
 // --- Open States person → record. Photo may be absent (frontend swaps a placeholder). ---

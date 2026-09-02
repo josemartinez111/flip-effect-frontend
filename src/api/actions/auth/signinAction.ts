@@ -3,52 +3,67 @@
 //⚫️ ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
 
 import kyMap from 'ky';
-import { tryCatchHandler } from '../../../lib';
+import { GlobalEnvs, Utils } from '../../../lib';
 import type { Session, AuthError } from '@supabase/supabase-js';
 //⚫️ ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
 
 export type SignInActionResultType = {
-  success: boolean;
-  message?: string;
-  session?: Session;
-  error?: AuthError;
+	success: boolean;
+	message?: string;
+	session?: Session;
+	error?: AuthError;
 };
 
 //⚫️ ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
 
-export async function signinAction(email: string, password: string): Promise<SignInActionResultType> {
-  const { VITE_SIGNIN_API_URL } = import.meta.env;
-  
-  const signInRequest = async (): Promise<SignInActionResultType> => {
-    if (!VITE_SIGNIN_API_URL) {
-      return { success: false, message: 'Sign-in API URL not configured.' };
-    }
-    
-    const payloadBody = {
-      json: { email, password },
-    };
-    const response = await kyMap
-      .post(VITE_SIGNIN_API_URL, payloadBody)
-      .json<SignInActionResultType>();
-    
-    // Adapt structure if your API returns differently
-    switch (true) {
-      case response.success:
-        return response;
-      default:
-        return { success: false, message: response.message || 'Sign-in failed.' };
-    }
-  };
-  
-  const result = await tryCatchHandler<SignInActionResultType>({
-    asyncActionCallback: signInRequest,
-    errorContext: 'Error during admin sign in',
-  });
-  
-  return result ?? {
-    success: false,
-    message: 'Sign in failed: Unknown error.',
-  };
+export async function signinAction(
+	email: string,
+	password: string,
+): Promise<SignInActionResultType> {
+	const signInApiUrl = GlobalEnvs.SignInApiUrl;
+
+	const signInCallback = async (): Promise<SignInActionResultType> => {
+		if (!signInApiUrl) {
+			return {
+				success: false,
+				message: 'Sign-in API URL not configured.',
+			};
+		}
+
+		const payloadBody = {
+			json: { email, password },
+		};
+		const response = await kyMap
+			.post(signInApiUrl, payloadBody)
+			.json<SignInActionResultType>();
+
+		// Adapt structure if your API returns differently
+		switch (true) {
+			case response.success:
+				return response;
+			default:
+				return {
+					success: false,
+					message: response.message || 'Sign-in failed.',
+				};
+		}
+	};
+
+	const signInResults = await Utils.runTryCatch<SignInActionResultType>({
+		callback: signInCallback,
+		errorContext: 'Error during admin sign in',
+	});
+
+	if (signInResults.error !== undefined) {
+		const failed: SignInActionResultType = {
+			success: false,
+			message: 'Sign in failed: Unknown error.',
+		};
+
+		return failed;
+	}
+
+	return signInResults.result;
 }
 
 //⚫️ ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
