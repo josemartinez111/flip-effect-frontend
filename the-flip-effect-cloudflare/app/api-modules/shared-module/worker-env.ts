@@ -6,6 +6,12 @@
 export type WorkerEnv = {
 	REPRESENTATIVES_CACHE: KVNamespace;
 	APPROVAL_CACHE: KVNamespace;
+	// --- Cloudflare-injected deploy version (id/tag/timestamp) → drives the seed-on-new-version refresh. ---
+	CF_VERSION_METADATA: {
+		id: string;
+		tag: string;
+		timestamp: string;
+	};
 	ALLOWED_ORIGINS: Array<string>;
 	OPEN_STATES_API_URL: string;
 	OPEN_STATES_API_KEY: string;
@@ -13,9 +19,10 @@ export type WorkerEnv = {
 	CONGRESS_LEGISLATOR_IMAGE_BASE_URL: string;
 	CENSUS_GEOCODER_API_URL: string;
 	// --- Approval feeds (both public, no key). Switched on ApprovalType in approval-module. ---
-	VOTEHUB_API_URL: string;
-	ECONOMY_API_URL: string;
+	NYT_APPROVAL_URL: string;
+	APNORC_WP_API_URL: string;
 };
+// ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
 
 // --- Hono env generic: every `new Hono<WorkerHonoEnv>()` types `ctx.env` as the bindings above. ---
 export type WorkerHonoEnv = {

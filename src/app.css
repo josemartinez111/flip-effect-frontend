@@ -3,6 +3,11 @@
 /* ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞ */
 
 @import "@fontsource/orbitron";
+@import "@fontsource/orbitron/700.css";
+@import "@fontsource/orbitron/900.css";
+@import "@fontsource/montserrat/500.css";
+@import "@fontsource/montserrat/600.css";
+@import "@fontsource/montserrat/700.css";
 @import "tailwindcss";
 @import "primeicons/primeicons.css";
 
@@ -24,9 +29,11 @@
   --breakpoint-desktop:          1280px;
 
   /* --- Typography --- */
-  --font-orbitron: 'Orbitron', sans-serif;
-  --font-sans:     ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
-                   'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --font-orbitron:  'Orbitron', sans-serif;
+  --font-sans:      ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
+                    'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  /* --- Montserrat: clean geometric sans — distinct from the techno Orbitron app routes (used for backlink sites) --- */
+  --font-montserrat: 'Montserrat', sans-serif;
 
   /* --- Brand palette --- */
   --color-brand-blue:   #3b82f6;
@@ -34,6 +41,12 @@
   --color-brand-pink:   #ec4899;
   --color-brand-purple: #7c3aed;
   --color-brand-orange: #f97316;
+
+  /* --- Auth palette --- */
+  --color-auth-blue:             #101827;
+  --color-auth-surface:          #101827;
+  --color-auth-panel:            #111a2b;
+  --color-auth-panel-soft:       #1a2538;
 
   /* --- The Flip Effect palette --- */
   --color-flipeffect-ink:         #0f172a;
@@ -46,10 +59,10 @@
   --color-flipeffect-cyan:        #67e8f9;
   --color-flipeffect-teal:        #14b8a6;
 
-  /* --- Truman approval rating palette --- */
-  --color-flipeffect-truman-gold:   #facc15;
-  --color-flipeffect-truman-amber:  #f59e0b;
-  --color-flipeffect-truman-bronze: #b45309;
+  /* --- Nixon approval rating palette --- */
+  --color-flipeffect-nixon-gold:   #facc15;
+  --color-flipeffect-nixon-amber:  #f59e0b;
+  --color-flipeffect-nixon-bronze: #b45309;
 
   /* --- Presidential label palette --- */
   --color-flipeffect-presidential-white:    #f8fafc;
@@ -121,6 +134,53 @@
 @utility deck-card-hover {
   transform: translateY(-4px);
   box-shadow: 0 12px 32px -4px rgba(0, 0, 0, 0.18);
+}
+
+/* --- Blog blog post deck: card positions + cycle animation --- */
+@utility deck-pos-top {
+  transform:  rotate(0deg) translateY(0px);
+  z-index:    3;
+  transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1),
+              opacity 0.3s ease;
+}
+
+@utility deck-pos-mid {
+  transform:  rotate(-5deg) translate(-10px, 12px);
+  z-index:    2;
+  transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1),
+              opacity 0.3s ease;
+}
+
+@utility deck-pos-back {
+  transform:  rotate(8deg) translate(12px, 22px);
+  z-index:    1;
+  transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1),
+              opacity 0.3s ease;
+}
+
+@utility deck-fly-off {
+  transform:  rotate(18deg) translateX(130%);
+  opacity:    0;
+  z-index:    3;
+  transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1),
+              opacity 0.45s ease;
+}
+
+@utility deck-snap {
+  transition: none;
+  opacity:    0;
+  z-index:    1;
+}
+
+/* --- Blog card hover: zooms any .cover-zoom child image --- */
+@utility cover-zoom {
+  transition: transform 0.6s ease;
+}
+
+@utility blog-card-hover {
+  &:hover .cover-zoom {
+    transform: scale(1.04);
+  }
 }
 
 /* --- Ticker / marquee wrapper --- */

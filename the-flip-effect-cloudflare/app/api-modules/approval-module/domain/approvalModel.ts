@@ -7,6 +7,7 @@ import type { HttpStatus } from '@shared-module/httpStatus';
 
 // --- Discriminator: which public feed to fetch + cache. One module, two sources, switched on this. ---
 export type ApprovalType = 'trump' | 'economy';
+// ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
 
 // --- One normalized poll row (shape the frontend renders). ---
 export type ApprovalPoll = {
@@ -15,6 +16,7 @@ export type ApprovalPoll = {
 	disapprove: number;
 	date: string;
 };
+// ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
 
 // --- Aggregated rating for a given ApprovalType. ---
 export type ApprovalRating = {
@@ -22,7 +24,11 @@ export type ApprovalRating = {
 	approve: number;
 	disapprove: number;
 	polls: Array<ApprovalPoll>;
+	// --- Caption + "last updated" hover: which feed produced this + when the Worker fetched it (ISO). ---
+	source: string;
+	fetchedAt: string;
 };
+// ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
 
 // --- Action result envelope returned by the service / endpoint. ---
 export type ApprovalActionResult = {

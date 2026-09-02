@@ -19,7 +19,11 @@ type GlobalEnvKey =
 	| 'VITE_SUPABASE_URL'
 	| 'VITE_SUPABASE_ANON_KEY'
 	| 'VITE_EPSTEIN_FILES_URL'
-	| 'VITE_CIVIC_WORKER_URL';
+	| 'VITE_LEAVING_MAGA_URL'
+	| 'VITE_CIVIC_WORKER_URL'
+	| 'VITE_BLOG_CURRENT_API_URL'
+	| 'VITE_BLOG_PUBLISH_API_URL'
+	| 'VITE_BLOG_HARD_REMOVE_API_URL';
 
 type EnvValue = string | boolean | undefined;
 type EnvMap = Record<string, EnvValue>;
@@ -73,10 +77,25 @@ export class GlobalEnvs {
 	static readonly SupabaseUrl = GlobalEnvs.getEnv('VITE_SUPABASE_URL');
 	static readonly SupabaseAnonKey = GlobalEnvs.getEnv('VITE_SUPABASE_ANON_KEY');
 
+	// --- BlogPost Environment Variables ---
+	static readonly BlogCurrentApiUrl = GlobalEnvs.getEnv(
+		'VITE_BLOG_CURRENT_API_URL',
+	);
+	static readonly BlogPublishApiUrl = GlobalEnvs.getEnv(
+		'VITE_BLOG_PUBLISH_API_URL',
+	);
+	static readonly BlogHardRemoveApiUrl = GlobalEnvs.getEnv(
+		'VITE_BLOG_HARD_REMOVE_API_URL',
+	);
+
 	// --- Public Resource Environment Variables ---
 	static readonly EpsteinFilesUrl = GlobalEnvs.getEnv(
 		'VITE_EPSTEIN_FILES_URL',
 		'https://www.justice.gov/epstein',
+	);
+	static readonly LeavingMagaUrl = GlobalEnvs.getEnv(
+		'VITE_LEAVING_MAGA_URL',
+		'https://leavingmaga.org/',
 	);
 
 	// --- Civic Representative Environment Variables ---

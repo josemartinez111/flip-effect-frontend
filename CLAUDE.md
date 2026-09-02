@@ -103,11 +103,13 @@ vuejs-frontend-template/
 **Auth:** Supabase (magic link, password reset)
 **Privacy:** All POST requests with JSON body (no sensitive GET params)
 
+> 🛠️ **The .NET API project for this frontend lives at** `/Users/josemartinez/Desktop/Business Fantum Wave Software/FantumWaveTech/FWTFullApps/FlipEffectEntireApp/TheFlipEffectAPI` — i.e. **beside** `flip-effect-frontend/` inside `FlipEffectEntireApp/` (its own solution + `.git`). This is the real backend going forward; the existing Cloudflare Workers are slated to be **migrated into actions** in this API project. It is **outside this project root** — the standing "no files outside the project root without permission" rule still applies to it.
+
 ### ☁️ Cloudflare (Workers / Proxies)
 
 - **Everything Cloudflare-related lives in `the-flip-effect-cloudflare/`** at the repo root. Worker TypeScript code, `wrangler.toml`, and Cloudflare docs all belong there — not under `src/`.
 - **Framework: Hono** (`new Hono<WorkerHonoEnv>()`). The hand-rolled `ts-pattern` router + manual CORS are gone. We get route grouping, `hono/logger`, `hono/cors` allowlist middleware, and `app.onError` real error handling.
-- Worker source uses a **module-based vertical-slice layout** (mirrors the .NET `Modules/` backend — `AuthModule`/`BaseModule`/`HealthCheckModule`/`SharedModule`): `app/` (entry + server) holds `app/api-modules/` (≈ `Modules/`). Each module is a `-module/` folder. Feature modules carry the full slice — `app/api-modules/representatives-module/{presentation,application,infrastructure,domain}`; `shared-module/` (≈ `SharedModule`, flat: `worker-env.ts`, `httpStatus.ts`) and `health-check-module/` (≈ `HealthCheckModule`, flattened: `presentation/` only) stay lean. No barrels — import the exact file via per-module path aliases (`@app/*`, `@representatives-module/*`, `@health-check-module/*`, `@shared-module/*`). Add a new module → new `-module/` folder + its `@<name>-module/*` alias in `tsconfig.json` **and** `vitest.config.ts` `resolve.alias`. Imports flow downward only (`app/` → `api-modules/`, never reverse).
+- Worker source uses a **module-based vertical-slice layout** (mirrors the .NET `Modules/` backend — `AuthModule`/`BaseModule`/`HealthCheckModule`/`SharedModule`): `app/` (entry + server) holds `app/api-modules/` (≈ `Modules/`). Each module is a `-module/` folder. Feature modules carry the full slice — `app/api-modules/representatives-module/{presentation,application,infrastructure,domain}`; `shared-module/` (≈ `SharedModule`, flat: `worker-env.ts`, `httpStatus.ts`, `apiTryCatchTypes.ts`, `utils.ts`) and `health-check-module/` (≈ `HealthCheckModule`, flattened: `presentation/` only) stay lean. No barrels — import the exact file via per-module path aliases (`@app/*`, `@representatives-module/*`, `@health-check-module/*`, `@shared-module/*`). Add a new module → new `-module/` folder + its `@<name>-module/*` alias in `tsconfig.json` **and** `vitest.config.ts` `resolve.alias`. Imports flow downward only (`app/` → `api-modules/`, never reverse).
 - **Models get a `Model` postfix** (`representativeModel.ts` = app-facing contract, `civicUpstreamModel.ts` = raw upstream DTOs). Both live in `domain/` (upstream DTOs are still the contract, not infrastructure). Non-model domain files (e.g. `representativeConstants.ts`) take no postfix.
 - **Handlers: extracted, never inlined.** Use `createFactory<WorkerHonoEnv>().createHandlers(...)` in the endpoint file, then `routeGroup.post('/path', ...handlers)`. Context is named `ctx` (not `c`). Hono ships status **types** only (`StatusCode` from `hono/utils/http-status`), no value enum — so the `shared-module/httpStatus.ts` `STATUS` const stays; its narrow `HttpStatus` union is a subset of `ContentfulStatusCode`, so `ctx.json(body, status)` type-checks with no casts.
 - **Route grouping declared IN the endpoint file** (mirrors the .NET pattern where `MappedXRoutes()` is declared in the endpoint class and mounted in `Program.cs`): the endpoint exports `const representativeRoutes = new Hono<WorkerHonoEnv>()`, and `app/app.ts` mounts it with `app.route('/api', representativeRoutes)`.
@@ -386,7 +388,7 @@ export const use$STORE_NAME$Store = defineStore('$storeName$', () => {
 - **Always use braces** on every `if`/`else`/`for`/`while` — never single-line brace-less statements like `if (x) return;`. The body goes on its own braced line.
 - **Always give a blank line above and below** a braced control block, so each block breathes. The only exception is when the block is the very first statement inside its parent (no blank needed directly under the opening `{`) or the last before a closing `}`.
 
-```ts
+```zsh
 // ❌ WRONG — lazy, no braces, cramped
 const trimmed = query.trim();
 if (!trimmed) return 'name';
@@ -409,7 +411,7 @@ if (isZip(trimmed)) {
 - **Do not extract single-use or trivial helper functions.** Inline the logic into its one caller. A file should be **one or two real functions**, not a swarm of tiny `const foo = () => oneThing` wrappers — those are more surface to maintain and read, not less. Only factor something out when it is genuinely reused or is a real, self-contained unit. Never make pure pass-through wrappers (`const refresh = (env) => seedAll(env)`) — call the underlying function directly.
 - **Named returns.** Don't return a freshly constructed object/response inline. Bind it to a typed, named variable (e.g. `const result: T = { ... }`), leave a blank line, then `return result`. This applies to every constructed return (success **and** failure objects, `new Response(...)`, etc.) so each outcome is greppable and debuggable. Trivial primitive bails (`return []`, `return undefined`, `return null`) may stay inline.
 
-```ts
+```zsh
 // ❌ WRONG — tiny one-use helper + inline object return
 const fail = (message: string) => ({ success: false, message });
 export const handle = () => {
@@ -657,6 +659,8 @@ pm preview          # Preview production locally
 - Run `pm build`, `vue-tsc --noEmit` when feasible
 - Check console errors, dark mode, responsive design
 - Call out skipped validation
+- Component tests are temporary implementation tools. After a UI component is verified, delete its local test file.
+- Keep only one reusable UI-component test example in `vuejs-frontend-template`; utility, API, and business-logic tests remain durable.
 
 **Template Compliance:**
 - ALWAYS use `<script setup lang="ts">` — never Options API

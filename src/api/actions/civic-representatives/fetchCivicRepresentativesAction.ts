@@ -3,7 +3,7 @@
 // > FETCH_CIVIC_REPRESENTATIVES_ACTION.TS
 // ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
 import kyMap from 'ky';
-import { GlobalEnvs, ST, tryCatchHandler } from '../../../lib';
+import { GlobalEnvs, ST, Utils } from '../../../lib';
 import type { CivicRepresentativeActionResult } from '../../action-results/CivicRepresentativeActionResult';
 import type { CivicRepresentativeSearchParams } from '../../models/CivicRepresentativeModel';
 // ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
@@ -15,8 +15,8 @@ import type { CivicRepresentativeSearchParams } from '../../models/CivicRepresen
 export async function fetchCivicRepresentativesAction(
 	searchParams: CivicRepresentativeSearchParams,
 ): Promise<CivicRepresentativeActionResult> {
-	// --- The actual request, handed to tryCatchHandler so failures are caught, not thrown. ---
-	const fetchCivicRepresentativesRequest =
+	// --- The actual request, handed to Utils.runTryCatch so failures are caught, not thrown. ---
+	const fetchCivicRepresentativesCallback =
 		async (): Promise<CivicRepresentativeActionResult> => {
 			// --- Trim any trailing slash so the path joins cleanly across local/prod origins. ---
 			const workerUrl = GlobalEnvs.CivicWorkerUrl.replace(/\/+$/, '');
@@ -33,7 +33,8 @@ export async function fetchCivicRepresentativesAction(
 			);
 
 			// --- Worker JSON already matches CivicRepresentativeActionResult, so the UI never sees raw shapes. ---
-			const actionResult = await response.json<CivicRepresentativeActionResult>();
+			const actionResult =
+				await response.json<CivicRepresentativeActionResult>();
 
 			// --- A clean non-2xx isn't thrown, so surface it here: action message + upstream cause, side by side. ---
 			if (!actionResult.success) {
@@ -45,19 +46,23 @@ export async function fetchCivicRepresentativesAction(
 			return actionResult;
 		};
 
-	// --- tryCatchHandler logs and returns undefined on a real failure (network down, bad JSON). ---
-	const result = await tryCatchHandler<CivicRepresentativeActionResult>({
-		asyncActionCallback: fetchCivicRepresentativesRequest,
-		errorContext: 'Error loading civic representatives',
-	});
+	const civicRepresentativeResults =
+		await Utils.runTryCatch<CivicRepresentativeActionResult>({
+			callback: fetchCivicRepresentativesCallback,
+			errorContext: 'Error loading civic representatives',
+		});
 
-	// --- undefined only happens on that hard failure, so fall back to a 500 the UI can render. ---
-	const civicRepresentativesResult: CivicRepresentativeActionResult = result ?? {
+	if (civicRepresentativeResults.error !== undefined) {
+		const failed: CivicRepresentativeActionResult = {
 			success: false,
 			statusCode: ST.INTERNAL_SERVER_ERROR,
 			message: 'Representative lookup failed.',
+			error: civicRepresentativeResults.error.message,
 		};
 
-	return civicRepresentativesResult;
+		return failed;
+	}
+
+	return civicRepresentativeResults.result;
 }
 // ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞

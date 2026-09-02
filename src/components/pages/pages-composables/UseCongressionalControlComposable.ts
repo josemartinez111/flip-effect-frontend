@@ -1,15 +1,16 @@
 // ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
-// PAGES: HOME > COMPOSABLES > USE_CONGRESSIONAL_CONTROL_COMPOSABLE.TS 
+// PAGES: HOME > COMPOSABLES > USE_CONGRESSIONAL_CONTROL_COMPOSABLE.TS
 // ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
 import clsx from 'clsx';
 import { twMerge } from 'tailwind-merge';
+import {
+	type SeatGridCardModel,
+	type SeatGridCardSeatStyleClasses,
+} from '../../shared/seat-grid-card/SeatGridCardTypes.ts';
 // ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
 
 export type CongressionalSeatParty =
-	| 'democrat'
-	| 'republican'
-	| 'independent'
-	| 'vacant';
+	'democrat' | 'republican' | 'independent' | 'vacant';
 // ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
 
 export type CongressionalSeatSize = 'house' | 'senate';
@@ -36,15 +37,6 @@ export type CongressionalControlChamber = {
 	summary: string;
 	pathSummary: string;
 	seats: Array<CongressionalSeat>;
-};
-// ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
-
-type CongressionalSeatAvatarStyleClasses = {
-	seatBackStyleClasses: string;
-	seatHeadStyleClasses: string;
-	seatBaseStyleClasses: string;
-	iconStyleClasses?: string;
-	hideIcon?: boolean;
 };
 // ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
 
@@ -102,135 +94,9 @@ export const UseCongressionalControlComposable = () => {
 		clsx('grid gap-4 laptop:grid-cols-2'),
 	);
 
-	const congressionalChamberCardStyleClasses = twMerge(
-		clsx(
-			'overflow-hidden rounded-xl border bg-transparent shadow-xl',
-			'border-slate-900/8 shadow-slate-950/12',
-			'dark:border-white/10 dark:shadow-black/35',
-		),
-	);
-
-	const congressionalChamberCardBodyStyleClasses = twMerge(clsx('p-0'));
-
-	const congressionalChamberCardContentStyleClasses = twMerge(
-		clsx(
-			'bg-gradient-to-br from-white/72 via-white/54 to-slate-200/50 p-4',
-			'dark:from-slate-950/84 dark:via-slate-900/68 dark:to-slate-950/84',
-			'tablet:p-5',
-		),
-	);
-
-	const congressionalChamberHeaderStyleClasses = twMerge(
-		clsx('mb-4 flex items-start justify-between gap-3'),
-	);
-
-	const congressionalChamberTitleStyleClasses = twMerge(
-		clsx(
-			'font-orbitron text-lg font-black uppercase tracking-[0.08em]',
-			'text-slate-950 dark:text-white',
-		),
-	);
-
-	const congressionalChamberStatusStyleClasses = twMerge(
-		clsx(
-			'rounded-md border px-2 py-1 font-orbitron text-[0.62rem] font-black',
-			'uppercase tracking-[0.16em]',
-			'border-rose-500/25 bg-rose-500/12 text-rose-700',
-			'dark:border-rose-300/22 dark:bg-rose-400/12 dark:text-rose-200',
-		),
-	);
-
-	const congressionalChamberSummaryStyleClasses = twMerge(
-		clsx(
-			'space-y-1 text-sm font-bold leading-6 text-slate-700 dark:text-slate-200/82',
-		),
-	);
-
-	const congressionalChamberPathStyleClasses = twMerge(
-		clsx('text-cyan-700 dark:text-cyan-100'),
-	);
-
-	const congressionalPartyBarsStyleClasses = twMerge(clsx('mt-4 space-y-3'));
-
-	const congressionalPartyBarRowStyleClasses = twMerge(
-		clsx('grid grid-cols-[5.5rem_minmax(0,1fr)_3.5rem] items-center gap-3'),
-	);
-
-	const congressionalPartyBarLabelStyleClasses = twMerge(
-		clsx(
-			'font-orbitron text-[0.62rem] font-black uppercase tracking-[0.12em]',
-			'text-slate-600 dark:text-slate-300/82',
-		),
-	);
-
-	const congressionalPartyBarTrackStyleClasses = twMerge(
-		clsx(
-			'h-2 overflow-hidden rounded-full bg-slate-950/10',
-			'shadow-[inset_0_1px_4px_rgba(15,23,42,0.18)]',
-			'dark:bg-white/10 dark:shadow-[inset_0_1px_4px_rgba(0,0,0,0.45)]',
-		),
-	);
-
-	const congressionalPartyBarCountStyleClasses = twMerge(
-		clsx(
-			'text-right font-orbitron text-xs font-black',
-			'text-slate-700 dark:text-slate-100',
-		),
-	);
-
-	const congressionalDemocratBarStyleClasses = twMerge(
-		clsx(
-			'h-full rounded-full bg-gradient-to-r from-blue-700 via-sky-500 to-cyan-300',
-		),
-	);
-
-	const congressionalRepublicanBarStyleClasses = twMerge(
-		clsx(
-			'h-full rounded-full bg-gradient-to-r from-rose-800 via-red-600 to-rose-300',
-		),
-	);
-
-	const congressionalChamberMetaStyleClasses = twMerge(
-		clsx(
-			'mt-4 flex flex-wrap gap-2 font-orbitron text-[0.62rem] font-bold',
-			'uppercase tracking-[0.12em]',
-		),
-	);
-
-	const congressionalChamberMetaItemStyleClasses = twMerge(
-		clsx(
-			'rounded-md border px-2 py-1',
-			'border-slate-900/10 bg-white/48 text-slate-700',
-			'dark:border-white/10 dark:bg-white/6 dark:text-slate-200/78',
-		),
-	);
-
-	const congressionalSeatGridStyleClasses = twMerge(
-		clsx(
-			'mt-5 grid content-start justify-items-center gap-x-1.5 gap-y-2',
-			'rounded-xl border p-3',
-			'border-slate-950/8 bg-slate-950/6',
-			'dark:border-white/8 dark:bg-black/18',
-		),
-	);
-
-	const congressionalHouseSeatGridStyleClasses = twMerge(
-		clsx(
-			congressionalSeatGridStyleClasses,
-			'grid-cols-[repeat(29,minmax(0,1fr))] tablet:grid-cols-[repeat(35,minmax(0,1fr))]',
-		),
-	);
-
-	const congressionalSenateSeatGridStyleClasses = twMerge(
-		clsx(
-			congressionalSeatGridStyleClasses,
-			'grid-cols-[repeat(20,minmax(0,1fr))] tablet:grid-cols-[repeat(25,minmax(0,1fr))]',
-		),
-	);
-
-	const congressionalSeatAvatarStyleClasses: Record<
+	const congressionalSeatStyleClasses: Record<
 		CongressionalSeatParty,
-		CongressionalSeatAvatarStyleClasses
+		SeatGridCardSeatStyleClasses
 	> = {
 		democrat: {
 			seatBackStyleClasses:
@@ -263,22 +129,74 @@ export const UseCongressionalControlComposable = () => {
 		},
 	};
 
-	const getCongressionalControlBarStyle = (percentage: number) => {
-		return {
-			width: `${percentage}%`,
-		};
-	};
+	const getCongressionalSeatGridCards = (
+		chambers: Array<CongressionalControlChamber>,
+	): Array<SeatGridCardModel> => {
+		const seatGridCards: Array<SeatGridCardModel> = chambers.map(
+			(chamber: CongressionalControlChamber) => {
+				const metadata = [
+					{
+						key: 'total-seats',
+						label: `${chamber.totalSeats} seats`,
+					},
+				];
 
-	const getCongressionalSeatAvatarSize = (
-		chamberKey: CongressionalSeatSize,
-	) => {
-		return chamberKey === 'house' ? 'small' : 'medium';
-	};
+				if (chamber.independents > 0) {
+					metadata.push({
+						key: 'independent-seats',
+						label: `${chamber.independents} IND shown separately`,
+					});
+				}
 
-	const getCongressionalSeatAvatarAriaLabel = (
-		party: CongressionalSeatParty,
-	) => {
-		return `${party} congressional seat`;
+				if (chamber.vacancies > 0) {
+					metadata.push({
+						key: 'vacant-seats',
+						label: `${chamber.vacancies} vacancies`,
+					});
+				}
+
+				const seatGridCard: SeatGridCardModel = {
+					key: chamber.key,
+					title: chamber.title,
+					statusLabel: chamber.statusLabel,
+					summary: chamber.summary,
+					highlight: chamber.pathSummary,
+					layout: chamber.key === 'house' ? 'dense' : 'standard',
+					seatAvatarSize: chamber.key === 'house' ? 'small' : 'medium',
+					seatGridAriaLabel: `${chamber.title} seats`,
+					bars: [
+						{
+							key: 'democrat-seats',
+							label: chamber.democratLabel,
+							count: chamber.democrats,
+							percentage: chamber.democratPercent,
+							styleClasses: 'from-blue-700 via-sky-500 to-cyan-300',
+						},
+						{
+							key: 'republican-seats',
+							label: 'Republicans',
+							count: chamber.republicans,
+							percentage: chamber.republicanPercent,
+							styleClasses: 'from-rose-800 via-red-600 to-rose-300',
+						},
+					],
+					metadata,
+					seats: chamber.seats.map((seat: CongressionalSeat) => {
+						const seatGridSeat = {
+							id: seat.id,
+							ariaLabel: `${seat.party} congressional seat`,
+							styleClasses: congressionalSeatStyleClasses[seat.party],
+						};
+
+						return seatGridSeat;
+					}),
+				};
+
+				return seatGridCard;
+			},
+		);
+
+		return seatGridCards;
 	};
 
 	return {
@@ -289,29 +207,7 @@ export const UseCongressionalControlComposable = () => {
 		congressionalControlTitleStyleClasses,
 		congressionalControlLeadStyleClasses,
 		congressionalControlGridStyleClasses,
-		congressionalChamberCardStyleClasses,
-		congressionalChamberCardBodyStyleClasses,
-		congressionalChamberCardContentStyleClasses,
-		congressionalChamberHeaderStyleClasses,
-		congressionalChamberTitleStyleClasses,
-		congressionalChamberStatusStyleClasses,
-		congressionalChamberSummaryStyleClasses,
-		congressionalChamberPathStyleClasses,
-		congressionalPartyBarsStyleClasses,
-		congressionalPartyBarRowStyleClasses,
-		congressionalPartyBarLabelStyleClasses,
-		congressionalPartyBarTrackStyleClasses,
-		congressionalPartyBarCountStyleClasses,
-		congressionalDemocratBarStyleClasses,
-		congressionalRepublicanBarStyleClasses,
-		congressionalChamberMetaStyleClasses,
-		congressionalChamberMetaItemStyleClasses,
-		congressionalHouseSeatGridStyleClasses,
-		congressionalSenateSeatGridStyleClasses,
-		congressionalSeatAvatarStyleClasses,
-		getCongressionalControlBarStyle,
-		getCongressionalSeatAvatarSize,
-		getCongressionalSeatAvatarAriaLabel,
+		getCongressionalSeatGridCards,
 	};
 };
 // ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞

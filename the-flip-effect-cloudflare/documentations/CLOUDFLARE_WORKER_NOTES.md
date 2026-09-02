@@ -26,7 +26,9 @@ the-flip-effect-cloudflare/
 │       │   └── presentation/           # healthCheckEndpoint.ts       (GET /api/health-check smoke route)
 │       └── shared-module/              # ≈ SharedModule — flat, no slice layers
 │           ├── worker-env.ts           # WorkerEnv + WorkerHonoEnv ({ Bindings: WorkerEnv })
-│           └── httpStatus.ts           # STATUS const + HttpStatus union — cross-cutting, reusable in any worker
+│           ├── httpStatus.ts           # STATUS const + HttpStatus union — cross-cutting, reusable in any worker
+│           ├── apiTryCatchTypes.ts     # AsyncAPIActionParams + status-coded Results contract
+│           └── utils.ts                # Utils.APITryCatch behavior
 ├── test/                               # vitest + @cloudflare/vitest-pool-workers; mirrors the module tree
 │   └── health-check-module/            # healthCheck.test.ts — the default scaffold smoke test
 ├── documentations/
@@ -47,7 +49,7 @@ the-flip-effect-cloudflare/
 | `infrastructure/` | `Infrastructure/` | upstream fetches + KV cache | All I/O. Swappable without touching the brain. |
 | `domain/` | `Domain/{Entities,DTOs}` | `*Model.ts` types + `*Constants.ts` | The contract. Imported everywhere, depends on nothing. Models take a `Model` postfix; both app-facing and upstream DTO models live here. |
 | `health-check-module/` | `HealthCheckModule` | `presentation/healthCheckEndpoint.ts` only | Flattened — a smoke route needs no application/domain/infra. The always-there default test target after scaffolding. |
-| `shared-module/` | `SharedModule` | `WorkerEnv` / `WorkerHonoEnv`, `STATUS` / `HttpStatus` | Cross-cutting, feature-agnostic — the genuinely reusable bits for the scaffold. Flat, no slice layers. |
+| `shared-module/` | `SharedModule` | `WorkerEnv` / `WorkerHonoEnv`, `STATUS` / `HttpStatus`, `AsyncAPIActionParams` / `Results`, `Utils.APITryCatch` | Cross-cutting, feature-agnostic — the genuinely reusable bits for the scaffold. Flat, no slice layers. |
 
 **No barrels.** An API project has no external consumers to shield, so a barrel only hides the real source file and invites circular imports. Import the exact file via aliases (`@representatives-module/application/representativesService`). Same reasoning the frontend `CLAUDE.md` already applies to pages/composables — it bites harder in a backend.
 
@@ -186,20 +188,22 @@ flip-effect-frontend/                 ← .git lives HERE (single repo)
 
 ## 🧭 First-Time Setup — Run Order (do once)
 
-Worker code is written, but nothing is live until CF resources exist. Run these **in order** before the frontend can call it.
+Worker code is written, but nothing is live until the CF resources exist **and the secret is set**. Run these **in order** from `the-flip-effect-cloudflare/` (use `npx wrangler …`; there's no global wrangler — it's a project devDependency on purpose).
 
 | # | Step | Command | Why |
 |---|------|---------|-----|
 | 1 | Auth wrangler | `npx wrangler login` | One-time browser login to your CF account |
-| 2 | Create KV namespace | `pm create:cache` | Outputs an id — paste it into `wrangler.toml` (replaces `REPLACE_WITH_KV_NAMESPACE_ID`). Cache is dead without it |
-| 3 | Set production secret | `pm secret:worker` | Paste Open States key → CF secret store |
-| 4 | Local secret for dev | copy `.dev.vars.example` → `.dev.vars`, fill key | Lets `wrangler dev` hit Open States locally |
+| 2 | Confirm / create the KV | `npx wrangler kv namespace list` (or `pm create:cache` if missing) | The `id` in `wrangler.toml` must exist on **your** account or `deploy` fails |
+| 3 | Local secret for dev | copy `.dev.vars.example` → `.dev.vars`, fill the Open States key | Lets `wrangler dev` hit Open States locally |
+| 4 | Deploy | `pm deploy:worker` | Ships to **`<worker>.<sub>.workers.dev`** — the custom-domain `[[routes]]` block is **commented out in `wrangler.toml`** until `theflipeffect.us` joins Cloudflare (`workers_dev = true` gives the free URL meanwhile) |
+| 5 | **Set the production secret** | `pm secret:worker` → paste the Open States key | **Required for State Lawmakers.** `secret put` also bumps the version (a redeploy). Persists across all future deploys — **one-time** |
 
-**Then pick a path:**
-- **Local test:** `pm run:worker` → `localhost:8787`. Point frontend `VITE_CIVIC_WORKER_URL` at it, verify before deploy.
-- **Live:** `pm deploy:worker` → `theflipeffect.us/api/*` responds. Requires `theflipeffect.us` to already be a zone/route in your CF account.
+> 🟥 **The gotcha that will bite you (it bit us):** `wrangler deploy` ships **code only — never `.dev.vars`**. Until step 5 runs on the live worker, **US Congress works** (keyless `congress-legislators` GitHub blob) but **State Lawmakers returns `"State representative lookup is unavailable right now."`** — Open States needs the key. They are **different APIs**; one working while the other doesn't is the *expected* symptom of a missing secret, **not a bug**. Set the secret, retry.
 
-**Only after the worker responds** does the frontend rewire (collapse `fetchCivicRepresentativesAction` to one POST) make sense.
+**Then point the frontend (`VITE_CIVIC_WORKER_URL`) at it — pick one:**
+- **Live worker (no local process):** `https://<worker>.<sub>.workers.dev`, restart `pm dev`. CORS already allowlists `localhost:5173`.
+- **Local worker:** `pm run:worker` → `http://localhost:8787` (a *local* simulated KV; dashboard KV stays empty).
+- **Production (July):** when `theflipeffect.us` is a Cloudflare zone, uncomment the `[[routes]]` block, drop `workers_dev`, redeploy.
 
 ---
 
@@ -210,9 +214,9 @@ All at [dash.cloudflare.com](https://dash.cloudflare.com). Things appear in this
 | Order | What | Where to click | When it appears |
 |-------|------|----------------|-----------------|
 | 1 | KV namespace `the-flip-effect-representatives-cache` | **Storage & Databases → KV** | After `pm create:cache`. Visible **now** |
-| 2 | The Worker `the-flip-effect-worker` | **Compute (Workers) → Workers & Pages** | Only after `pm deploy:worker`. **Not** there during local `wrangler dev` |
-| 3 | Public vars + secret `OPEN_STATES_API_KEY` (shown as hidden) | Worker → **Settings → Variables and Secrets** | After deploy |
-| 4 | Weekly cron `0 9 * * 1` + route `theflipeffect.us/api/*` | Worker → **Settings → Triggers** | After deploy |
+| 2 | The Worker `the-flip-effect-worker` (URL `<worker>.<sub>.workers.dev`) | **Compute (Workers) → Workers & Pages** | Only after `pm deploy:worker`. **Not** there during local `wrangler dev` |
+| 3 | Public vars + secret `OPEN_STATES_API_KEY` (shown as hidden) | Worker → **Settings → Variables and Secrets** | After deploy **+ `pm secret:worker`** — the secret is its own step |
+| 4 | Weekly cron `0 9 * * 1` (custom route stays commented out until the domain move) | Worker → **Settings → Triggers** | After deploy |
 
 **Two gotchas:**
 - **Local dev does not touch the dashboard KV.** `wrangler dev` uses a *local* simulated KV (the output says `Mode: local`). So the dashboard namespace stays at **0 keys** until a **deployed** worker's cron seeds it (or you write to it remotely). Empty there during local testing is normal.
@@ -228,12 +232,25 @@ All at [dash.cloudflare.com](https://dash.cloudflare.com). Things appear in this
 
 ---
 
+## 🌱 Cache Seeding — Weekly Cron + Seed-on-Deploy
+
+The KV cache fills two ways, both running the same `seedAllStates` (federal blob + every state roster):
+
+1. **Weekly cron** (`0 9 * * 1`, the `scheduled` handler) — the time-based refresh.
+2. **Seed-on-new-version** — the `[version_metadata]` binding (`CF_VERSION_METADATA`) exposes the Worker's deploy version id at runtime. A request middleware (`application/representativesSeedOnDeploy.ts`) compares it to a KV marker `meta:seeded-version`; on a **new version (every deploy) or an unseeded cache**, the first request claims the version and fires `seedAllStates` inside `ctx.waitUntil` (background — never blocks the response). So **every deploy = a fresh cache**, no manual trigger, no deploy-script curl.
+
+**Quota guard (so frequent deploys don't blow Open States' ~560/day):** `seedAllStates` does one `KV.list()` and **skips any roster refreshed within `SEED_FRESHNESS_WINDOW_MS` (6 days)** — a `metadata.seededAt` stamped on every `put`. Repeat deploys the same day therefore re-fetch ~nothing. The window is `< CACHE_TTL_SECONDS` (1 week) so the weekly cron still refreshes everything.
+
+**Still needs the secret:** the state half of the seed calls Open States, so without `OPEN_STATES_API_KEY` on the live worker (Setup step 5) only `federal:legislators` seeds. KV keys you'll see after a seeded deploy: `federal:legislators`, `state:CA`, `state:FL`, …, `meta:seeded-version`.
+
+---
+
 ## ♻️ Porting Into The Vue/Vite Scaffold (Future)
 
 When folding this into the scaffolding template, the reusable, project-agnostic pieces are:
 - **Hono as the framework:** `new Hono<WorkerHonoEnv>()` + `hono/logger` + `hono/cors` allowlist + `app.onError`. The `createFactory` extracted-handler pattern and the "route group declared in the endpoint, mounted in `app.ts`" convention port as-is.
-- The module-based folder shape: `app/{app,server}` + `app/api-modules/<name>-module/{presentation,application,infrastructure,domain}` + `app/api-modules/shared-module/{worker-env,httpStatus}`. Models take a `Model` postfix; feature modules carry the full slice, `shared-module/` stays flat.
-- `shared-module/httpStatus.ts` (`STATUS` const + `HttpStatus` union) and `shared-module/worker-env.ts` (`WorkerEnv` + `WorkerHonoEnv`) — fully feature-agnostic.
+- The module-based folder shape: `app/{app,server}` + `app/api-modules/<name>-module/{presentation,application,infrastructure,domain}` + `app/api-modules/shared-module/{worker-env,httpStatus,apiTryCatchTypes,utils}`. Models take a `Model` postfix; feature modules carry the full slice, `shared-module/` stays flat.
+- `shared-module/httpStatus.ts` (`STATUS` const + `HttpStatus` union), `shared-module/worker-env.ts` (`WorkerEnv` + `WorkerHonoEnv`), `shared-module/apiTryCatchTypes.ts` (try/catch contracts), and `shared-module/utils.ts` (behavior) — fully feature-agnostic.
 - **`health-check-module/` + its `test/health-check-module/healthCheck.test.ts`** — the always-there scaffold default. New project → `pm test:worker` → green proves the wiring before any real module is written.
 - **The test stack:** `vitest` + `@cloudflare/vitest-pool-workers` (`cloudflareTest` plugin → `wrangler.toml`), `tsconfig` `types` includes `@cloudflare/vitest-pool-workers/types`, `vitest.config.ts` re-declares the module aliases as `resolve.alias`.
 - The secret pattern: `wrangler.toml` public `vars` vs `.dev.vars` local secret vs CF secret store.

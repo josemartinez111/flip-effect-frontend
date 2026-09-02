@@ -4,8 +4,8 @@
 ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞ -->
 <script setup lang="ts">
 // -- ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞ --
-import Card from 'primevue/card';
-import FWTSeatAvatar from '../../../shared/FWTSeatAvatar.vue';
+import { computed } from 'vue';
+import SeatGridCard from '../../../shared/seat-grid-card/SeatGridCard.vue';
 import {
 	type CongressionalControlChamber,
 	UseCongressionalControlComposable,
@@ -41,30 +41,12 @@ const {
 	congressionalControlTitleStyleClasses,
 	congressionalControlLeadStyleClasses,
 	congressionalControlGridStyleClasses,
-	congressionalChamberCardStyleClasses,
-	congressionalChamberCardBodyStyleClasses,
-	congressionalChamberCardContentStyleClasses,
-	congressionalChamberHeaderStyleClasses,
-	congressionalChamberTitleStyleClasses,
-	congressionalChamberStatusStyleClasses,
-	congressionalChamberSummaryStyleClasses,
-	congressionalChamberPathStyleClasses,
-	congressionalPartyBarsStyleClasses,
-	congressionalPartyBarRowStyleClasses,
-	congressionalPartyBarLabelStyleClasses,
-	congressionalPartyBarTrackStyleClasses,
-	congressionalPartyBarCountStyleClasses,
-	congressionalDemocratBarStyleClasses,
-	congressionalRepublicanBarStyleClasses,
-	congressionalChamberMetaStyleClasses,
-	congressionalChamberMetaItemStyleClasses,
-	congressionalHouseSeatGridStyleClasses,
-	congressionalSenateSeatGridStyleClasses,
-	congressionalSeatAvatarStyleClasses,
-	getCongressionalControlBarStyle,
-	getCongressionalSeatAvatarSize,
-	getCongressionalSeatAvatarAriaLabel,
+	getCongressionalSeatGridCards,
 } = UseCongressionalControlComposable();
+
+const congressionalSeatGridCards = computed(() => {
+	return getCongressionalSeatGridCards(chambers);
+});
 // -- ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞ --
 </script>
 <!-- ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞ MARKUP ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞ -->
@@ -87,120 +69,11 @@ const {
 			</div>
 
 			<div :class="congressionalControlGridStyleClasses">
-				<!-- Extractable: CongressionalChamberControlCard -->
-				<Card
-					v-for="chamber in chambers"
-					:key="chamber.key"
-					unstyled
-					:class="congressionalChamberCardStyleClasses"
-					:pt="{
-						body: { class: congressionalChamberCardBodyStyleClasses },
-						content: {
-							class: congressionalChamberCardContentStyleClasses,
-						},
-					}"
-				>
-					<template #content>
-						<div :class="congressionalChamberHeaderStyleClasses">
-							<div>
-								<h3 :class="congressionalChamberTitleStyleClasses">
-									{{ chamber.title }}
-								</h3>
-
-								<div :class="congressionalChamberSummaryStyleClasses">
-									<p>{{ chamber.summary }}</p>
-									<p :class="congressionalChamberPathStyleClasses">
-										{{ chamber.pathSummary }}
-									</p>
-								</div>
-							</div>
-
-							<span :class="congressionalChamberStatusStyleClasses">
-								{{ chamber.statusLabel }}
-							</span>
-						</div>
-
-						<!-- Extractable: CongressionalControlBars -->
-						<div :class="congressionalPartyBarsStyleClasses">
-							<div :class="congressionalPartyBarRowStyleClasses">
-								<span :class="congressionalPartyBarLabelStyleClasses">
-									{{ chamber.democratLabel }}
-								</span>
-								<div :class="congressionalPartyBarTrackStyleClasses">
-									<div
-										:class="congressionalDemocratBarStyleClasses"
-										:style="
-											getCongressionalControlBarStyle(
-												chamber.democratPercent,
-											)
-										"
-									/>
-								</div>
-								<span :class="congressionalPartyBarCountStyleClasses">
-									{{ chamber.democrats }}
-								</span>
-							</div>
-
-							<div :class="congressionalPartyBarRowStyleClasses">
-								<span :class="congressionalPartyBarLabelStyleClasses">
-									Republicans
-								</span>
-								<div :class="congressionalPartyBarTrackStyleClasses">
-									<div
-										:class="congressionalRepublicanBarStyleClasses"
-										:style="
-											getCongressionalControlBarStyle(
-												chamber.republicanPercent,
-											)
-										"
-									/>
-								</div>
-								<span :class="congressionalPartyBarCountStyleClasses">
-									{{ chamber.republicans }}
-								</span>
-							</div>
-						</div>
-
-						<div :class="congressionalChamberMetaStyleClasses">
-							<span :class="congressionalChamberMetaItemStyleClasses">
-								{{ chamber.totalSeats }} seats
-							</span>
-							<span
-								v-if="chamber.independents > 0"
-								:class="congressionalChamberMetaItemStyleClasses"
-							>
-								{{ chamber.independents }} IND shown separately
-							</span>
-							<span
-								v-if="chamber.vacancies > 0"
-								:class="congressionalChamberMetaItemStyleClasses"
-							>
-								{{ chamber.vacancies }} vacancies
-							</span>
-						</div>
-
-						<!-- Extractable: CongressionalSeatAvatarGrid -->
-						<div
-							:class="
-								chamber.key === 'house'
-									? congressionalHouseSeatGridStyleClasses
-									: congressionalSenateSeatGridStyleClasses
-							"
-						>
-							<FWTSeatAvatar
-								v-for="seat in chamber.seats"
-								:key="seat.id"
-								:seat-avatar-size="
-									getCongressionalSeatAvatarSize(chamber.key)
-								"
-								v-bind="congressionalSeatAvatarStyleClasses[seat.party]"
-								:aria-label="
-									getCongressionalSeatAvatarAriaLabel(seat.party)
-								"
-							/>
-						</div>
-					</template>
-				</Card>
+				<SeatGridCard
+					v-for="seatGridCard in congressionalSeatGridCards"
+					:key="seatGridCard.key"
+					:seat-grid-card="seatGridCard"
+				/>
 			</div>
 		</div>
 	</section>

@@ -3,8 +3,9 @@
 // > USE_APPROVAL_RATING_TIER_COMPOSABLE.TS
 // ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
 import clsx from 'clsx';
+import { storeToRefs } from 'pinia';
 import { twMerge } from 'tailwind-merge';
-import { computed, ref } from 'vue';
+import { computed, ref, watch } from 'vue';
 import {
 	UsaApprovalMapTier1,
 	UsaApprovalMapTier2,
@@ -13,6 +14,7 @@ import {
 	UsaApprovalMapTier5,
 } from '../../../assets';
 import { UseAnimatedPercentageComposable } from '../../../lib';
+import { useApprovalStore } from '../../../lib/stores/UseApprovalStore.ts';
 // ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
 
 type ApprovalRatingTierMap = {
@@ -42,6 +44,33 @@ export const UseApprovalRatingTierComposable = () => {
 	const economyApprovalRatingPercentage = ref(
 		currentTrumpEconomyApprovalPercentage,
 	);
+
+	// --- Live economy approval from the Worker (AP-NORC); the static value stands in until it lands. ---
+	const { economyRating } = storeToRefs(useApprovalStore());
+
+	watch(
+		economyRating,
+		(rating) => {
+			if (rating) {
+				economyApprovalRatingPercentage.value = rating.approve;
+			}
+		},
+		{ immediate: true },
+	);
+
+	// --- Hover caption: where the economy % comes from + when the Worker last pulled it. ---
+	const economyApprovalSourceCaption = computed(() => {
+		const rating = economyRating.value;
+
+		if (!rating) {
+			return 'Source: AP-NORC';
+		}
+
+		const updatedOn = new Date(rating.fetchedAt).toLocaleDateString();
+
+		return `Source: ${rating.source} · updated ${updatedOn}`;
+	});
+
 	const activeApprovalRatingTierIndex = ref(0);
 	const approvalRatingTierTimeoutIds: number[] = [];
 
@@ -152,7 +181,6 @@ export const UseApprovalRatingTierComposable = () => {
 		clsx(
 			'relative overflow-visible',
 			'laptop:origin-top laptop:scale-[0.70]',
-			'dark:overflow-hidden',
 		),
 	);
 
@@ -212,6 +240,17 @@ export const UseApprovalRatingTierComposable = () => {
 			'bg-clip-text text-4xl font-black leading-none text-transparent',
 			'drop-shadow-[0_0_14px_rgba(244,63,94,0.76)]',
 			'tablet:text-5xl laptop:text-6xl',
+		),
+	);
+
+	const economySourceTooltipStyleClasses = twMerge(
+		clsx(
+			'pointer-events-none absolute bottom-full left-1/2 z-50 mb-4',
+			'w-max max-w-[22rem] -translate-x-1/2 whitespace-normal',
+			'rounded-xl border border-white/25 bg-slate-950/95 px-5 py-3',
+			'font-sans text-sm font-bold leading-snug text-white',
+			'opacity-0 shadow-2xl backdrop-blur-md transition-opacity duration-200',
+			'group-hover:opacity-100 tablet:text-base',
 		),
 	);
 
@@ -366,6 +405,7 @@ export const UseApprovalRatingTierComposable = () => {
 	return {
 		approvalRatingTierMaps,
 		animatedApprovalRatingPercentage,
+		economyApprovalSourceCaption,
 		activeApprovalRatingTierMap,
 		approvalTierCompositionStyleClasses,
 		approvalTierSectionStyleClasses,
@@ -375,6 +415,7 @@ export const UseApprovalRatingTierComposable = () => {
 		approvalTierBadgeStyleClasses,
 		approvalTierBadgeRowStyleClasses,
 		approvalTierBadgeValueStyleClasses,
+		economySourceTooltipStyleClasses,
 		approvalTierBadgeLabelStyleClasses,
 		approvalTierBadgeHeadlineStyleClasses,
 		approvalTierBadgeDescriptionStyleClasses,

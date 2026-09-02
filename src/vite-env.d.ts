@@ -4,6 +4,14 @@
 
 interface ImportMetaEnv {
   readonly VITE_STRIPE_DONATION_URL?: string;
+  readonly VITE_MAGIC_LINK_API_URL?: string;
+  readonly VITE_VERIFY_MAGIC_LINK_API_URL?: string;
+  readonly VITE_RESET_PASSWORD_LINK_API_URL?: string;
+  readonly VITE_RESET_PASSWORD_API_URL?: string;
+  readonly VITE_SIGNIN_API_URL?: string;
+  readonly VITE_SIGNOUT_API_URL?: string;
+  readonly VITE_SUPABASE_URL?: string;
+  readonly VITE_SUPABASE_ANON_KEY?: string;
 }
 
 interface ImportMeta {

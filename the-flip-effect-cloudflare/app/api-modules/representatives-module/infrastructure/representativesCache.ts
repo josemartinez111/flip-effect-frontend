@@ -3,13 +3,15 @@
 // > REPRESENTATIVES_CACHE.TS
 // ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
 import type { WorkerEnv } from '@shared-module/worker-env';
+import { Utils } from '@shared-module/utils';
 import type {
 	CongressLegislator,
 	OpenStatesPerson,
 } from '@representatives-module/domain/civicUpstreamModel';
 import {
-	CACHE_TTL_SECONDS,
 	FEDERAL_LEGISLATORS_KEY,
+	SEED_FRESHNESS_WINDOW_MS,
+	SEEDED_VERSION_KEY,
 	US_STATE_CODES,
 	stateCacheKey,
 } from '@representatives-module/domain/representativeConstants';
@@ -19,17 +21,23 @@ import {
 } from '@representatives-module/infrastructure/civicDataProviders';
 // ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
 
-const putWeekly = (env: WorkerEnv, key: string, value: unknown): Promise<void> =>
-	env.REPRESENTATIVES_CACHE.put(key, JSON.stringify(value), { expirationTtl: CACHE_TTL_SECONDS });
+const putLastGood = (
+	env: WorkerEnv,
+	key: string,
+	value: unknown,
+): Promise<void> =>
+	env.REPRESENTATIVES_CACHE.put(key, JSON.stringify(value), {
+		metadata: { seededAt: Date.now() },
+	});
+// ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
 
 // --- Federal: read-through KV. Miss → fetch the keyless blob, cache it. ---
 export const readFederalLegislators = async (
 	env: WorkerEnv,
 ): Promise<Array<CongressLegislator>> => {
-	const cached = await env.REPRESENTATIVES_CACHE.get<Array<CongressLegislator>>(
-		FEDERAL_LEGISLATORS_KEY,
-		'json',
-	);
+	const cached = await env.REPRESENTATIVES_CACHE.get<
+		Array<CongressLegislator>
+	>(FEDERAL_LEGISLATORS_KEY, 'json');
 
 	if (cached) {
 		return cached;
@@ -38,53 +46,91 @@ export const readFederalLegislators = async (
 	const fresh = await fetchFederalLegislators(env);
 
 	if (fresh.length > 0) {
-		await putWeekly(env, FEDERAL_LEGISLATORS_KEY, fresh);
+		await putLastGood(env, FEDERAL_LEGISLATORS_KEY, fresh);
 	}
 
 	return fresh;
 };
-
+// ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
 // --- State roster: read-through KV by state code (cron pre-seeds these). ---
-export const readStateLegislators = async (
+export const fetchCachedStateLegislators = (
 	env: WorkerEnv,
 	code: string,
-): Promise<Array<OpenStatesPerson>> => {
-	const key = stateCacheKey(code);
-	const cached = await env.REPRESENTATIVES_CACHE.get<Array<OpenStatesPerson>>(key, 'json');
+): Promise<Array<OpenStatesPerson> | null> =>
+	env.REPRESENTATIVES_CACHE.get<Array<OpenStatesPerson>>(
+		stateCacheKey(code),
+		'json',
+	);
+// ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
 
-	if (cached) {
-		return cached;
+// --- Deploy marker: which Worker version last triggered a seed (drives seed-on-new-version). ---
+export const getSeededVersion = (env: WorkerEnv): Promise<string | null> =>
+	env.REPRESENTATIVES_CACHE.get(SEEDED_VERSION_KEY);
+// ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
+
+export const setSeededVersion = (
+	env: WorkerEnv,
+	versionId: string,
+): Promise<void> =>
+	env.REPRESENTATIVES_CACHE.put(SEEDED_VERSION_KEY, versionId);
+// ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
+
+// --- One list call reads every key's seededAt metadata (no blob reads), so repeat seeds skip fresh rosters. ---
+const buildFreshKeySet = async (env: WorkerEnv): Promise<Set<string>> => {
+	const listed = await env.REPRESENTATIVES_CACHE.list<{
+		seededAt: number;
+	}>();
+	const now = Date.now();
+	const freshKeys = new Set<string>();
+
+	for (const key of listed.keys) {
+		if (
+			key.metadata &&
+			now - key.metadata.seededAt < SEED_FRESHNESS_WINDOW_MS
+		) {
+			freshKeys.add(key.name);
+		}
 	}
 
-	const fresh = await fetchStateRosterByCode(env, code);
-
-	if (fresh.length > 0) {
-		await putWeekly(env, key, fresh);
-	}
-
-	return fresh;
+	return freshKeys;
 };
+// ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
 
-// --- Weekly cron: refresh the federal blob + every state roster. ---
+// --- Cron + deploy: refresh the federal blob + every state roster, skipping anything still fresh. ---
 export const seedAllStates = async (env: WorkerEnv): Promise<void> => {
-	const federal = await fetchFederalLegislators(env);
+	const freshKeys = await buildFreshKeySet(env);
 
-	if (federal.length > 0) {
-		await putWeekly(env, FEDERAL_LEGISLATORS_KEY, federal);
+	if (!freshKeys.has(FEDERAL_LEGISLATORS_KEY)) {
+		const federal = await fetchFederalLegislators(env);
+
+		if (federal.length > 0) {
+			await putLastGood(env, FEDERAL_LEGISLATORS_KEY, federal);
+		}
 	}
 
 	for (const code of US_STATE_CODES) {
-		// --- Isolate each state: one upstream throw must not abort the rest of the weekly seed. ---
-		try {
+		if (freshKeys.has(stateCacheKey(code))) {
+			continue;
+		}
+
+		// --- Isolate each state: one upstream throw must not abort the rest of the seed. ---
+		const seedStateRosterCallback = async (): Promise<void> => {
 			const roster = await fetchStateRosterByCode(env, code);
 
 			if (roster.length > 0) {
-				await putWeekly(env, stateCacheKey(code), roster);
+				await putLastGood(env, stateCacheKey(code), roster);
 			}
-		} catch (error: unknown) {
-			const cause = error instanceof Error ? error.message : String(error);
+		};
 
-			console.error(`[seed ${code}] ${cause}`);
+		const seedStateRosterResults = await Utils.APITryCatch<void>({
+			callback: seedStateRosterCallback,
+			errorContext: `REPRESENTATIVES_SEED_${code}`,
+		});
+
+		if (seedStateRosterResults.error !== undefined) {
+			console.error(
+				`[seed ${code}] ${seedStateRosterResults.error.message}`,
+			);
 		}
 	}
 };

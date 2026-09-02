@@ -3,14 +3,14 @@
 // ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
 
 import kyMap from 'ky';
-import { ST, tryCatchHandler } from '../../../lib';
+import { ST, Utils } from '../../../lib';
 import governmentChecksBalancesQuizUrl from '../../data/government-checks-balances-quiz.json?url';
 import { isGovernmentChecksBalancesQuiz } from '../../utils/isGovernmentChecksBalancesQuiz';
 import type { GovernmentChecksBalancesQuizActionResult } from '../../types/GovernmentChecksBalancesQuizType';
 // ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
 
 export async function fetchGovernmentChecksBalancesQuizAction(): Promise<GovernmentChecksBalancesQuizActionResult> {
-	const fetchGovernmentChecksBalancesQuizRequest =
+	const fetchGovernmentChecksBalancesQuizCallback =
 		async (): Promise<GovernmentChecksBalancesQuizActionResult> => {
 			const response = await kyMap.get(governmentChecksBalancesQuizUrl, {
 				throwHttpErrors: false,
@@ -39,17 +39,21 @@ export async function fetchGovernmentChecksBalancesQuizAction(): Promise<Governm
 			};
 		};
 
-	const result =
-		await tryCatchHandler<GovernmentChecksBalancesQuizActionResult>({
-			asyncActionCallback: fetchGovernmentChecksBalancesQuizRequest,
+	const quizResults =
+		await Utils.runTryCatch<GovernmentChecksBalancesQuizActionResult>({
+			callback: fetchGovernmentChecksBalancesQuizCallback,
 			errorContext: 'Error loading government checks and balances quiz',
 		});
 
-	const quizLoadError = {
-		success: false,
-		message: 'Quiz data failed to load.',
-	};
+	if (quizResults.error !== undefined) {
+		const failed: GovernmentChecksBalancesQuizActionResult = {
+			success: false,
+			message: 'Quiz data failed to load.',
+		};
 
-	return result ?? quizLoadError;
+		return failed;
+	}
+
+	return quizResults.result;
 }
 // ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞

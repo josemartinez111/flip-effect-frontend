@@ -39,6 +39,24 @@ export type * from './action-results/CivicRepresentativeActionResult.ts';
 // models/civic-representatives api->models
 // ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
 export type * from './models/CivicRepresentativeModel.ts';
+// ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
+// actions/blog api->actions
+// ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
+export * from './actions/blog/fetchBlogPostAction.ts';
+// ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
+// actions/approval api->actions
+// ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
+export * from './actions/approval/fetchApprovalRatingAction.ts';
+// ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
+// action-results/approval api->action-results
+// ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
+export type * from './action-results/ApprovalActionResult.ts';
+export type * from './action-results/BlogPostActionResult.ts';
+// ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
+// models/approval api->models
+// ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
+export type * from './models/ApprovalModel.ts';
+export type * from './models/BlogPostModel.ts';
 // ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
 // actions/database api->actions
 // ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞

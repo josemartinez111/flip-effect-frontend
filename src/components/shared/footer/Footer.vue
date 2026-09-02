@@ -6,7 +6,7 @@
 // ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
 import Divider from 'primevue/divider';
 import { twMerge } from 'tailwind-merge';
-import { formatDate } from '../../../lib';
+import { Utils } from '../../../lib';
 import { FlipEffectLogo } from '../../../assets';
 import clsx from 'clsx';
 // ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
@@ -22,7 +22,7 @@ interface FooterSection {
 }
 // ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
 
-const currentYear = formatDate('year');
+const currentYear = Utils.formatDate('year');
 
 const sections: FooterSection[] = [
 	{

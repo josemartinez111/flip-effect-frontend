@@ -5,14 +5,16 @@
 <script setup lang="ts">
 // ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
 import Card from 'primevue/card';
-import { onMounted, onUnmounted, ref } from 'vue';
+import { storeToRefs } from 'pinia';
+import { computed, onMounted, onUnmounted, ref } from 'vue';
 import {
 	ApprovalRatingCardBG,
-	TrumanAvatar,
+	NixonAvatar,
 	TrumpAvatar,
 } from '../../../../assets';
 import { currentTrumpApprovalRatingPercentage } from '../../pages-composables/UseApprovalRatingTierComposable.ts';
 import { UseHeroApprovalRatingComposable } from '../../pages-composables/UseHeroApprovalRatingComposable.ts';
+import { useApprovalStore } from '../../../../lib/stores/UseApprovalStore.ts';
 // ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
 
 // --- Styles composables ---
@@ -24,18 +26,29 @@ const {
 	cardSlotLayerStyleClasses,
 	cardHeaderStyleClasses,
 	cardExplanationStyleClasses,
-	trumanNameStyleClasses,
+	nixonNameStyleClasses,
 	trumpNameStyleClasses,
-	trumanPercentageStyleClasses,
+	nixonPercentageStyleClasses,
 	trumpPercentageStyleClasses,
-	trumanAvatarStyleClasses,
+	nixonAvatarStyleClasses,
 	trumpAvatarStyleClasses,
+	trumpSourceTooltipStyleClasses,
 } = UseHeroApprovalRatingComposable();
 
-// --- Static approval animation ---
-// TODO: Replace with the Trump approval API action later. Keep its source
-// timestamp checked against the economy approval action used by the tier map.
+// --- Trump approval: live from the store (VoteHub); the static value is the fallback until it lands. ---
+const { trumpRating } = storeToRefs(useApprovalStore());
 const trumpApprovalRatingPercentage = currentTrumpApprovalRatingPercentage;
+
+// --- Hover caption: source + neutral methodology context so the number reads as real, not cherry-picked. ---
+const trumpApprovalSourceCaption = computed(() => {
+	const rating = trumpRating.value;
+	const source = rating?.source ?? 'New York Times';
+	const updatedOn = rating
+		? new Date(rating.fetchedAt).toLocaleDateString()
+		: 'recently';
+
+	return `${source}: averaged from only the pollsters NYT screens as reliable (its "select pollsters") — filtering out the partisan houses that skew a raw average high. Neutral and current. Updated ${updatedOn}.`;
+});
 const animatedTrumpApprovalRating = ref(100);
 const trumpApprovalRatingImpacting = ref(false);
 let trumpApprovalRatingAnimationFrameId: number | undefined;
@@ -120,20 +133,25 @@ onMounted(() => {
 		durationMs: 820,
 		easing: easeInOutSine,
 	});
-	queueTrumpApprovalRatingAnimation(3000, {
-		from: 85,
-		to: trumpApprovalRatingPercentage,
-		durationMs: 1250,
-		easing: easeInQuart,
-		onComplete: () => {
-			trumpApprovalRatingImpacting.value = true;
-			const timeoutId = window.setTimeout(() => {
-				trumpApprovalRatingImpacting.value = false;
-			}, 360);
+	// --- Final settle resolves at execution (≈3s in), by which time the store fetch has landed the live number. ---
+	const finalSettleTimeoutId = window.setTimeout(() => {
+		animateTrumpApprovalRating({
+			from: 85,
+			to: trumpRating.value?.approve ?? trumpApprovalRatingPercentage,
+			durationMs: 1250,
+			easing: easeInQuart,
+			onComplete: () => {
+				trumpApprovalRatingImpacting.value = true;
+				const timeoutId = window.setTimeout(() => {
+					trumpApprovalRatingImpacting.value = false;
+				}, 360);
 
-			trumpApprovalRatingTimeoutIds.push(timeoutId);
-		},
-	});
+				trumpApprovalRatingTimeoutIds.push(timeoutId);
+			},
+		});
+	}, 3000);
+
+	trumpApprovalRatingTimeoutIds.push(finalSettleTimeoutId);
 });
 
 onUnmounted(() => {
@@ -160,44 +178,49 @@ onUnmounted(() => {
 		}"
 	>
 		<template #content>
-			<img
-				:src="ApprovalRatingCardBG"
-				alt=""
-				:class="cardBgImageStyleClasses"
-			/>
+			<div class="absolute inset-0 overflow-hidden rounded-[1.6rem]">
+				<img
+					:src="ApprovalRatingCardBG"
+					alt=""
+					:class="cardBgImageStyleClasses"
+				/>
+			</div>
 
 			<div :class="cardSlotLayerStyleClasses">
 				<h2 :class="cardHeaderStyleClasses">Approval Rating</h2>
-				<div :class="trumanNameStyleClasses">Harry Truman</div>
+				<div :class="nixonNameStyleClasses">Richard Nixon</div>
 				<div :class="trumpNameStyleClasses">Donald Trump</div>
 				<img
-					:src="TrumanAvatar"
-					alt="Harry Truman"
-					:class="trumanAvatarStyleClasses"
+					:src="NixonAvatar"
+					alt="Richard Nixon"
+					:class="nixonAvatarStyleClasses"
 				/>
 				<img
 					:src="TrumpAvatar"
 					alt="Trump"
 					:class="trumpAvatarStyleClasses"
 				/>
-				<div :class="trumanPercentageStyleClasses">22%</div>
+				<div :class="nixonPercentageStyleClasses">24%</div>
 				<div
 					:class="[
 						trumpPercentageStyleClasses,
-						'transition-[filter,transform] duration-300 ease-out',
+						'group cursor-pointer transition-[filter,transform] duration-300 ease-out',
 						trumpApprovalRatingImpacting
 							? 'scale-125 drop-shadow-[0_0_22px_rgba(244,63,94,0.95)]'
 							: 'scale-100',
 					]"
 				>
 					{{ animatedTrumpApprovalRating }}%
+					<span :class="trumpSourceTooltipStyleClasses">
+						{{ trumpApprovalSourceCaption }}
+					</span>
 				</div>
 				<p :class="cardExplanationStyleClasses">
-					Truman's 22% approval rating reflects his lowest recorded
-					approval
+					Nixon's final approval rating was 24%, measured days before he
+					resigned amid Watergate
 					<br />
-					(1952, Gallup). Trump's approval rating reflects current
-					aggregated polling.
+					(August 1974, Gallup). Trump's rating reflects current aggregated
+					polling.
 				</p>
 				<slot />
 			</div>

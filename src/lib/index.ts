@@ -9,6 +9,8 @@
 export * from './global-composables-hooks/UseSocialMediaMetadataComposable';
 export * from './global-composables-hooks/UseGradientComposable';
 export * from './global-composables-hooks/UseAdminVisibleComposable';
+export * from './global-composables-hooks/useAdminVisible';
+export * from './global-composables-hooks/useAuthRouteMode';
 export * from './global-composables-hooks/UseAnimatedPercentageComposable';
 // ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
 
@@ -25,12 +27,9 @@ export * from './stores/UseScrollAnimationStore';
 // ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
 // utils lib->utils
 // ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
-export * from './utils/try-catch';
+export * from './utils/utils';
 export * from './utils/resolve-checkin-toast';
-export * from './utils/date-formatter';
-export * from './utils/countdown';
-export * from './utils/is-valid';
-export * from './utils/get-session-expiration';
+export * from './utils/image-processing';
 // ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
 
 /* Types: lib */
@@ -40,6 +39,20 @@ export * from './utils/get-session-expiration';
 export type { AppTheme } from './types/AppTheme';
 export type { CustomClass } from './types/CustomTypes';
 export type { ApiActionResult } from './types/ApiActionResult';
+export type {
+	CountDownOptions,
+	CountdownTimeLeft,
+	DateFormatType,
+	SessionExpirationOptions,
+	UnitType,
+} from './types/DateTimeTypes';
+export type { AsyncActionParams, Results } from './types/TryCatchTypes';
+export type {
+	FailureHttpStatus,
+	HttpStatus,
+	StatusCodeType,
+	SuccessHttpStatus,
+} from './types/HttpStatusTypes';
 // ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
 
 /* Constants: lib */
@@ -48,8 +61,11 @@ export type { ApiActionResult } from './types/ApiActionResult';
 // ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
 export { Constants as EL } from './constants/constants';
 export { GlobalEnvs } from './constants/GlobalEnvs';
-// ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
-// status-codes lib->utils
-// ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
-export { HTTP_STATUS as ST } from './utils/status-codes';
+export {
+	MS_PER_DAY,
+	MS_PER_HOUR,
+	MS_PER_MINUTE,
+	MS_PER_SECOND,
+} from './constants/DateTimeConstants';
+export { HTTP_STATUS as ST } from './constants/HttpStatusConstants';
 // ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞

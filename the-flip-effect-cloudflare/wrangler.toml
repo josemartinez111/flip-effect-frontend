@@ -4,9 +4,15 @@ name = "the-flip-effect-worker"
 main = "app/app.ts"
 compatibility_date = "2026-06-14"
 compatibility_flags = ["nodejs_compat"]
+# --- Deploy to the free *.workers.dev URL for now (custom domain joins Cloudflare in July). ---
+workers_dev = true
 
 [observability]
 enabled = true
+
+# --- Worker's own deploy version at runtime (env.CF_VERSION_METADATA.id) → seed-on-new-version refresh. ---
+[version_metadata]
+binding = "CF_VERSION_METADATA"
 
 # ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
 # --- Public, non-secret vars. The API key is a Worker secret, not here. ---
@@ -17,15 +23,17 @@ OPEN_STATES_API_URL = "https://v3.openstates.org"
 CONGRESS_LEGISLATORS_CURRENT_URL = "https://unitedstates.github.io/congress-legislators/legislators-current.json"
 CONGRESS_LEGISLATOR_IMAGE_BASE_URL = "https://unitedstates.github.io/images/congress/225x275"
 CENSUS_GEOCODER_API_URL = "https://geocoding.geo.census.gov/geocoder/geographies/onelineaddress"
-# --- Approval feeds (both public, no key). TODO: confirm exact base URLs in `wrangler dev`. ---
-VOTEHUB_API_URL = "https://votehub.com/api/polls"
-ECONOMY_API_URL = "https://api.example.com/economy-approval"
+# --- Approval feeds (both public, no key): NYT polls JSON (newest page, select pollsters) for trump, AP-NORC WordPress API for economy. ---
+# --- NYT URL carries the interactive's build hash; if NYT redeploys the tracker and this 404s, refresh the hash from the page's Network tab. ---
+NYT_APPROVAL_URL = "https://static01.nytimes.com/newsgraphics/2025-polling-averages/14264423-d36f-48f2-a758-2e9eebc14ee8/_assets/data/interactive/polls/donald-trump-approval-rating-polls/by_end_date/polls-0.json"
+APNORC_WP_API_URL = "https://apnorc.org/wp-json/wp/v2/project"
 
 # ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
 # --- Same-domain route so the frontend hits /api/* with no CORS. ---
-[[routes]]
-pattern = "theflipeffect.us/api/*"
-zone_name = "theflipeffect.us"
+# --- DISABLED until theflipeffect.us moves to Cloudflare (July). Re-enable then. ---
+# [[routes]]
+# pattern = "theflipeffect.us/api/*"
+# zone_name = "theflipeffect.us"
 
 # ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
 # --- KV: rep blob cache keyed by state. Replace id after `wrangler kv namespace create`. ---
@@ -33,10 +41,10 @@ zone_name = "theflipeffect.us"
 binding = "REPRESENTATIVES_CACHE"
 id = "fc1e439de10f4201b7d180da8fdf951e"
 
-# --- Approval cache (trump + economy, keyed per type). Replace id after `pm create:cache`. ---
+# --- Approval cache (trump + economy, keyed per type). ---
 [[kv_namespaces]]
 binding = "APPROVAL_CACHE"
-id = "REPLACE_WITH_APPROVAL_KV_NAMESPACE_ID"
+id = "bf078d293e7844a880850982e72fbcbc"
 
 # ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
 # --- Weekly get-all: refresh every state in KV (Mondays 09:00 UTC). ---

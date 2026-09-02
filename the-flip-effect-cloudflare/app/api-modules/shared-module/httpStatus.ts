@@ -13,4 +13,8 @@ export const STATUS = {
 
 // --- Narrowed union (200 | 400 | 404 | 500 | 503) so `ctx.json(body, status)` stays type-safe, no casts. ---
 export type HttpStatus = (typeof STATUS)[keyof typeof STATUS];
+
+export type SuccessHttpStatus = typeof STATUS.OK;
+
+export type FailureHttpStatus = Exclude<HttpStatus, SuccessHttpStatus>;
 // ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
