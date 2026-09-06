@@ -14,7 +14,7 @@ import { UseSessionStore } from '../../lib/stores/UseSessionStore';
 //   (comment the line out)                              — no guard, UI maintenance
 //
 // allowPublic — unauthenticated users pass through; the page decides
-// what they see via useAdminVisible() + <Show>.
+// what they see via UseAdminVisibleComposable() + <Show>.
 // ---
 
 type GuardAdminRouteOptions = {

@@ -298,13 +298,13 @@ const {
 			:class="civicSearchShellStyleClasses"
 			@submit.prevent="submitCivicRepresentativeSearch"
 		>
-			<!-- SEARCH: TITLE -->
+			<!-- ∞∞∞∞∞∞∞∞ SEARCH: TITLE ∞∞∞∞∞∞∞∞ -->
 
 			<div :class="civicSearchTitleStyleClasses">
 				{{ title }}
 			</div>
 
-			<!-- SEARCH: CONTROLS -->
+			<!-- ∞∞∞∞∞∞∞∞ SEARCH: CONTROLS ∞∞∞∞∞∞∞∞ -->
 
 			<div :class="civicSearchControlsStyleClasses">
 				<InputText
@@ -358,7 +358,7 @@ const {
 				</button>
 			</div>
 
-			<!-- SEARCH: HELPER / WORKER MESSAGE -->
+			<!-- ∞∞∞∞∞∞∞∞ SEARCH: HELPER / WORKER MESSAGE ∞∞∞∞∞∞∞∞ -->
 
 			<div
 				v-if="civicSearchHasMessage"
@@ -393,7 +393,7 @@ const {
 			</div>
 		</form>
 
-		<!-- SEARCH: RESULTS MODAL -->
+		<!-- ∞∞∞∞∞∞∞∞ SEARCH: RESULTS MODAL ∞∞∞∞∞∞∞∞ -->
 
 		<BaseModal
 			v-model:visible="civicSearchResultsModalOpen"
@@ -418,7 +418,7 @@ const {
 					:key="representative.id"
 					:class="civicSearchResultCardStyleClasses"
 				>
-					<!-- SEARCH: REPRESENTATIVE IMAGE -->
+					<!-- ∞∞∞∞∞∞∞∞ SEARCH: REPRESENTATIVE IMAGE ∞∞∞∞∞∞∞∞ -->
 
 					<img
 						:src="getRepresentativePhotoUrl(representative)"
@@ -427,7 +427,7 @@ const {
 						@error="handleRepresentativePhotoError"
 					/>
 
-					<!-- SEARCH: REPRESENTATIVE DETAILS -->
+					<!-- ∞∞∞∞∞∞∞∞ SEARCH: REPRESENTATIVE DETAILS ∞∞∞∞∞∞∞∞ -->
 
 					<div :class="civicSearchResultCardBodyStyleClasses">
 						<div :class="civicSearchResultMetaStyleClasses">

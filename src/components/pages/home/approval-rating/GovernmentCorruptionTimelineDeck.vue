@@ -541,7 +541,7 @@ watch(
 ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞ -->
 <template>
 	<div :class="rootStyleClasses">
-		<!-- TIMELINE: HEADER -->
+		<!-- ∞∞∞∞∞∞∞∞ TIMELINE: HEADER ∞∞∞∞∞∞∞∞ -->
 		<header :class="headerStyleClasses">
 			<div>
 				<h2 :class="titleStyleClasses">{{
@@ -561,10 +561,10 @@ watch(
 			/>
 		</header>
 
-		<!-- TIMELINE: PAGED EVENT GROUP -->
+		<!-- ∞∞∞∞∞∞∞∞ TIMELINE: PAGED EVENT GROUP ∞∞∞∞∞∞∞∞ -->
 		<div :class="stageStyleClasses">
 			<div :class="surfaceStyleClasses">
-				<!-- TIMELINE: CARD RAIL -->
+				<!-- ∞∞∞∞∞∞∞∞ TIMELINE: CARD RAIL ∞∞∞∞∞∞∞∞ -->
 				<div :class="timelineViewportStyleClasses">
 					<Transition
 						mode="out-in"
@@ -646,7 +646,7 @@ watch(
 					</Transition>
 				</div>
 
-				<!-- TIMELINE: NAVIGATION BAR -->
+				<!-- ∞∞∞∞∞∞∞∞ TIMELINE: NAVIGATION BAR ∞∞∞∞∞∞∞∞ -->
 				<div :class="controlsBarStyleClasses">
 					<button
 						type="button"
@@ -680,7 +680,7 @@ watch(
 			</div>
 		</div>
 
-		<!-- TIMELINE: FOCUSED EVENT MODAL -->
+		<!-- ∞∞∞∞∞∞∞∞ TIMELINE: FOCUSED EVENT MODAL ∞∞∞∞∞∞∞∞ -->
 		<BaseModal
 			v-model:visible="focusedTimelineEventModalOpen"
 			:header="focusedTimelineEvent?.title"

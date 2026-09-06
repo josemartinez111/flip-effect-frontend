@@ -3,52 +3,64 @@
 // > REPRESENTATIVES_ENDPOINT.TS
 // ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
 import { Hono } from 'hono';
-import { createFactory } from 'hono/factory';
+import type { Context } from 'hono';
 import type { WorkerHonoEnv } from '@shared-module/worker-env';
 import { STATUS } from '@shared-module/httpStatus';
+import { Utils } from '@shared-module/utils';
 import type {
 	CivicRepresentativeActionResult,
 	CivicRepresentativeSearchParams,
 } from '@representatives-module/domain/representativeModel';
-import { fetchRepresentativesBySearch } from '@representatives-module/application/representativesService';
+import { RepresentativesService } from '@representatives-module/application/representativesService';
 // ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
 
-// --- Typed handler factory bound to the Worker env (extracted handlers, never inlined at the route). ---
-const workerFactory = createFactory<WorkerHonoEnv>();
+// --- Own the representative route group and private handler like the Elysia endpoint classes. ---
+export class RepresentativesEndpoints {
+	static mappedRepresentativesRoutes(): Hono<WorkerHonoEnv> {
+		const representativeRoutes = new Hono<WorkerHonoEnv>();
+		representativeRoutes.post(
+			'/representatives',
+			RepresentativesEndpoints.fetchRepresentativesBySearchAsync,
+		);
 
-// --- POST /api/representatives → normalized CivicRepresentativeActionResult JSON. ---
-const representativeHandlers = workerFactory.createHandlers(async (ctx) => {
-	let searchParams: CivicRepresentativeSearchParams;
-
-	try {
-		searchParams = await ctx.req.json<CivicRepresentativeSearchParams>();
-	} catch (error: unknown) {
-		if (error instanceof Error) {
-			console.error(error.message);
-		}
-
-		const invalid: CivicRepresentativeActionResult = {
-			success: false,
-			statusCode: STATUS.BAD_REQUEST,
-			message: 'Invalid request body.',
-		};
-		// --- RETURNS ERROR JSON --- 
-		return ctx.json(invalid, invalid.statusCode);
+		return representativeRoutes;
 	}
 
-	const result = await fetchRepresentativesBySearch(ctx.env, searchParams);
-	
-	
-	return ctx.json(
-		result, 
-		result.statusCode
-	);
-});
-// -- ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞ --
+	// --- POST /api/representatives → normalized CivicRepresentativeActionResult JSON. ---
+	private static async fetchRepresentativesBySearchAsync(
+		ctx: Context<WorkerHonoEnv>,
+	): Promise<Response> {
+		const fetchRepresentativeSearchParamsCallback =
+			async (): Promise<CivicRepresentativeSearchParams> =>
+				ctx.req.json<CivicRepresentativeSearchParams>();
+		const searchParamsResults =
+			await Utils.APITryCatch<CivicRepresentativeSearchParams>({
+				callback: fetchRepresentativeSearchParamsCallback,
+				errorContext: 'FETCH_REPRESENTATIVE_SEARCH_PARAMS',
+				failureStatusCode: STATUS.BAD_REQUEST,
+			});
 
-// --- Route group (declared here like a .NET endpoint class; mounted under /api in app.ts). ---
-const representativeRoutes = new Hono<WorkerHonoEnv>();
-representativeRoutes.post('/representatives', ...representativeHandlers);
-// ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
-export { representativeRoutes };
+		if (searchParamsResults.error !== undefined) {
+			console.error(searchParamsResults.error.message);
+
+			const invalid: CivicRepresentativeActionResult = {
+				success: false,
+				statusCode: searchParamsResults.statusCode,
+				message: 'Invalid request body.',
+			};
+
+			const response = ctx.json(invalid, invalid.statusCode);
+			return response;
+		}
+
+		const result =
+			await RepresentativesService.fetchRepresentativesBySearch(
+				ctx.env,
+				searchParamsResults.result,
+			);
+
+		const response = ctx.json(result, result.statusCode);
+		return response;
+	}
+}
 // ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞

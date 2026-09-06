@@ -3,6 +3,7 @@
 // noinspection JSUnusedGlobalSymbols
 
 interface ImportMetaEnv {
+  readonly VITE_AUTH_MODE?: 'auth' | 'maintenance';
   readonly VITE_STRIPE_DONATION_URL?: string;
   readonly VITE_MAGIC_LINK_API_URL?: string;
   readonly VITE_VERIFY_MAGIC_LINK_API_URL?: string;

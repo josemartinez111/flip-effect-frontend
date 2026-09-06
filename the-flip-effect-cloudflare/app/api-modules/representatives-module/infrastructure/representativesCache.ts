@@ -31,6 +31,20 @@ const putLastGood = (
 	});
 // ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
 
+// --- Force one fresh federal download and replace KV only when the source returns a usable roster. ---
+export const fetchFreshFederalLegislators = async (
+	env: WorkerEnv,
+): Promise<Array<CongressLegislator>> => {
+	const fresh = await fetchFederalLegislators(env);
+
+	if (fresh.length > 0) {
+		await putLastGood(env, FEDERAL_LEGISLATORS_KEY, fresh);
+	}
+
+	return fresh;
+};
+// ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
+
 // --- Federal: read-through KV. Miss → fetch the keyless blob, cache it. ---
 export const readFederalLegislators = async (
 	env: WorkerEnv,
@@ -43,11 +57,7 @@ export const readFederalLegislators = async (
 		return cached;
 	}
 
-	const fresh = await fetchFederalLegislators(env);
-
-	if (fresh.length > 0) {
-		await putLastGood(env, FEDERAL_LEGISLATORS_KEY, fresh);
-	}
+	const fresh = await fetchFreshFederalLegislators(env);
 
 	return fresh;
 };
@@ -101,11 +111,7 @@ export const seedAllStates = async (env: WorkerEnv): Promise<void> => {
 	const freshKeys = await buildFreshKeySet(env);
 
 	if (!freshKeys.has(FEDERAL_LEGISLATORS_KEY)) {
-		const federal = await fetchFederalLegislators(env);
-
-		if (federal.length > 0) {
-			await putLastGood(env, FEDERAL_LEGISLATORS_KEY, federal);
-		}
+		await fetchFreshFederalLegislators(env);
 	}
 
 	for (const code of US_STATE_CODES) {

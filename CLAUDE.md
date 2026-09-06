@@ -66,7 +66,7 @@ vuejs-frontend-template/
 │   │
 │   ├── lib/
 │   │   ├── constants/                    # App-wide constants
-│   │   ├── global-composables-hooks/     # Shared composables (useGradient, etc.)
+│   │   ├── global-composables-hooks/     # Shared composables (UseGradientComposable, etc.)
 │   │   ├── stores/                       # Pinia stores (Use$Name$Store pattern)
 │   │   ├── types/                        # ApiActionResult, AppTheme, etc.
 │   │   ├── utils/                        # date-formatter, validation, etc.
@@ -81,7 +81,7 @@ vuejs-frontend-template/
 │   │
 │   ├── router/
 │   │   ├── routes.ts                     # Vue Router config + navigation guards
-│   │   └── useNavLinks.ts                # NavLinkType + useNavLinks composable
+│   │   └── UseNavLinksComposable.ts      # NavLinkType + navigation-link composable
 │   │
 │   ├── App.vue                           # Root entry (mounts router-view)
 │   ├── main.ts                           # App bootstrap
@@ -110,9 +110,10 @@ vuejs-frontend-template/
 - **Everything Cloudflare-related lives in `the-flip-effect-cloudflare/`** at the repo root. Worker TypeScript code, `wrangler.toml`, and Cloudflare docs all belong there — not under `src/`.
 - **Framework: Hono** (`new Hono<WorkerHonoEnv>()`). The hand-rolled `ts-pattern` router + manual CORS are gone. We get route grouping, `hono/logger`, `hono/cors` allowlist middleware, and `app.onError` real error handling.
 - Worker source uses a **module-based vertical-slice layout** (mirrors the .NET `Modules/` backend — `AuthModule`/`BaseModule`/`HealthCheckModule`/`SharedModule`): `app/` (entry + server) holds `app/api-modules/` (≈ `Modules/`). Each module is a `-module/` folder. Feature modules carry the full slice — `app/api-modules/representatives-module/{presentation,application,infrastructure,domain}`; `shared-module/` (≈ `SharedModule`, flat: `worker-env.ts`, `httpStatus.ts`, `apiTryCatchTypes.ts`, `utils.ts`) and `health-check-module/` (≈ `HealthCheckModule`, flattened: `presentation/` only) stay lean. No barrels — import the exact file via per-module path aliases (`@app/*`, `@representatives-module/*`, `@health-check-module/*`, `@shared-module/*`). Add a new module → new `-module/` folder + its `@<name>-module/*` alias in `tsconfig.json` **and** `vitest.config.ts` `resolve.alias`. Imports flow downward only (`app/` → `api-modules/`, never reverse).
+- **Class-based Worker APIs:** Application services and feature cache collaborators use exported classes with static methods. Presentation files export an `*Endpoints` class with a static `mapped*Routes()` method and private static handlers, so `app.ts` mounts a completed route group just like the .NET/Elysia composition root. Worker event exports remain at module scope because they are Cloudflare framework boundaries.
 - **Models get a `Model` postfix** (`representativeModel.ts` = app-facing contract, `civicUpstreamModel.ts` = raw upstream DTOs). Both live in `domain/` (upstream DTOs are still the contract, not infrastructure). Non-model domain files (e.g. `representativeConstants.ts`) take no postfix.
-- **Handlers: extracted, never inlined.** Use `createFactory<WorkerHonoEnv>().createHandlers(...)` in the endpoint file, then `routeGroup.post('/path', ...handlers)`. Context is named `ctx` (not `c`). Hono ships status **types** only (`StatusCode` from `hono/utils/http-status`), no value enum — so the `shared-module/httpStatus.ts` `STATUS` const stays; its narrow `HttpStatus` union is a subset of `ContentfulStatusCode`, so `ctx.json(body, status)` type-checks with no casts.
-- **Route grouping declared IN the endpoint file** (mirrors the .NET pattern where `MappedXRoutes()` is declared in the endpoint class and mounted in `Program.cs`): the endpoint exports `const representativeRoutes = new Hono<WorkerHonoEnv>()`, and `app/app.ts` mounts it with `app.route('/api', representativeRoutes)`.
+- **Handlers: class-owned, private, and never inlined.** Each endpoint class passes its private static handler directly to the Hono route method. Type the handler context as `Context<WorkerHonoEnv>` and name it `ctx` (not `c`). Hono ships status **types** only (`StatusCode` from `hono/utils/http-status`), no value enum — so the `shared-module/httpStatus.ts` `STATUS` const stays; its narrow `HttpStatus` union is a subset of `ContentfulStatusCode`, so `ctx.json(body, status)` type-checks with no casts.
+- **Route grouping belongs to the endpoint class** (mirrors the Elysia/.NET pattern): `RepresentativesEndpoints.mappedRepresentativesRoutes()` builds and returns `new Hono<WorkerHonoEnv>()`, and `app/app.ts` mounts that completed group with `app.route('/api', RepresentativesEndpoints.mappedRepresentativesRoutes())`.
 - **Entry split (the Cloudflare `export default {}` workaround):** `app/server.ts` is "the server" — the Hono `app` plus `logger`, `onError`, and the `scheduled` cron handler (`export const`). `app/app.ts` is the composition root (the `Program.cs` analog): it imports `app`/`scheduled`, wires the CORS allowlist middleware, mounts the route groups, builds one `ExportedHandler` (`{ fetch: app.fetch, scheduled }`), and is the **only** file with `export default`. `wrangler.toml` `main` points at `app/app.ts`. Everywhere else stays `export const`.
 - **Tests live in `test/`** (mirrors the module tree), run with `vitest` + `@cloudflare/vitest-pool-workers` (the `cloudflareTest` plugin → `wrangler.toml`, so tests run in real `workerd` with real bindings). `tsconfig` `types` includes `@cloudflare/vitest-pool-workers/types` (the `/types` subpath gives `cloudflare:test`). `health-check-module` + `test/health-check-module/healthCheck.test.ts` (asserts `GET /api/health-check` → 200, `?fail=true` → 503 via `SELF.fetch`) ship as the always-there scaffold smoke test. Run with `pm test:worker`.
 - Cloudflare-specific docs go in `the-flip-effect-cloudflare/documentations/` (e.g. `CIVIC_REPRESENTATIVE_WORKER.md`).
@@ -372,6 +373,10 @@ export const use$STORE_NAME$Store = defineStore('$storeName$', () => {
 
 **Divider Rule (CRITICAL):** Do not generate or approximate `∞` divider lines from memory. Treat divider lines as fixed code. When adding or editing any comment scaffold in any file type, copy the exact divider line from the same file first. If the file has none, copy from the closest same-kind file. If still unclear, copy the exact scaffold from this `CLAUDE.md`. Before finalizing a diff, scan for shortened or wrapped divider lines and fix them.
 
+**Markup Comments:** Keep comments inside Vue templates light and limited to meaningful UI regions. Use `<!-- ∞∞∞∞∞∞∞∞ TITLE ∞∞∞∞∞∞∞∞ -->` for a short label. When context needs more than one line, use the same eight-character divider above and below the body inside one multi-line HTML comment. Do not use plain `<!-- COMPONENT -->`, `<!-- --- comment --- -->`, or hash/dash dividers in template markup.
+
+**Maintenance Comment Rule:** When creating or refactoring code, add a short one- or two-sentence comment above each reasonably complex top-level object/function and brief local comments where the internal flow would otherwise be unclear six months later. Apply the same treatment to nearby complex code in files already being refactored, keep comments concise, use the established comment style, and never number code comments.
+
 ```zsh
 // --- Single line comment ---
 
@@ -625,6 +630,64 @@ pm preview          # Preview production locally
 
 ---
 
+## 🗣️ Response Format (CRITICAL — Rolling 1–33 Numbering)
+
+**Every response to the user is a numbered list.** Not prose paragraphs, not loose bullets. Each top-level point gets the next number in a running counter.
+
+**The counter is a rolling session counter.**
+- It starts at `1` on the first response of a session.
+- It keeps counting across the ENTIRE response and across EVERY response that follows.
+- It NEVER restarts at `1` just because a new response, a new section, or a new topic begins.
+- When it reaches `33`, the NEXT number wraps back to `1` and continues from there.
+- The counter never resets because the request changed, because the user asked something new, or because the previous turn ended. Only reaching `33` resets it.
+
+**Structure of a numbered point:**
+- The number carries one short declarative sentence — a claim, a result, or a heading-style statement ending in `:`.
+- Supporting detail sits under it as plain `-` sub-bullets.
+- Sub-bullets are NEVER numbered and NEVER lettered. No `1a`, no `2.1`, no `i.`/`ii.`.
+- Code blocks, tables, and file lists may sit under a number without consuming a number.
+
+**Questions keep the same counter.** When asking the user something, each distinct option is its OWN number on its own line, drawn from the same running count. A question section never restarts at `1`.
+
+**Closing sections do not take numbers.** `Files touched`, `Files removed`, and `Files created` are unnumbered plain path lists at the very end — no descriptions, no line numbers, just relative paths.
+
+**Reference shape:**
+
+```zsh
+1. Refactored, Sin. The visible player flow now lives entirely in one YouTubeVideoPlayer.vue:
+
+  - Single-video player
+  - Custom controls
+  - Error/fallback states
+
+2. Only true support boundaries remain separate:
+
+  - Composable: YouTube iframe lifecycle
+  - Utility: shared SDK loading and URL parsing
+
+3. Public usage remains unchanged and simple:
+
+  <YouTubeVideoPlayer :video-url="YOUTUBE_VIDEO_URL" />
+
+4. Verification passed:
+
+  - 8/8 tests
+  - Clean production build
+  - Template remains untouched until you approve this version
+
+Files touched
+
+  - src/components/shared/youtube-video-player/YouTubeVideoPlayer.vue
+
+Files removed
+
+  - src/components/shared/youtube-video-player/YouTubeVideoFrame.vue
+```
+
+**Tone:** direct, short sentences, no filler, no hedging, no restating the request back. State the result, then the detail.
+
+---
+
 ## 🧭 Agent Operating Notes
 
 **Code Delivery:**
@@ -650,6 +713,7 @@ pm preview          # Preview production locally
 - **ALWAYS end every response with all files touched — no inline comments, just paths:**
   - List every file modified, created, or deleted with relative paths
   - No descriptions, no line numbers, just the clean path list
+- **Response numbering is governed by the Response Format (CRITICAL — Rolling 1–33 Numbering) section above.** The counter rolls across responses and only resets after `33`.
 - **When asking questions, ALWAYS use a single FLAT, continuously-increasing numbered list (1, 2, 3, 4, 5, …) so the user can respond by number.** NEVER use letter sub-bullets or nested numbering (no `1a`/`1b`, no `2.1`). Each distinct option is its OWN number on its own line — if a question has two choices, that is two numbers, not one number with `a`/`b` under it. A short plain-text label (e.g. `Alias naming:`) may prefix the option text, but the number out front always just increments.
 - **The count is continuous across the ENTIRE response, not per section.** If the response has more than one numbered list (e.g. a "Work it costs" list THEN a "Questions" list), the second list keeps counting from where the first stopped — it does NOT restart at 1. Never emit two lists in one response that both begin at 1. If two sections each need their own 1-based numbering, merge them into one list or renumber the second so the sequence is unbroken (… 5, then 6, 7, 8 …).
 - Never use implicit `any` in callbacks: `(item: Type) => ...`

@@ -7,6 +7,7 @@
 // pages->routes
 // ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
 export { default as HomePage } from './home/home.page.vue';
+export { default as BalanceOfPowerPage } from './balance-of-power/balance-of-power.page.vue';
 export { default as BlogPage } from './blog/blog.page.vue';
 export { default as LoginPage } from './auth/login/login.page.vue';
 export { default as MagicLinkPage } from './auth/magic-link/magic-link.page.vue';

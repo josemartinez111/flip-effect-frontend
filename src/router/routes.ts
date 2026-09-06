@@ -8,27 +8,28 @@ import {
 } from 'vue-router';
 import { DominoEffectBGHomePage } from '../assets';
 import RootLayout from '../pages/layouts/RootLayout.vue';
-import type { AdminVisibleMode, AuthRouteMode } from '../lib';
+import { APP_AUTH_MODE, type AuthMode } from '../lib';
 // ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
 
 type BlogRouteProps = {
-	adminMode: AdminVisibleMode;
+	adminMode: AuthMode;
 };
 
 type AuthRouteProps = {
-	authMode: AuthRouteMode;
+	authMode: AuthMode;
 };
 
 const blogRouteProps: BlogRouteProps = {
-	adminMode: 'maintenance',
+	adminMode: APP_AUTH_MODE,
 };
 
 const authRouteProps: AuthRouteProps = {
-	authMode: 'maintenance',
+	authMode: APP_AUTH_MODE,
 };
 // -- ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞ --
 
 const routes: Readonly<Array<RouteRecordRaw>> = [
+	// --- Home Route ---
 	{
 		path: '/',
 		// --- Routes nested here inherit the shared app shell: navbar, footer, and layout background ---
@@ -43,48 +44,69 @@ const routes: Readonly<Array<RouteRecordRaw>> = [
 					layoutBackgroundImage: DominoEffectBGHomePage,
 				},
 			},
+			// --- Balance of Power Route ---
+			{
+				path: 'balance-of-power',
+				name: 'balance-of-power',
+				component: () =>
+					import('../pages/balance-of-power/balance-of-power.page.vue'),
+				meta: {
+					showLayoutBackground: true,
+					layoutBackgroundImage: DominoEffectBGHomePage,
+				},
+			},
+			// --- Blog Route ---
 			{
 				path: 'blog',
 				name: 'blog',
 				// --- Always public — adminMode decides which VERSION renders (admin vs public) ---
-				// TODO: 🚨FLIP TO 'auth' FOR PRODUCTION — 'maintenance' force-shows admin controls (no auth)
+				// --- The centralized mode force-shows admin controls only during local maintenance work. ---
 				props: blogRouteProps,
 				component: () => import('../pages/blog/blog.page.vue'),
 			},
 		],
 	},
+	// --- Admin Auth Routes ---
 	{
 		path: '/admin/login',
 		name: 'admin-login',
 		// --- Default entry screen — always renders. authMode controls token processing only. ---
-		// TODO: 🚨FLIP TO 'auth' FOR PRODUCTION — 'maintenance' skips Supabase redirect/token processing
+		// --- Production always resolves to auth; local maintenance skips unfinished token processing. ---
 		props: authRouteProps,
 		component: () => import('../pages/auth/login/login.page.vue'),
 	},
+	// --- Admin Magic Link Route ---
 	{
 		path: '/admin/magic',
 		name: 'admin-magic-link',
 		// --- Admin verification request screen — backend verifies the email. ---
 		props: authRouteProps,
-		component: () => import('../pages/auth/magic-link/magic-link.page.vue'),
+		component: () =>
+			import('../pages/auth/magic-link/magic-link.page.vue'),
 	},
+	// --- Admin Reset Password Route ---
 	{
 		path: '/admin/update-password',
 		name: 'admin-update-password',
 		// --- Auth-only screen in production; maintenance mode shows the form for UI review. ---
-		// TODO: 🚨FLIP TO 'auth' FOR PRODUCTION — verifies Supabase reset tokens before rendering
+		// --- Production verifies Supabase reset tokens before rendering this form. ---
 		props: authRouteProps,
-		component: () => import('../pages/auth/update-password/update-password.page.vue'),
+		component: () =>
+			import('../pages/auth/update-password/update-password.page.vue'),
 	},
+	// --- Admin Reset Password Route ---
 	{
 		path: '/access-denied',
 		name: 'access-denied',
-		component: () => import('../pages/error-pages/access-denied/access-denied.page.vue'),
+		component: () =>
+			import('../pages/error-pages/access-denied/access-denied.page.vue'),
 	},
+	// --- 404 Not Found Route ---
 	{
 		path: '/:pathMatch(.*)*',
 		name: 'not-found',
-		component: () => import('../pages/error-pages/not-found/not-found.page.vue'),
+		component: () =>
+			import('../pages/error-pages/not-found/not-found.page.vue'),
 	},
 ] as const;
 // ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞

@@ -23,6 +23,7 @@ export default defineConfig({
       '@primeuix/themes/aura',
       'primevue/button',
       'primevue/card',
+      'primevue/carousel',
       'primevue/checkbox',
       'primevue/config',
       'primevue/dialog',
@@ -62,6 +63,8 @@ export default defineConfig({
 
   test: {
     environment: 'jsdom',
+    // --- Worker tests own a separate workerd config; this command verifies only the Vue application. ---
+    include: ['src/**/*.test.ts'],
     // setupFiles: ['./tests/setup.ts'], // ← uncomment when tests exist
   },
 });

@@ -1,4 +1,6 @@
-<!-- ⚫️ ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞ -->
-<!--                          src/App.vue                                 -->
-<!-- ⚫️ ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞ -->
-<!-- NOTE: Real app entry is src/app/App.vue — this file is unused.       -->
+<!--
+∞∞∞∞∞∞∞∞
+ROOT ENTRY PLACEHOLDER
+The active application component lives at src/app/App.vue.
+∞∞∞∞∞∞∞∞
+-->

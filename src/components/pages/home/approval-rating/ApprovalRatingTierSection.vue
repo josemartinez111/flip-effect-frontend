@@ -104,9 +104,9 @@ onUnmounted(() => {
 		ref="approvalTierRootElement"
 		:class="approvalTierCompositionStyleClasses"
 	>
-		<!-- APPROVAL TIER: TRIGGER ROW (quiz + timeline) -->
+		<!-- ∞∞∞∞∞∞∞∞ APPROVAL TIER: TRIGGER ROW (QUIZ + TIMELINE) ∞∞∞∞∞∞∞∞ -->
 		<div class="laptop:block flex items-start justify-center gap-4">
-			<!-- APPROVAL TIER: QUIZ TRIGGER -->
+			<!-- ∞∞∞∞∞∞∞∞ APPROVAL TIER: QUIZ TRIGGER ∞∞∞∞∞∞∞∞ -->
 			<button
 				type="button"
 				:class="approvalQuizTriggerButtonStyleClasses"
@@ -120,7 +120,7 @@ onUnmounted(() => {
 				/>
 			</button>
 
-			<!-- APPROVAL TIER: TIMELINE TRIGGER -->
+			<!-- ∞∞∞∞∞∞∞∞ APPROVAL TIER: TIMELINE TRIGGER ∞∞∞∞∞∞∞∞ -->
 			<button
 				type="button"
 				:class="approvalTimelineTriggerButtonStyleClasses"
@@ -135,7 +135,7 @@ onUnmounted(() => {
 			</button>
 		</div>
 
-		<!-- APPROVAL TIER: ECONOMY MAP STORY -->
+		<!-- ∞∞∞∞∞∞∞∞ APPROVAL TIER: ECONOMY MAP STORY ∞∞∞∞∞∞∞∞ -->
 		<div :class="approvalTierSectionStyleClasses">
 			<div :class="approvalTierTearShadowStyleClasses"></div>
 
@@ -151,7 +151,7 @@ onUnmounted(() => {
 				<div :class="approvalTierEdgeStyleClasses"></div>
 			</div>
 
-			<!-- APPROVAL TIER: ECONOMY BADGE -->
+			<!-- ∞∞∞∞∞∞∞∞ APPROVAL TIER: ECONOMY BADGE ∞∞∞∞∞∞∞∞ -->
 			<div :class="approvalTierBadgeStyleClasses">
 				<div :class="approvalTierBadgeRowStyleClasses">
 					<span
@@ -180,7 +180,7 @@ onUnmounted(() => {
 			</div>
 		</div>
 
-		<!-- APPROVAL TIER: TIMELINE MODAL -->
+		<!-- ∞∞∞∞∞∞∞∞ APPROVAL TIER: TIMELINE MODAL ∞∞∞∞∞∞∞∞ -->
 		<BaseModal
 			v-model:visible="approvalTimelineModalOpen"
 			:root-class="approvalTimelineModalRootStyleClasses"
@@ -194,7 +194,7 @@ onUnmounted(() => {
 			/>
 		</BaseModal>
 
-		<!-- APPROVAL TIER: QUIZ MODAL -->
+		<!-- ∞∞∞∞∞∞∞∞ APPROVAL TIER: QUIZ MODAL ∞∞∞∞∞∞∞∞ -->
 		<BaseModal
 			v-model:visible="approvalQuizModalOpen"
 			:root-class="approvalQuizModalRootStyleClasses"

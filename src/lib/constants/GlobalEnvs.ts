@@ -4,6 +4,7 @@
 
 type GlobalEnvKey =
 	| 'VITE_API_URL'
+	| 'VITE_AUTH_MODE'
 	| 'VITE_STRIPE_DONATION_URL'
 	| 'VITE_STRIPE_PUBLISHABLE_KEY'
 	| 'VITE_STRIPE_PRODUCT_ID'
@@ -36,6 +37,7 @@ type EnvMap = Record<string, EnvValue>;
 export class GlobalEnvs {
 	// --- App Environment Variables ---
 	static readonly ApiUrl = GlobalEnvs.getEnv('VITE_API_URL');
+	static readonly AuthMode = GlobalEnvs.getEnv('VITE_AUTH_MODE');
 
 	// --- Stripe Environment Variables ---
 	static readonly StripeDonationUrl = GlobalEnvs.getEnv(
@@ -108,9 +110,14 @@ export class GlobalEnvs {
 	private static getEnv(key: GlobalEnvKey, fallback = ''): string {
 		const envVariables: EnvMap = import.meta.env;
 		const value = envVariables[key];
+		const normalizedValue = typeof value === 'string' ? value.trim() : '';
+		// --- Scaffold placeholders document intent but must never become live request URLs or credentials. ---
+		const isPlaceholder =
+			normalizedValue.startsWith('replace_with_') ||
+			normalizedValue.startsWith('something_like_');
 		const result =
-			typeof value === 'string' && value.trim().length > 0
-				? value
+			normalizedValue.length > 0 && !isPlaceholder
+				? normalizedValue
 				: fallback;
 
 		return result;

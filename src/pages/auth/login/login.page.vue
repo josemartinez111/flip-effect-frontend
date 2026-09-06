@@ -5,11 +5,11 @@
 <script setup lang="ts">
 // ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
 import AuthLoginPanel from '../../../components/pages/auth-sections/AuthLoginPanel.vue';
-import type { AuthRouteMode } from '../../../lib';
+import type { AuthMode } from '../../../lib';
 // ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
 
 const { authMode } = defineProps<{
-	authMode: AuthRouteMode;
+	authMode: AuthMode;
 }>();
 // ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
 </script>

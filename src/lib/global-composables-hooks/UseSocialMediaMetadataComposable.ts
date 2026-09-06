@@ -17,9 +17,9 @@ type SupportedPlatform = 'facebook' | 'instagram' | 'twitter' | 'linkedin';
  * @property extraMeta - Additional platform-specific meta tags (e.g., Twitter card type)
  */
 interface PlatformConfig {
-  prefix: string;
-  nameAttribute: 'name' | 'property';
-  extraMeta?: Record<string, string>;
+	prefix: string;
+	nameAttribute: 'name' | 'property';
+	extraMeta?: Record<string, string>;
 }
 
 /**
@@ -33,13 +33,13 @@ interface PlatformConfig {
  * @property platforms - Array of social platforms to generate meta-tags for
  */
 interface SocialMetadataProps {
-  siteUrl: string;
-  title: string;
-  description: string;
-  path?: string;
-  image?: string;
-  type?: 'website' | 'article' | 'profile';
-  platforms: SupportedPlatform[];
+	siteUrl: string;
+	title: string;
+	description: string;
+	path?: string;
+	image?: string;
+	type?: 'website' | 'article' | 'profile';
+	platforms: SupportedPlatform[];
 }
 
 type MetaTag =
@@ -49,23 +49,23 @@ type MetaTag =
 // ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
 
 const PLATFORM_CONFIGS: Record<SupportedPlatform, PlatformConfig> = {
-  facebook: {
-    prefix: 'og',
-    nameAttribute: 'property',
-  },
-  instagram: {
-    prefix: 'og',
-    nameAttribute: 'property',
-  },
-  twitter: {
-    prefix: 'twitter',
-    nameAttribute: 'name',
-    extraMeta: { card: 'summary_large_image' },
-  },
-  linkedin: {
-    prefix: 'linkedin',
-    nameAttribute: 'name',
-  },
+	facebook: {
+		prefix: 'og',
+		nameAttribute: 'property',
+	},
+	instagram: {
+		prefix: 'og',
+		nameAttribute: 'property',
+	},
+	twitter: {
+		prefix: 'twitter',
+		nameAttribute: 'name',
+		extraMeta: { card: 'summary_large_image' },
+	},
+	linkedin: {
+		prefix: 'linkedin',
+		nameAttribute: 'name',
+	},
 };
 
 const createMetaTag = (
@@ -82,49 +82,51 @@ const createMetaTag = (
 
 // ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
 
-export function UseSocialMediaMetadataComposable({
-  siteUrl,
-  title,
-  description,
-  path = '',
-  image,
-  type = 'website',
-  platforms,
-}: SocialMetadataProps): void {
-  const url = `${siteUrl}${path}`;
+export const UseSocialMediaMetadataComposable = ({
+	siteUrl,
+	title,
+	description,
+	path = '',
+	image,
+	type = 'website',
+	platforms,
+}: SocialMetadataProps): void => {
+	const url = `${siteUrl}${path}`;
 
-  const meta: MetaTag[] = platforms.flatMap((platform) => {
-    const config = PLATFORM_CONFIGS[platform];
-    const { prefix, nameAttribute, extraMeta } = config;
+	const meta: MetaTag[] = platforms.flatMap((platform) => {
+		const config = PLATFORM_CONFIGS[platform];
+		const { prefix, nameAttribute, extraMeta } = config;
 
-    const baseTags: MetaTag[] = [
-      createMetaTag(nameAttribute, `${prefix}:title`, title),
-      createMetaTag(nameAttribute, `${prefix}:description`, description),
-    ];
+		const baseTags: MetaTag[] = [
+			createMetaTag(nameAttribute, `${prefix}:title`, title),
+			createMetaTag(nameAttribute, `${prefix}:description`, description),
+		];
 
-    if (prefix === 'og') {
-      baseTags.push(
-        createMetaTag(nameAttribute, `${prefix}:type`, type),
-        createMetaTag(nameAttribute, `${prefix}:url`, url),
-      );
-    }
+		if (prefix === 'og') {
+			baseTags.push(
+				createMetaTag(nameAttribute, `${prefix}:type`, type),
+				createMetaTag(nameAttribute, `${prefix}:url`, url),
+			);
+		}
 
-    if (image) {
-      baseTags.push(createMetaTag(nameAttribute, `${prefix}:image`, image));
-    }
+		if (image) {
+			baseTags.push(
+				createMetaTag(nameAttribute, `${prefix}:image`, image),
+			);
+		}
 
-    if (extraMeta) {
-      Object.entries(extraMeta).forEach(([key, metaValue]) => {
-        baseTags.push(
-          createMetaTag(nameAttribute, `${prefix}:${key}`, metaValue),
-        );
-      });
-    }
+		if (extraMeta) {
+			Object.entries(extraMeta).forEach(([key, metaValue]) => {
+				baseTags.push(
+					createMetaTag(nameAttribute, `${prefix}:${key}`, metaValue),
+				);
+			});
+		}
 
-    return baseTags;
-  });
+		return baseTags;
+	});
 
-  useHead({ meta });
-}
+	useHead({ meta });
+};
 
 // ⚫️ ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞

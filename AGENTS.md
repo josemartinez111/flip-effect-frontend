@@ -66,7 +66,7 @@ vuejs-frontend-template/
 │   │
 │   ├── lib/
 │   │   ├── constants/                    # App-wide constants
-│   │   ├── global-composables-hooks/     # Shared composables (useGradient, etc.)
+│   │   ├── global-composables-hooks/     # Shared composables (UseGradientComposable, etc.)
 │   │   ├── stores/                       # Pinia stores (Use$Name$Store pattern)
 │   │   ├── types/                        # ApiActionResult, AppTheme, etc.
 │   │   ├── utils/                        # date-formatter, validation, etc.
@@ -81,7 +81,7 @@ vuejs-frontend-template/
 │   │
 │   ├── router/
 │   │   ├── routes.ts                     # Vue Router config + navigation guards
-│   │   └── useNavLinks.ts                # NavLinkType + useNavLinks composable
+│   │   └── UseNavLinksComposable.ts      # NavLinkType + navigation-link composable
 │   │
 │   ├── App.vue                           # Root entry (mounts router-view)
 │   ├── main.ts                           # App bootstrap
@@ -372,6 +372,8 @@ export const use$STORE_NAME$Store = defineStore('$storeName$', () => {
 
 **Divider Rule (CRITICAL):** Do not generate or approximate `∞` divider lines from memory. Treat divider lines as fixed code. When adding or editing any comment scaffold in any file type, copy the exact divider line from the same file first. If the file has none, copy from the closest same-kind file. If still unclear, copy the exact scaffold from this `AGENTS.md`. Before finalizing a diff, scan for shortened or wrapped divider lines and fix them.
 
+**Markup Comments:** Keep comments inside Vue templates light and limited to meaningful UI regions. Use `<!-- ∞∞∞∞∞∞∞∞ TITLE ∞∞∞∞∞∞∞∞ -->` for a short label. When context needs more than one line, use the same eight-character divider above and below the body inside one multi-line HTML comment. Do not use plain `<!-- COMPONENT -->`, `<!-- --- comment --- -->`, or hash/dash dividers in template markup.
+
 ```zsh
 // --- Single line comment ---
 
@@ -625,6 +627,64 @@ pm preview          # Preview production locally
 
 ---
 
+## 🗣️ Response Format (CRITICAL — Rolling 1–33 Numbering)
+
+**Every response to the user is a numbered list.** Not prose paragraphs, not loose bullets. Each top-level point gets the next number in a running counter.
+
+**The counter is a rolling session counter.**
+- It starts at `1` on the first response of a session.
+- It keeps counting across the ENTIRE response and across EVERY response that follows.
+- It NEVER restarts at `1` just because a new response, a new section, or a new topic begins.
+- When it reaches `33`, the NEXT number wraps back to `1` and continues from there.
+- The counter never resets because the request changed, because the user asked something new, or because the previous turn ended. Only reaching `33` resets it.
+
+**Structure of a numbered point:**
+- The number carries one short declarative sentence — a claim, a result, or a heading-style statement ending in `:`.
+- Supporting detail sits under it as plain `-` sub-bullets.
+- Sub-bullets are NEVER numbered and NEVER lettered. No `1a`, no `2.1`, no `i.`/`ii.`.
+- Code blocks, tables, and file lists may sit under a number without consuming a number.
+
+**Questions keep the same counter.** When asking the user something, each distinct option is its OWN number on its own line, drawn from the same running count. A question section never restarts at `1`.
+
+**Closing sections do not take numbers.** `Files touched`, `Files removed`, and `Files created` are unnumbered plain path lists at the very end — no descriptions, no line numbers, just relative paths.
+
+**Reference shape:**
+
+```zsh
+1. Refactored, Sin. The visible player flow now lives entirely in one YouTubeVideoPlayer.vue:
+
+  - Single-video player
+  - Custom controls
+  - Error/fallback states
+
+2. Only true support boundaries remain separate:
+
+  - Composable: YouTube iframe lifecycle
+  - Utility: shared SDK loading and URL parsing
+
+3. Public usage remains unchanged and simple:
+
+  <YouTubeVideoPlayer :video-url="YOUTUBE_VIDEO_URL" />
+
+4. Verification passed:
+
+  - 8/8 tests
+  - Clean production build
+  - Template remains untouched until you approve this version
+
+Files touched
+
+  - src/components/shared/youtube-video-player/YouTubeVideoPlayer.vue
+
+Files removed
+
+  - src/components/shared/youtube-video-player/YouTubeVideoFrame.vue
+```
+
+**Tone:** direct, short sentences, no filler, no hedging, no restating the request back. State the result, then the detail.
+
+---
+
 ## 🧭 Agent Operating Notes
 
 **Code Delivery:**
@@ -650,6 +710,7 @@ pm preview          # Preview production locally
 - **ALWAYS end every response with all files touched — no inline comments, just paths:**
   - List every file modified, created, or deleted with relative paths
   - No descriptions, no line numbers, just the clean path list
+- **Response numbering is governed by the Response Format (CRITICAL — Rolling 1–33 Numbering) section above.** The counter rolls across responses and only resets after `33`.
 - **When asking questions, ALWAYS use a single FLAT, continuously-increasing numbered list (1, 2, 3, 4, 5, …) so the user can respond by number.** NEVER use letter sub-bullets or nested numbering (no `1a`/`1b`, no `2.1`). Each distinct option is its OWN number on its own line — if a question has two choices, that is two numbers, not one number with `a`/`b` under it. A short plain-text label (e.g. `Alias naming:`) may prefix the option text, but the number out front always just increments.
 - **The count is continuous across the ENTIRE response, not per section.** If the response has more than one numbered list (e.g. a "Work it costs" list THEN a "Questions" list), the second list keeps counting from where the first stopped — it does NOT restart at 1. Never emit two lists in one response that both begin at 1. If two sections each need their own 1-based numbering, merge them into one list or renumber the second so the sequence is unbroken (… 5, then 6, 7, 8 …).
 - Never use implicit `any` in callbacks: `(item: Type) => ...`

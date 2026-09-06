@@ -46,7 +46,8 @@ export const UseApprovalRatingTierComposable = () => {
 	);
 
 	// --- Live economy approval from the Worker (AP-NORC); the static value stands in until it lands. ---
-	const { economyRating } = storeToRefs(useApprovalStore());
+	const approvalStore = useApprovalStore();
+	const { economyRating } = storeToRefs(approvalStore);
 
 	watch(
 		economyRating,

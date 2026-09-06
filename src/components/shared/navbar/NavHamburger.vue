@@ -19,7 +19,8 @@ const emit = defineEmits<{ click: [] }>();
 const btnStyleClasses = twMerge(
 	clsx(
 		'gap-2! text-black! hover:bg-blue-100!',
-		'dark:text-white! dark:hover:bg-blue-200! dark:hover:text-black!',
+		'dark:text-white!',
+		'hover:opacity-65! hover:text-white! hover:bg-[#908E96]!',
 	),
 );
 // ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞

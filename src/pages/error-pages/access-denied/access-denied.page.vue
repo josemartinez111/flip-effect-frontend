@@ -12,7 +12,7 @@ import { AuthAccessDeniedArtwork } from '../../../assets';
 ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞ -->
 <template>
 	<section class="bg-gray-600">
-		<!-- --- Container --- -->
+		<!-- ∞∞∞∞∞∞∞∞ CONTAINER ∞∞∞∞∞∞∞∞ -->
 		<div class="mx-auto w-full max-w-7xl rounded-sm px-5 py-16 tablet:px-10 tablet:py-20">
 			<div class="grid items-center gap-8 tablet:gap-20 laptop:grid-cols-2">
 				<div>
@@ -28,7 +28,7 @@ import { AuthAccessDeniedArtwork } from '../../../assets';
 						</div>
 					</div>
 
-					<!-- --- Back home button --- -->
+					<!-- ∞∞∞∞∞∞∞∞ BACK HOME BUTTON ∞∞∞∞∞∞∞∞ -->
 					<RouterLink
 						to="/"
 						class="mt-6 inline-block cursor-pointer items-center rounded-md bg-indigo-950 px-6 py-3 text-center font-semibold text-white shadow-2xl transition hover:bg-rose-600 active:opacity-30 desktop:px-56"

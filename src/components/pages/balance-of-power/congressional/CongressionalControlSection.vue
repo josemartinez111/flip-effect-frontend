@@ -1,36 +1,28 @@
 <!-- ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
-    COMPONENTS: PAGES > HOME > CONGRESSIONAL
+    COMPONENTS: PAGES > BALANCE-OF-POWER > CONGRESSIONAL
     > CONGRESSIONAL_CONTROL_SECTION.VUE
 ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞ -->
 <script setup lang="ts">
 // -- ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞ --
-import { computed } from 'vue';
+import { computed, onMounted } from 'vue';
 import SeatGridCard from '../../../shared/seat-grid-card/SeatGridCard.vue';
-import {
-	type CongressionalControlChamber,
-	UseCongressionalControlComposable,
-} from '../../pages-composables/UseCongressionalControlComposable.ts';
+import { UseCongressControlComposable } from '../balance-of-power-page-composables/UseCongressControlComposable.ts';
 // -- ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞ --
 
 type CongressionalControlSectionProps = {
 	eyebrow: string;
 	title: string;
 	lead: string;
-	chambers: Array<CongressionalControlChamber>;
 };
 // -- ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞ Usage ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞ --
 // <CongressionalControlSection
 // 	eyebrow="Congressional Balance"
 // 	title="House & Senate Control"
 // 	lead="Track the balance of power shaping the next fight in Congress."
-// 	:chambers="congressionalControlChambers"
 // />
-//
-// `:chambers` is one-way prop binding. Use `v-model` only if this component
-// must edit parent-owned chamber data.
 // -- ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞ Usage ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞ --
 
-const { eyebrow, title, lead, chambers } =
+const { eyebrow, title, lead } =
 	defineProps<CongressionalControlSectionProps>();
 
 const {
@@ -40,12 +32,22 @@ const {
 	congressionalControlEyebrowStyleClasses,
 	congressionalControlTitleStyleClasses,
 	congressionalControlLeadStyleClasses,
+	congressionalControlSourceStyleClasses,
 	congressionalControlGridStyleClasses,
+	congressionalBalanceSourceCaption,
+	congressionalBalanceSourceUrl,
+	congressionalControlChambers,
+	congressionalBalanceStore,
 	getCongressionalSeatGridCards,
-} = UseCongressionalControlComposable();
+} = UseCongressControlComposable();
 
 const congressionalSeatGridCards = computed(() => {
-	return getCongressionalSeatGridCards(chambers);
+	return getCongressionalSeatGridCards(congressionalControlChambers.value);
+});
+
+// --- Fetch once when this page-owned section mounts; every seat is derived from that one snapshot. ---
+onMounted(async () => {
+	await congressionalBalanceStore.fetchCongressBalance();
 });
 // -- ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞ --
 </script>
@@ -53,6 +55,7 @@ const congressionalSeatGridCards = computed(() => {
 <template>
 	<section :class="congressionalControlSectionStyleClasses">
 		<div :class="congressionalControlShellStyleClasses">
+			<!-- ∞∞∞∞∞∞∞∞ CONTROL SUMMARY ∞∞∞∞∞∞∞∞ -->
 			<div :class="congressionalControlHeaderStyleClasses">
 				<div>
 					<div :class="congressionalControlEyebrowStyleClasses">
@@ -68,6 +71,18 @@ const congressionalSeatGridCards = computed(() => {
 				</p>
 			</div>
 
+			<!-- ∞∞∞∞∞∞∞∞ LIVE DATA SOURCE ∞∞∞∞∞∞∞∞ -->
+			<a
+				v-if="congressionalBalanceSourceCaption"
+				:href="congressionalBalanceSourceUrl"
+				target="_blank"
+				rel="noreferrer"
+				:class="congressionalControlSourceStyleClasses"
+			>
+				{{ congressionalBalanceSourceCaption }}
+			</a>
+
+			<!-- ∞∞∞∞∞∞∞∞ HOUSE AND SENATE SEAT GRIDS ∞∞∞∞∞∞∞∞ -->
 			<div :class="congressionalControlGridStyleClasses">
 				<SeatGridCard
 					v-for="seatGridCard in congressionalSeatGridCards"

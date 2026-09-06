@@ -40,7 +40,7 @@ const { isDarkMode } = storeToRefs(store);
 				:checked="isDarkMode"
 				@change="store.toggleDarkMode()"
 			/>
-			<!-- SUN-SVG -->
+			<!-- ∞∞∞∞∞∞∞∞ SUN-SVG ∞∞∞∞∞∞∞∞ -->
 			<svg
 				:class="['col-start-1 row-start-1', isDarkMode ? 'fill-[#52A9FF]' : 'fill-[#F75C02]']"
 				xmlns="http://www.w3.org/2000/svg"
@@ -59,7 +59,7 @@ const { isDarkMode } = storeToRefs(store);
       19.8l1.4-1.4M18.4 5.6l1.4-1.4"
 				/>
 			</svg>
-			<!-- MOON-SVG -->
+			<!-- ∞∞∞∞∞∞∞∞ MOON-SVG ∞∞∞∞∞∞∞∞ -->
 			<svg
 				:class="['col-start-2 row-start-1', isDarkMode ? 'fill-[#52A9FF]' : 'fill-[#F75C02]']"
 				xmlns="http://www.w3.org/2000/svg"

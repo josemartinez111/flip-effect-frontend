@@ -9,8 +9,8 @@
 export * from './global-composables-hooks/UseSocialMediaMetadataComposable';
 export * from './global-composables-hooks/UseGradientComposable';
 export * from './global-composables-hooks/UseAdminVisibleComposable';
-export * from './global-composables-hooks/useAdminVisible';
-export * from './global-composables-hooks/useAuthRouteMode';
+export * from './global-composables-hooks/UseActionToastComposable';
+export * from './global-composables-hooks/UseLiveDataErrorToastComposable';
 export * from './global-composables-hooks/UseAnimatedPercentageComposable';
 // ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
 
@@ -46,7 +46,13 @@ export type {
 	SessionExpirationOptions,
 	UnitType,
 } from './types/DateTimeTypes';
-export type { AsyncActionParams, Results } from './types/TryCatchTypes';
+export type {
+	AsyncActionParams,
+	Results,
+	SyncActionParams,
+} from './types/TryCatchTypes';
+export type { AuthMode } from './types/AuthMode';
+export type { AuthVerificationSession } from './types/AuthVerificationSessionTypes';
 export type {
 	FailureHttpStatus,
 	HttpStatus,
@@ -61,6 +67,12 @@ export type {
 // ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
 export { Constants as EL } from './constants/constants';
 export { GlobalEnvs } from './constants/GlobalEnvs';
+export {
+	APP_AUTH_MODE,
+	resolveAppAuthMode,
+} from './constants/AuthModeConstants';
+export { AuthModeUtils } from './utils/AuthModeUtils';
+export { AuthVerificationSessionUtils } from './utils/AuthVerificationSessionUtils';
 export {
 	MS_PER_DAY,
 	MS_PER_HOUR,

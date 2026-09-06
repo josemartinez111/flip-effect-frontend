@@ -14,6 +14,13 @@ export interface AsyncActionParams<TResult> {
 	failureStatusCode?: FailureHttpStatus;
 }
 
+export interface SyncActionParams<TResult> {
+	callback: () => TResult;
+	errorContext: string;
+	successStatusCode?: SuccessHttpStatus;
+	failureStatusCode?: FailureHttpStatus;
+}
+
 export type Results<TResult> =
 	| {
 			statusCode: SuccessHttpStatus;

@@ -3,43 +3,53 @@
 // > APPROVAL_ENDPOINT.TS
 // ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
 import { Hono } from 'hono';
-import { createFactory } from 'hono/factory';
+import type { Context } from 'hono';
 import type { WorkerHonoEnv } from '@shared-module/worker-env';
 import { STATUS } from '@shared-module/httpStatus';
 import type { ApprovalActionResult } from '@approval-module/domain/approvalModel';
-import { fetchApprovalRating } from '@approval-module/application/approvalService';
+import { ApprovalService } from '@approval-module/application/approvalService';
 // ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
 
-// --- Typed handler factory bound to the Worker env (extracted handler, never inlined at the route). ---
-const workerFactory = createFactory<WorkerHonoEnv>();
-
 // ---
-// GET /api/approval?type=trump|economy → ApprovalActionResult JSON.
-// The ?type query IS the ApprovalType discriminator the service + provider switch on.
+// Own the approval route group and its handler as one presentation surface. app.ts only mounts
+// the completed group, matching the endpoint-class structure used by the Elysia API.
 // ---
-const approvalHandlers = workerFactory.createHandlers(async (ctx) => {
-	const approvalType = ctx.req.query('type');
+export class ApprovalEndpoints {
+	static mappedApprovalRoutes(): Hono<WorkerHonoEnv> {
+		const approvalRoutes = new Hono<WorkerHonoEnv>();
+		approvalRoutes.get(
+			'/approval',
+			ApprovalEndpoints.fetchApprovalRatingAsync,
+		);
 
-	// --- Validate the discriminator before it reaches the switch downstream. ---
-	if (approvalType !== 'trump' && approvalType !== 'economy') {
-		const invalid: ApprovalActionResult = {
-			success: false,
-			statusCode: STATUS.BAD_REQUEST,
-			message: "Query ?type must be 'trump' or 'economy'.",
-		};
-
-		return ctx.json(invalid, invalid.statusCode);
+		return approvalRoutes;
 	}
 
-	const result = await fetchApprovalRating(ctx.env, approvalType);
+	// --- GET /api/approval?type=trump|economy → ApprovalActionResult JSON. ---
+	private static async fetchApprovalRatingAsync(
+		ctx: Context<WorkerHonoEnv>,
+	): Promise<Response> {
+		const approvalType = ctx.req.query('type');
 
-	return ctx.json(result, result.statusCode);
-});
-// -- ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞ --
+		// --- Validate the discriminator before it reaches the service's source switch. ---
+		if (approvalType !== 'trump' && approvalType !== 'economy') {
+			const invalid: ApprovalActionResult = {
+				success: false,
+				statusCode: STATUS.BAD_REQUEST,
+				message: "Query ?type must be 'trump' or 'economy'.",
+			};
 
-// --- Route group (declared here like a .NET endpoint class; mounted under /api in app.ts). ---
-const approvalRoutes = new Hono<WorkerHonoEnv>();
-approvalRoutes.get('/approval', ...approvalHandlers);
-// ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
-export { approvalRoutes };
+			const response = ctx.json(invalid, invalid.statusCode);
+			return response;
+		}
+
+		const result = await ApprovalService.fetchApprovalRating(
+			ctx.env,
+			approvalType,
+		);
+
+		const response = ctx.json(result, result.statusCode);
+		return response;
+	}
+}
 // ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞

@@ -70,14 +70,14 @@ const brandEffectStyleClasses = twMerge(
 <template>
 	<!-- ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞ -->
 	<RouterLink to="/" :class="brandLinkStyleClasses">
-		<!-- --- Placeholder logo --- -->
+		<!-- ∞∞∞∞∞∞∞∞ PLACEHOLDER LOGO ∞∞∞∞∞∞∞∞ -->
 		<img
 			:src="FlipEffectLogo"
 			alt="The Flip Effect Logo"
 			:class="logoStyleClasses"
 		/>
 
-		<!-- --- Gradient Orbitron text with glow behind --- -->
+		<!-- ∞∞∞∞∞∞∞∞ GRADIENT ORBITRON TEXT WITH GLOW BEHIND ∞∞∞∞∞∞∞∞ -->
 		<div :class="brandTextContainerStyleClasses">
 			<span :class="brandGlowStyleClasses" aria-hidden="true">
 				TheFlipEffect

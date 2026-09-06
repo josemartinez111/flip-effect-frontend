@@ -12,7 +12,7 @@ import { Image404 } from '../../../assets';
 ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞ -->
 <template>
 	<section>
-		<!-- --- Container --- -->
+		<!-- ∞∞∞∞∞∞∞∞ CONTAINER ∞∞∞∞∞∞∞∞ -->
 		<div class="mx-auto w-full max-w-7xl px-5 py-16 tablet:px-10 tablet:py-20">
 			<div class="grid items-center gap-8 tablet:gap-20 laptop:grid-cols-2">
 				<div>
@@ -30,7 +30,7 @@ import { Image404 } from '../../../assets';
 						</div>
 					</div>
 
-					<!-- --- Back home button --- -->
+					<!-- ∞∞∞∞∞∞∞∞ BACK HOME BUTTON ∞∞∞∞∞∞∞∞ -->
 					<RouterLink
 						to="/"
 						class="mt-6 inline-block cursor-pointer items-center rounded-md bg-blue-950 px-6 py-3 text-center font-semibold text-white desktop:px-12"
