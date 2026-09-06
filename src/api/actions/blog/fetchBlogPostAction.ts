@@ -4,6 +4,7 @@
 // ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
 import kyMap, { HTTPError } from 'ky';
 import { GlobalEnvs } from '../../../lib/constants/GlobalEnvs';
+import { Utils } from '../../../lib/utils/utils';
 import type {
 	BlogPost,
 	PublishBlogPostPayload,
@@ -19,36 +20,62 @@ const resolveBlogPostError = (
 	errorContext: string,
 ): BlogPostErrorCode => {
 	if (error instanceof HTTPError) {
-		console.error(`[ERROR ${errorContext}]: HTTP ${error.response.status}`);
+		console.error(
+			`[ERROR ${errorContext}]: HTTP ${error.response.status}`,
+		);
 		return error.response.status === 404
 			? 'BLOG_POST_NOT_FOUND'
 			: 'SERVER_ERROR';
 	}
 
 	if (error instanceof Error) {
-		console.error(`[ERROR ${errorContext}]: ${error.stack ?? error.message}`);
+		console.error(
+			`[ERROR ${errorContext}]: ${error.stack ?? error.message}`,
+		);
 		return 'NETWORK_ERROR';
 	}
 
-	console.error(`[UNKNOWN ERROR ${errorContext}]: ${JSON.stringify(error)}`);
+	console.error(
+		`[UNKNOWN ERROR ${errorContext}]: ${JSON.stringify(error)}`,
+	);
 	return 'SERVER_ERROR';
 };
 
-export const fetchCurrentBlogPostAction = async (): Promise<BlogPostActionResult<BlogPost>> => {
+export const fetchCurrentBlogPostAction = async (): Promise<
+	BlogPostActionResult<BlogPost>
+> => {
 	const endpoint = GlobalEnvs.BlogCurrentApiUrl;
 
 	if (!endpoint) {
-		return { success: false, errorCode: 'CONFIG_ERROR' };
+		const failed: BlogPostActionResult<BlogPost> = {
+			success: false,
+			errorCode: 'CONFIG_ERROR',
+		};
+
+		return failed;
 	}
 
-	try {
-		return await kyMap.get(endpoint).json<BlogPostActionResult<BlogPost>>();
-	} catch (error: unknown) {
-		return {
+	const fetchCurrentBlogPostCallback = async (): Promise<
+		BlogPostActionResult<BlogPost>
+	> => kyMap.get(endpoint).json<BlogPostActionResult<BlogPost>>();
+	const blogPostResults = await Utils.runTryCatch({
+		callback: fetchCurrentBlogPostCallback,
+		errorContext: 'FETCH_CURRENT_BLOG_POST',
+	});
+
+	if (blogPostResults.error !== undefined) {
+		const failed: BlogPostActionResult<BlogPost> = {
 			success: false,
-			errorCode: resolveBlogPostError(error, 'FETCH_CURRENT_BLOG_POST_ERROR'),
+			errorCode: resolveBlogPostError(
+				blogPostResults.error,
+				'FETCH_CURRENT_BLOG_POST_ERROR',
+			),
 		};
+
+		return failed;
 	}
+
+	return blogPostResults.result;
 };
 
 export const fetchPublishBlogPostAction = async (
@@ -57,17 +84,38 @@ export const fetchPublishBlogPostAction = async (
 	const endpoint = GlobalEnvs.BlogPublishApiUrl;
 
 	if (!endpoint) {
-		return { success: false, errorCode: 'CONFIG_ERROR' };
+		const failed: BlogPostActionResult<BlogPost> = {
+			success: false,
+			errorCode: 'CONFIG_ERROR',
+		};
+
+		return failed;
 	}
 
-	try {
-		return await kyMap.post(endpoint, { json: payload }).json<BlogPostActionResult<BlogPost>>();
-	} catch (error: unknown) {
-		return {
+	const fetchPublishBlogPostCallback = async (): Promise<
+		BlogPostActionResult<BlogPost>
+	> =>
+		kyMap
+			.post(endpoint, { json: payload })
+			.json<BlogPostActionResult<BlogPost>>();
+	const publishResults = await Utils.runTryCatch({
+		callback: fetchPublishBlogPostCallback,
+		errorContext: 'FETCH_PUBLISH_BLOG_POST',
+	});
+
+	if (publishResults.error !== undefined) {
+		const failed: BlogPostActionResult<BlogPost> = {
 			success: false,
-			errorCode: resolveBlogPostError(error, 'FETCH_PUBLISH_BLOG_POST_ERROR'),
+			errorCode: resolveBlogPostError(
+				publishResults.error,
+				'FETCH_PUBLISH_BLOG_POST_ERROR',
+			),
 		};
+
+		return failed;
 	}
+
+	return publishResults.result;
 };
 
 export const fetchHardRemoveBlogPostAction = async (
@@ -76,19 +124,40 @@ export const fetchHardRemoveBlogPostAction = async (
 	const urlTemplate = GlobalEnvs.BlogHardRemoveApiUrl;
 
 	if (!urlTemplate) {
-		return { success: false, errorCode: 'CONFIG_ERROR' };
+		const failed: BlogPostActionResult<void> = {
+			success: false,
+			errorCode: 'CONFIG_ERROR',
+		};
+
+		return failed;
 	}
 
 	const endpoint = urlTemplate.replace('{id}', id);
-
-	try {
+	const fetchHardRemoveBlogPostCallback = async (): Promise<void> => {
 		await kyMap.delete(endpoint);
-		return { success: true, message: 'Blog post permanently deleted.' };
-	} catch (error: unknown) {
-		return {
+	};
+	const removeResults = await Utils.runTryCatch({
+		callback: fetchHardRemoveBlogPostCallback,
+		errorContext: 'FETCH_HARD_REMOVE_BLOG_POST',
+	});
+
+	if (removeResults.error !== undefined) {
+		const failed: BlogPostActionResult<void> = {
 			success: false,
-			errorCode: resolveBlogPostError(error, 'FETCH_HARD_REMOVE_BLOG_POST_ERROR'),
+			errorCode: resolveBlogPostError(
+				removeResults.error,
+				'FETCH_HARD_REMOVE_BLOG_POST_ERROR',
+			),
 		};
+
+		return failed;
 	}
+
+	const succeeded: BlogPostActionResult<void> = {
+		success: true,
+		message: 'Blog post permanently deleted.',
+	};
+
+	return succeeded;
 };
 // ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞

@@ -51,17 +51,17 @@ const navbarContentStyleClasses = twMerge(
 		<div :class="navbarScrimStyleClasses"></div>
 
 		<div :class="navbarContentStyleClasses">
-			<!-- --- Brand (left) --- -->
+			<!-- ∞∞∞∞∞∞∞∞ BRAND (LEFT) ∞∞∞∞∞∞∞∞ -->
 			<NavBrand />
 
-			<!-- --- Actions (right) --- -->
+			<!-- ∞∞∞∞∞∞∞∞ ACTIONS (RIGHT) ∞∞∞∞∞∞∞∞ -->
 			<div class="flex items-center gap-3">
-				<!-- --- Dark mode toggle: always visible, hidden on phone landscape --- -->
+				<!-- ∞∞∞∞∞∞∞∞ DARK MODE TOGGLE: ALWAYS VISIBLE, HIDDEN ON PHONE LANDSCAPE ∞∞∞∞∞∞∞∞ -->
 				<div class="block phone-landscape:hidden">
 					<DarkmodeToggleSwitch />
 				</div>
 
-				<!-- Hamburger: always visible -->
+				<!-- ∞∞∞∞∞∞∞∞ HAMBURGER: ALWAYS VISIBLE ∞∞∞∞∞∞∞∞ -->
 				<NavHamburger
 					:ariaExpanded="drawerOpen"
 					@click="drawerOpen = !drawerOpen"
@@ -70,7 +70,7 @@ const navbarContentStyleClasses = twMerge(
 		</div>
 	</header>
 
-	<!-- --- Slide-in drawer --- -->
+	<!-- ∞∞∞∞∞∞∞∞ SLIDE-IN DRAWER ∞∞∞∞∞∞∞∞ -->
 	<SideDrawer
 		:is-open="drawerOpen"
 		:nav-links="navLinks"

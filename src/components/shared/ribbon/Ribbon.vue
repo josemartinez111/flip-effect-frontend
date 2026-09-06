@@ -15,28 +15,28 @@ const props = defineProps<{
 
 const { msg } = toRefs(props);
 </script>
-<!-- --------------------------------------------------------
-                     <>MARKUP</>
---------------------------------------------------------- -->
+<!-- ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
+                        </>MARKUP</>
+∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞ -->
 <template>
   <div class="relative inline-block overflow-hidden">
-    <!-- Ribbon Overlay -->
+    <!-- ∞∞∞∞∞∞∞∞ RIBBON OVERLAY ∞∞∞∞∞∞∞∞ -->
     <div class="absolute left-0 top-0 right-0 h-1 w-full z-10 opacity-75">
       <div class="ribbon">
         {{ msg }}
       </div>
     </div>
     
-    <!-- Slot for child content (Button) -->
+    <!-- ∞∞∞∞∞∞∞∞ SLOT FOR CHILD CONTENT (BUTTON) ∞∞∞∞∞∞∞∞ -->
     <div class="relative z-0">
       <slot />
     </div>
   </div>
 </template>
 
-<!-- --------------------------------------------------------
-                            STYLES
---------------------------------------------------------- -->
+<!-- ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
+                          STYLES
+∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞ -->
 <style scoped>
 @reference "../../../app.css";
 
@@ -47,4 +47,4 @@ const { msg } = toRefs(props);
   top-[12px] w-[90px] whitespace-nowrap;
 }
 </style>
-<!-- ---------------------------------------------------- -->
+<!-- ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞ -->

@@ -9,15 +9,16 @@ import {
 	SupabaseContext,
 	updatePasswordAction,
 } from '../../../../api';
-import { isAuthMaintenanceMode, type AuthRouteMode, UseSessionStore } from '../../../../lib';
 import {
-	clearUrlFragment,
-	setAuthVerificationSession,
-} from './UseAuthVerificationSessionComposable';
+	AuthModeUtils,
+	AuthVerificationSessionUtils,
+	type AuthMode,
+	UseSessionStore,
+} from '../../../../lib';
 // ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
 
 type UseAuthUpdatePasswordOptions = {
-	authMode: AuthRouteMode;
+	authMode: AuthMode;
 };
 
 const isValidPassword = (value: string): boolean => value.length >= 8;
@@ -43,7 +44,7 @@ export const UseAuthUpdatePasswordComposable = ({
 	};
 
 	const initializePasswordUpdate = async (): Promise<void> => {
-		if (isAuthMaintenanceMode(authMode)) {
+		if (AuthModeUtils.isMaintenance(authMode)) {
 			isCheckingSession.value = false;
 			return;
 		}
@@ -77,7 +78,7 @@ export const UseAuthUpdatePasswordComposable = ({
 		}
 
 		verifiedEmail.value = session.user.email.toLowerCase();
-		clearUrlFragment();
+		AuthVerificationSessionUtils.clearUrlFragment();
 		isCheckingSession.value = false;
 	};
 
@@ -114,7 +115,9 @@ export const UseAuthUpdatePasswordComposable = ({
 		}
 
 		if (verifiedEmail.value) {
-			setAuthVerificationSession(verifiedEmail.value);
+			AuthVerificationSessionUtils.saveVerificationSession(
+				verifiedEmail.value,
+			);
 		}
 
 		await SupabaseContext.getClient().auth.signOut();

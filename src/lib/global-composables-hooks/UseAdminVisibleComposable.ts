@@ -1,20 +1,22 @@
 // ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
 //  LIB > GLOBAL-COMPOSABLES-HOOKS > USE_ADMIN_VISIBLE_COMPOSABLE.TS
 // ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
+import { computed, type ComputedRef } from 'vue';
 import { UseSessionStore } from '../stores/UseSessionStore';
+import type { AuthMode } from '../types/AuthMode';
+import { AuthModeUtils } from '../utils/AuthModeUtils';
 // ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
 
-// ---
-// Shared admin visibility gate used across components that live
-// outside protected route guards (e.g. FoodbankAlertBanner, BlogBlogPostsPage).
-//
-// isMaintenance: pass true to force-show admin controls during
-// maintenance without requiring a logged-in session.
-// TODO: flip to true in both call sites when entering maintenance mode.
-// ---
-export const UseAdminVisibleComposable = (isMaintenance: boolean): boolean => {
-	const { isLoggedIn } = UseSessionStore();
-	return isMaintenance || isLoggedIn;
+// --- Keep the admin/public page split reactive while the session changes. ---
+export const UseAdminVisibleComposable = (
+	mode: AuthMode,
+): ComputedRef<boolean> => {
+	const sessionStore = UseSessionStore();
+	const isAdminVisible = computed(
+		() => AuthModeUtils.isMaintenance(mode) || sessionStore.isLoggedIn,
+	);
+
+	return isAdminVisible;
 };
 
 // ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞

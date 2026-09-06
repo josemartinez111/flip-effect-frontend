@@ -6,7 +6,12 @@ import { ref, type ComputedRef } from 'vue';
 import clsx from 'clsx';
 import { twMerge } from 'tailwind-merge';
 import type { BlogPost } from '../../../../api';
-import { EL, loadBlogImagesToCanvas, useBlogPostToast } from '../../../../lib';
+import {
+	EL,
+	loadBlogImagesToCanvas,
+	UseBlogPostToastComposable,
+	Utils,
+} from '../../../../lib';
 import type { BlogPublishFormValues } from './UseBlogPostsComposable';
 // ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
 
@@ -33,7 +38,7 @@ const AUTHOR_OPTIONS: Array<BlogAuthorOption> = [
 export const UseBlogPublishDialogComposable = ({
 	blogPost,
 }: UseBlogPublishDialogComposableOptions) => {
-	const { showBlogPostToast } = useBlogPostToast();
+	const { showBlogPostToast } = UseBlogPostToastComposable();
 
 	const formHeader = ref<string>(EL.STR_EMPTY);
 	const formAuthor = ref<string>('author-one');
@@ -97,7 +102,9 @@ export const UseBlogPublishDialogComposable = ({
 	const publishFieldStyleClasses = twMerge(clsx('tablet:col-span-3'));
 
 	const publishFieldLabelStyleClasses = twMerge(
-		clsx('mb-1.5 block text-xs font-extrabold tracking-wide text-gray-500 uppercase'),
+		clsx(
+			'mb-1.5 block text-xs font-extrabold tracking-wide text-gray-500 uppercase',
+		),
 	);
 
 	const publishInputShellStyleClasses = twMerge(
@@ -109,17 +116,25 @@ export const UseBlogPublishDialogComposable = ({
 	);
 
 	const publishInputIconShellStyleClasses = twMerge(
-		clsx('flex w-10 items-center justify-center bg-gray-50 dark:bg-gray-800'),
+		clsx(
+			'flex w-10 items-center justify-center bg-gray-50 dark:bg-gray-800',
+		),
 	);
 
-	const publishInputIconStyleClasses = twMerge(clsx('text-sm text-gray-400'));
+	const publishInputIconStyleClasses = twMerge(
+		clsx('text-sm text-gray-400'),
+	);
 
 	const publishTextInputStyleClasses = twMerge(
-		clsx('w-full bg-transparent px-3 text-sm font-medium focus:outline-hidden'),
+		clsx(
+			'w-full bg-transparent px-3 text-sm font-medium focus:outline-hidden',
+		),
 	);
 
 	const publishSelectStyleClasses = twMerge(
-		clsx('w-full cursor-pointer border-none bg-transparent text-sm font-medium shadow-none'),
+		clsx(
+			'w-full cursor-pointer border-none bg-transparent text-sm font-medium shadow-none',
+		),
 	);
 
 	const publishTextareaStyleClasses = twMerge(
@@ -131,7 +146,9 @@ export const UseBlogPublishDialogComposable = ({
 	);
 
 	const publishSubmitContainerStyleClasses = twMerge(
-		clsx('flex justify-end border-t border-gray-100 pt-4 dark:border-gray-800 tablet:col-span-3'),
+		clsx(
+			'flex justify-end border-t border-gray-100 pt-4 dark:border-gray-800 tablet:col-span-3',
+		),
 	);
 
 	const publishSubmitButtonStyleClasses = twMerge(
@@ -150,13 +167,16 @@ export const UseBlogPublishDialogComposable = ({
 				'overflow-hidden rounded-xl border border-gray-200 bg-white text-gray-900 shadow-2xl dark:border-gray-800 dark:bg-gray-950 dark:text-white',
 		},
 		header: {
-			class: 'bg-white dark:bg-gray-950 border-b border-gray-200 dark:border-gray-800 px-5 py-4',
+			class:
+				'bg-white dark:bg-gray-950 border-b border-gray-200 dark:border-gray-800 px-5 py-4',
 		},
 		content: {
-			class: 'bg-white text-gray-900 dark:bg-gray-950 dark:text-white p-0!',
+			class:
+				'bg-white text-gray-900 dark:bg-gray-950 dark:text-white p-0!',
 		},
 		footer: {
-			class: 'bg-white dark:bg-gray-950 border-t border-gray-200 dark:border-gray-800',
+			class:
+				'bg-white dark:bg-gray-950 border-t border-gray-200 dark:border-gray-800',
 		},
 	};
 
@@ -166,7 +186,8 @@ export const UseBlogPublishDialogComposable = ({
 	};
 
 	const setImageInputRef = (element: unknown): void => {
-		imageInputRef.value = element instanceof HTMLInputElement ? element : null;
+		imageInputRef.value =
+			element instanceof HTMLInputElement ? element : null;
 	};
 
 	const syncFormWithBlogPost = (): void => {
@@ -194,42 +215,52 @@ export const UseBlogPublishDialogComposable = ({
 			return;
 		}
 
-		const files = Array.from(event.target.files ?? []).filter((file: File) =>
-			file.type.startsWith('image/'),
+		const files = Array.from(event.target.files ?? []).filter(
+			(file: File) => file.type.startsWith('image/'),
 		);
 
 		if (files.length === 0) {
 			return;
 		}
 
-		try {
-			const base64Images = await loadBlogImagesToCanvas(files);
+		const loadBlogImagesCallback =
+			async (): Promise<Array<string> | null> =>
+				loadBlogImagesToCanvas(files);
+		const imageResults = await Utils.runTryCatch({
+			callback: loadBlogImagesCallback,
+			errorContext: 'LOAD_BLOG_IMAGES',
+		});
 
-			if (base64Images === null) {
-				showBlogPostToast(
-					{
-						severity: 'warn',
-						summary: 'Too Many Images',
-						detail: 'Total image size is too large. Remove some images and try again.',
-					},
-					6000,
-				);
-				resetImageFields();
-				return;
-			}
-
-			formImagePreview.value = base64Images[0] ?? null;
-			formImageData.value = base64Images;
-		} catch (error: unknown) {
-			if (error instanceof Error) {
-				showBlogPostToast({
-					severity: 'error',
-					summary: 'Image Error',
-					detail: error.message,
-				});
-			}
+		if (imageResults.error !== undefined) {
+			showBlogPostToast({
+				severity: 'error',
+				summary: 'Image Error',
+				detail: imageResults.error.message,
+			});
 			resetImageFields();
+
+			return;
 		}
+
+		const base64Images = imageResults.result;
+
+		if (base64Images === null) {
+			showBlogPostToast(
+				{
+					severity: 'warn',
+					summary: 'Too Many Images',
+					detail:
+						'Total image size is too large. Remove some images and try again.',
+				},
+				6000,
+			);
+			resetImageFields();
+
+			return;
+		}
+
+		formImagePreview.value = base64Images[0] ?? null;
+		formImageData.value = base64Images;
 	};
 
 	const getPublishFormValues = (): BlogPublishFormValues => ({

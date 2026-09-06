@@ -5,7 +5,7 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import type { WorkerEnv } from '@shared-module/worker-env';
 import type { CivicRepresentativeRecord } from '@representatives-module/domain/representativeModel';
-import { fetchRepresentativesBySearch } from '@representatives-module/application/representativesService';
+import { RepresentativesService } from '@representatives-module/application/representativesService';
 // ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
 
 const providerMocks = vi.hoisted(() => ({
@@ -84,10 +84,14 @@ describe('representatives service', () => {
 		providerMocks.fetchStatePeopleByDistricts.mockRejectedValue(
 			new Error('Open States timed out'),
 		);
-		const result = await fetchRepresentativesBySearch(workerEnv, {
-			query: '1 E Edenton St, Raleigh, NC 27601',
-			filters: ['house', 'senate', 'state'],
-		});
+		const result =
+			await RepresentativesService.fetchRepresentativesBySearch(
+				workerEnv,
+				{
+					query: '1 E Edenton St, Raleigh, NC 27601',
+					filters: ['house', 'senate', 'state'],
+				},
+			);
 
 		expect(result.success).toBe(true);
 		expect(result.statusCode).toBe(200);
@@ -127,10 +131,14 @@ describe('representatives service', () => {
 			}),
 		);
 
-		const result = await fetchRepresentativesBySearch(workerEnv, {
-			query: 'ma',
-			filters: ['house', 'senate', 'state'],
-		});
+		const result =
+			await RepresentativesService.fetchRepresentativesBySearch(
+				workerEnv,
+				{
+					query: 'ma',
+					filters: ['house', 'senate', 'state'],
+				},
+			);
 
 		expect(result.success).toBe(true);
 		expect(providerMocks.fetchStatePeopleByQuery).toHaveBeenCalledOnce();

@@ -186,7 +186,7 @@ const modalCloseButtonIconStyleClasses = twMerge(
 			<slot name="header" />
 		</template>
 
-		<!-- Default slot for child component -->
+		<!-- ∞∞∞∞∞∞∞∞ DEFAULT SLOT FOR CHILD COMPONENT ∞∞∞∞∞∞∞∞ -->
 		<slot />
 
 		<template v-if="$slots.footer" #footer>

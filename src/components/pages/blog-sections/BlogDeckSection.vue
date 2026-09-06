@@ -231,13 +231,13 @@ const backLinkStyleClasses = twMerge(
                         </>MARKUP</>
 ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞ -->
 <template>
-	<!-- --- No outer card — past-blogs side column goes next to this section --- -->
+	<!-- ∞∞∞∞∞∞∞∞ NO OUTER CARD — PAST-BLOGS SIDE COLUMN GOES NEXT TO THIS SECTION ∞∞∞∞∞∞∞∞ -->
 	<section class="fade-up relative z-10 flex w-full max-w-7xl flex-col">
-		<!-- --- DECK ROW: centered, full width, own section --- -->
+		<!-- ∞∞∞∞∞∞∞∞ DECK ROW: CENTERED, FULL WIDTH, OWN SECTION ∞∞∞∞∞∞∞∞ -->
 		<div class="flex justify-center px-10 pt-10 pb-10 laptop:px-14 laptop:pt-14">
 			<div class="relative h-100 w-72" @click="handleDeckCycle">
 				<div class="relative h-full w-full">
-					<!-- --- Card slots 0-2 (srcs rotate through the full image pool) --- -->
+					<!-- ∞∞∞∞∞∞∞∞ CARD SLOTS 0-2 (SRCS ROTATE THROUGH THE FULL IMAGE POOL) ∞∞∞∞∞∞∞∞ -->
 					<div v-for="cardIndex in [0, 1, 2]" :key="cardIndex" :class="getDeckCardClass(cardIndex)">
 						<img
 							:src="cardSrcs[cardIndex]"
@@ -252,7 +252,7 @@ const backLinkStyleClasses = twMerge(
 					</div>
 				</div>
 
-				<!-- --- Dot indicators: one per image in the pool --- -->
+				<!-- ∞∞∞∞∞∞∞∞ DOT INDICATORS: ONE PER IMAGE IN THE POOL ∞∞∞∞∞∞∞∞ -->
 				<div class="absolute right-0 -bottom-5 left-0 flex justify-center gap-1.5">
 					<span
 						v-for="dotIndex in dotIndexes"
@@ -263,9 +263,9 @@ const backLinkStyleClasses = twMerge(
 			</div>
 		</div>
 
-		<!-- --- CONTENT SECTION: Author → Title → Body → Back link --- -->
+		<!-- ∞∞∞∞∞∞∞∞ CONTENT SECTION: AUTHOR → TITLE → BODY → BACK LINK ∞∞∞∞∞∞∞∞ -->
 		<div class="relative z-10 mx-auto flex w-full max-w-3xl flex-col gap-5 px-10 pb-10 laptop:px-14 laptop:pb-14">
-			<!-- --- Author byline: compact inline row above the title --- -->
+			<!-- ∞∞∞∞∞∞∞∞ AUTHOR BYLINE: COMPACT INLINE ROW ABOVE THE TITLE ∞∞∞∞∞∞∞∞ -->
 			<div class="flex items-center gap-3">
 				<div class="h-11 w-11 shrink-0 overflow-hidden rounded-full border-2 border-gray-200 dark:border-gray-600">
 					<img :src="authorInfo.avatarSrc" :alt="authorInfo.name" class="h-full w-full object-cover" />
@@ -280,12 +280,12 @@ const backLinkStyleClasses = twMerge(
 				</div>
 			</div>
 
-			<!-- --- Title --- -->
+			<!-- ∞∞∞∞∞∞∞∞ TITLE ∞∞∞∞∞∞∞∞ -->
 			<h2 :class="titleStyleClasses">
 				{{ isLoading ? 'Loading...' : (blogPost?.header ?? 'Welcome to the Blog') }}
 			</h2>
 
-			<!-- --- Body: live content when blog post exists, default otherwise --- -->
+			<!-- ∞∞∞∞∞∞∞∞ BODY: LIVE CONTENT WHEN BLOG POST EXISTS, DEFAULT OTHERWISE ∞∞∞∞∞∞∞∞ -->
 			<Show :when="isLoading">
 				<p :class="bodyStyleClasses">Fetching latest blogPost...</p>
 				<template #fallback>
@@ -310,7 +310,7 @@ const backLinkStyleClasses = twMerge(
 				</template>
 			</Show>
 
-			<!-- --- Back to Home --- -->
+			<!-- ∞∞∞∞∞∞∞∞ BACK TO HOME ∞∞∞∞∞∞∞∞ -->
 			<RouterLink to="/" :class="backLinkStyleClasses">
 				<span aria-hidden="true">←</span> Back to Home
 			</RouterLink>

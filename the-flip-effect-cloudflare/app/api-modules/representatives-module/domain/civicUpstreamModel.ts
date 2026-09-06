@@ -9,11 +9,29 @@
 // ---
 
 // --- Congress legislators (keyless GitHub Pages dataset) ---
-type CongressLegislatorTerm = {
+export type CongressLegislatorParty =
+	| 'D'
+	| 'Democrat'
+	| 'Democratic'
+	| 'I'
+	| 'Independent'
+	| 'R'
+	| 'Republican';
+
+export type CongressLegislatorCaucus =
+	'D' | 'Democrat' | 'Democratic' | 'R' | 'Republican';
+
+export type CongressLegislatorDate = `${number}-${number}-${number}`;
+
+// --- One dated chamber term; the balance feature uses the dates and caucus instead of assuming the last term is active. ---
+export type CongressLegislatorTerm = {
 	type?: 'rep' | 'sen';
-	state?: string;
+	start?: CongressLegislatorDate;
+	end?: CongressLegislatorDate;
+	state?: Uppercase<string>;
 	district?: number;
-	party?: string;
+	party?: CongressLegislatorParty;
+	caucus?: CongressLegislatorCaucus;
 	phone?: string;
 	office?: string;
 	address?: string;

@@ -20,6 +20,9 @@ const config = defineConfig({
 	resolve: {
 		alias: {
 			'@app/': aliasDir('./app/'),
+			'@congressional-balance-module/': aliasDir(
+				'./app/api-modules/congressional-balance-module/',
+			),
 			'@representatives-module/': aliasDir(
 				'./app/api-modules/representatives-module/',
 			),

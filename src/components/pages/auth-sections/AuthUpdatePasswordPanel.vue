@@ -8,13 +8,13 @@ import clsx from 'clsx';
 import { Eye, EyeOff } from '@lucide/vue';
 import { twMerge } from 'tailwind-merge';
 import { AuthLogoMark } from '../../../assets';
-import type { AuthRouteMode } from '../../../lib';
+import type { AuthMode } from '../../../lib';
 import AuthLoadingState from './AuthLoadingState.vue';
 import { UseAuthUpdatePasswordComposable } from './auth-page-composables/UseAuthUpdatePasswordComposable';
 // ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
 
 const { authMode } = defineProps<{
-	authMode: AuthRouteMode;
+	authMode: AuthMode;
 }>();
 
 const {

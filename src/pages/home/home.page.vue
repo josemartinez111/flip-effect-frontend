@@ -6,7 +6,6 @@ PAGES: HOME > HOME_PAGE.VUE
 import { onMounted } from 'vue';
 import {
 	ApprovalRatingTierSection,
-	CongressionalControlSection,
 	CivicRepresentativeSearchSection,
 	FWTScrollAnimation,
 	GeneralElectionCountdownSection,
@@ -25,13 +24,14 @@ const {
 	civicRepresentativeSearchPlaceholder,
 	civicRepresentativeSearchFilterOptions,
 	civicRepresentativeSearchDefaultFilters,
-	congressionalControlChambers,
 } = UseHomePageContentComposable();
+
+const approvalStore = useApprovalStore();
 // ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
 
-onMounted(() => {
-	// --- One fetch fills both feeds in the store; the hero card + tier map read them reactively. ---
-	useApprovalStore().fetchApprovalRatings();
+// --- Load the homepage approval snapshots after the page mounts. ---
+onMounted(async () => {
+	await approvalStore.fetchApprovalRatings();
 });
 </script>
 <!-- ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
@@ -39,7 +39,7 @@ onMounted(() => {
 ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞ -->
 <template>
 	<main :class="mainContainerStyleClasses">
-		<!-- COMPONENT-GROUP: top badge row (countdown + branches) -->
+		<!-- ∞∞∞∞∞∞∞∞ COUNTDOWN AND BRANCHES ∞∞∞∞∞∞∞∞ -->
 		<div
 			class="laptop:block laptop:px-0 laptop:pt-0 flex items-start justify-between gap-2 px-4 pt-4"
 		>
@@ -48,7 +48,7 @@ onMounted(() => {
 				:duration-ms="820"
 				:delay-ms="120"
 			>
-				<!-- COMPONENT: GeneralElectionCountdownSection -->
+				<!-- ∞∞∞∞∞∞∞∞ GENERAL ELECTION COUNTDOWN ∞∞∞∞∞∞∞∞ -->
 				<GeneralElectionCountdownSection />
 			</FWTScrollAnimation>
 
@@ -57,13 +57,13 @@ onMounted(() => {
 				:duration-ms="820"
 				:delay-ms="160"
 			>
-				<!-- COMPONENT: HomeBranchesBadge -->
+				<!-- ∞∞∞∞∞∞∞∞ GOVERNMENT BRANCHES ∞∞∞∞∞∞∞∞ -->
 				<HomeBranchesBadge />
 			</FWTScrollAnimation>
 		</div>
 
 		<FWTScrollAnimation direction="none" :duration-ms="780">
-			<!-- COMPONENT: CivicRepresentativeSearchSection -->
+			<!-- ∞∞∞∞∞∞∞∞ REPRESENTATIVE SEARCH ∞∞∞∞∞∞∞∞ -->
 			<CivicRepresentativeSearchSection
 				:title="civicRepresentativeSearchTitle"
 				:placeholder="civicRepresentativeSearchPlaceholder"
@@ -73,27 +73,13 @@ onMounted(() => {
 		</FWTScrollAnimation>
 
 		<FWTScrollAnimation direction="up" :distance="42" :duration-ms="900">
-			<!-- COMPONENT: HomeHeroSection -->
+			<!-- ∞∞∞∞∞∞∞∞ HOME HERO ∞∞∞∞∞∞∞∞ -->
 			<HomeHeroSection />
 		</FWTScrollAnimation>
 
 		<FWTScrollAnimation direction="left" :distance="58" :duration-ms="940">
-			<!-- COMPONENT: ApprovalRatingTierSection -->
+			<!-- ∞∞∞∞∞∞∞∞ APPROVAL RATING STORY ∞∞∞∞∞∞∞∞ -->
 			<ApprovalRatingTierSection />
-		</FWTScrollAnimation>
-
-		<FWTScrollAnimation
-			direction="right"
-			:distance="64"
-			:duration-ms="980"
-		>
-			<!-- COMPONENT: CongressionalControlSection -->
-			<CongressionalControlSection
-				eyebrow="Congressional Balance"
-				title="House & Senate Control"
-				lead="Track the balance of power shaping the next fight in Congress."
-				:chambers="congressionalControlChambers"
-			/>
 		</FWTScrollAnimation>
 	</main>
 </template>

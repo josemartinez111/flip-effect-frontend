@@ -49,10 +49,10 @@ const layoutBackgroundImage = computed((): string | null => {
       </template>
     </Show>
 
-	  <!-- ∞∞∞∞∞∞∞∞ NAVBAR-COMPONENT ∞∞∞∞∞∞∞∞ --> 
+	  <!-- ∞∞∞∞∞∞∞∞ NAVBAR-COMPONENT ∞∞∞∞∞∞∞∞ -->
     <NavBar />
     <main class="relative z-10 flex-1 pt-16">
-	    <!-- ∞∞∞∞∞∞∞∞ ROUTER ∞∞∞∞∞∞∞∞ --> 
+	    <!-- ∞∞∞∞∞∞∞∞ ROUTER ∞∞∞∞∞∞∞∞ -->
       <RouterView />
     </main>
 	  <!-- ∞∞∞∞∞∞∞∞ FOOTER-COMPONENT ∞∞∞∞∞∞∞∞ -->

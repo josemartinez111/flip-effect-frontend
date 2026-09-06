@@ -11,7 +11,7 @@ import {
 	fetchPublishBlogPostAction,
 } from '../../../../api';
 import type { BlogPost, PublishBlogPostPayload } from '../../../../api';
-import { useBlogPostToast } from '../../../../lib';
+import { UseBlogPostToastComposable } from '../../../../lib';
 // ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
 
 // ---
@@ -27,7 +27,8 @@ export type BlogPublishFormValues = {
 };
 
 export const UseBlogPostsComposable = () => {
-	const { showBlogPostErrorToast, showBlogPostToast } = useBlogPostToast();
+	const { showBlogPostErrorToast, showBlogPostToast } =
+		UseBlogPostToastComposable();
 
 	// --- Blog post data ---
 	const currentBlogPost = ref<BlogPost | null>(null);
@@ -49,16 +50,15 @@ export const UseBlogPostsComposable = () => {
 		),
 	);
 
-	// --- Fetch current blog post from backend ---
+	// --- Background reads fail quietly so route mounts and refreshes never create action toasts. ---
 	const fetchBlogPost = async (): Promise<void> => {
 		isLoading.value = true;
 		const result = await fetchCurrentBlogPostAction();
+
 		if (result.success && result.data) {
 			currentBlogPost.value = result.data;
-		} else if (result.errorCode && result.errorCode !== 'CONFIG_ERROR') {
-			// --- CONFIG_ERROR = scaffold mode (no env set) — stay silent, show defaults ---
-			showBlogPostErrorToast(result.errorCode);
 		}
+
 		isLoading.value = false;
 	};
 
@@ -72,7 +72,9 @@ export const UseBlogPostsComposable = () => {
 	};
 
 	// --- Admin: publish / upsert blog post ---
-	const handlePublish = async (formValues: BlogPublishFormValues): Promise<void> => {
+	const handlePublish = async (
+		formValues: BlogPublishFormValues,
+	): Promise<void> => {
 		const header = formValues.header.trim();
 		const blogBody = formValues.blogBody.trim();
 
@@ -104,7 +106,11 @@ export const UseBlogPostsComposable = () => {
 			currentBlogPost.value = result.data;
 			isPublishDialogVisible.value = false;
 			showBlogPostToast(
-				{ severity: 'success', summary: 'Published', detail: 'Blog post is now live.' },
+				{
+					severity: 'success',
+					summary: 'Published',
+					detail: 'Blog post is now live.',
+				},
 				3000,
 			);
 		} else {
@@ -129,7 +135,11 @@ export const UseBlogPostsComposable = () => {
 			currentBlogPost.value = null;
 			isDeleteDialogVisible.value = false;
 			showBlogPostToast(
-				{ severity: 'success', summary: 'Deleted', detail: 'Blog post permanently removed.' },
+				{
+					severity: 'success',
+					summary: 'Deleted',
+					detail: 'Blog post permanently removed.',
+				},
 				3000,
 			);
 		} else {

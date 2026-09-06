@@ -93,7 +93,7 @@ const {
 ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞ -->
 <template>
 	<div :class="quizRootStyleClasses">
-		<!-- QUIZ: START SCREEN -->
+		<!-- ∞∞∞∞∞∞∞∞ QUIZ: START SCREEN ∞∞∞∞∞∞∞∞ -->
 		<div v-if="!quizStarted" :class="quizIntroContainerStyleClasses">
 			<div :class="quizEyebrowStyleClasses">
 				Ready Check
@@ -124,7 +124,7 @@ const {
 			/>
 		</div>
 
-		<!-- QUIZ: RESULTS SCREEN -->
+		<!-- ∞∞∞∞∞∞∞∞ QUIZ: RESULTS SCREEN ∞∞∞∞∞∞∞∞ -->
 		<div v-else-if="quizCompleted" :class="quizResultsContainerStyleClasses">
 			<Card
 				unstyled
@@ -146,7 +146,7 @@ const {
 							:value="quizHighScoreAchieved ? 'High Score' : 'Results'"
 						/>
 
-						<!-- QUIZ: HIGH SCORE SIGNAL -->
+						<!-- ∞∞∞∞∞∞∞∞ QUIZ: HIGH SCORE SIGNAL ∞∞∞∞∞∞∞∞ -->
 						<div
 							v-if="quizHighScoreAchieved"
 							:class="quizHighScoreSignalGridStyleClasses"
@@ -190,9 +190,9 @@ const {
 			</Card>
 		</div>
 
-		<!-- QUIZ: QUESTION SCREEN -->
+		<!-- ∞∞∞∞∞∞∞∞ QUIZ: QUESTION SCREEN ∞∞∞∞∞∞∞∞ -->
 		<div v-else :class="quizQuestionContainerStyleClasses">
-			<!-- QUIZ: QUESTION HEADER -->
+			<!-- ∞∞∞∞∞∞∞∞ QUIZ: QUESTION HEADER ∞∞∞∞∞∞∞∞ -->
 			<div :class="quizQuestionHeaderStyleClasses">
 				<div :class="quizQuestionCounterStyleClasses">
 					Question {{ currentQuestionIndex + 1 }} /
@@ -211,7 +211,7 @@ const {
 				:show-value="false"
 			/>
 
-			<!-- QUIZ: QUESTION CARD -->
+			<!-- ∞∞∞∞∞∞∞∞ QUIZ: QUESTION CARD ∞∞∞∞∞∞∞∞ -->
 			<Transition
 				mode="out-in"
 				:enter-active-class="quizCardTransitionActiveStyleClasses"
@@ -234,7 +234,7 @@ const {
 								{{ currentQuestion.question }}
 							</h3>
 
-							<!-- QUIZ: ANSWER OPTIONS -->
+							<!-- ∞∞∞∞∞∞∞∞ QUIZ: ANSWER OPTIONS ∞∞∞∞∞∞∞∞ -->
 							<div :class="quizAnswerOptionsGridStyleClasses">
 								<button
 									v-for="option in currentQuestion.options"
@@ -255,7 +255,7 @@ const {
 								</button>
 							</div>
 
-							<!-- QUIZ: ANSWER FEEDBACK -->
+							<!-- ∞∞∞∞∞∞∞∞ QUIZ: ANSWER FEEDBACK ∞∞∞∞∞∞∞∞ -->
 							<div
 								v-if="currentQuestionAnswered"
 								:class="quizFeedbackStyleClasses"

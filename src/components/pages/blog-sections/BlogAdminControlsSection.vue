@@ -119,7 +119,7 @@ const statusPillStyleClasses = computed<string>(() =>
 		</div>
 
 		<div :class="adminActionsStyleClasses">
-			<!-- --- Status pill --- -->
+			<!-- ∞∞∞∞∞∞∞∞ STATUS PILL ∞∞∞∞∞∞∞∞ -->
 			<span :class="statusPillStyleClasses">
 				<i :class="blogPost ? 'pi pi-check-circle' : 'pi pi-circle'" />
 				{{ blogPost ? 'Live' : 'Empty' }}

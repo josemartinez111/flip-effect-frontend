@@ -189,7 +189,7 @@ const handleNextClick = () => {
 ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞ -->
 <template>
 	<section :class="rootStyleClasses" aria-label="Timeline navigation">
-		<!-- STEPPER: TOUCH ZONES -->
+		<!-- ∞∞∞∞∞∞∞∞ STEPPER: TOUCH ZONES ∞∞∞∞∞∞∞∞ -->
 		<button
 			type="button"
 			:class="previousTouchZoneStyleClasses"
@@ -206,7 +206,7 @@ const handleNextClick = () => {
 			@click="handleNextClick"
 		></button>
 
-		<!-- STEPPER: CONTROL BODY -->
+		<!-- ∞∞∞∞∞∞∞∞ STEPPER: CONTROL BODY ∞∞∞∞∞∞∞∞ -->
 		<div :class="containerStyleClasses">
 			<div :class="outerRingStyleClasses">
 				<div :class="handleStyleClasses">
@@ -222,7 +222,7 @@ const handleNextClick = () => {
 				</div>
 			</div>
 
-			<!-- STEPPER: ARROWS -->
+			<!-- ∞∞∞∞∞∞∞∞ STEPPER: ARROWS ∞∞∞∞∞∞∞∞ -->
 			<FWTDirectionalStepperArrowIcon
 				direction="previous"
 				:class="previousArrowIconStyleClasses"

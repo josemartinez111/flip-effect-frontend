@@ -7,11 +7,11 @@
 import { useRouter } from 'vue-router';
 import { sendMagicLinkAction } from '../../../api';
 import AuthVerificationLinkPanel from '../../../components/pages/auth-sections/AuthVerificationLinkPanel.vue';
-import type { AuthRouteMode } from '../../../lib';
+import type { AuthMode } from '../../../lib';
 // ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
 
 defineProps<{
-	authMode: AuthRouteMode;
+	authMode: AuthMode;
 }>();
 
 const router = useRouter();

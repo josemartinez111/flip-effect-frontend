@@ -55,7 +55,7 @@ const seedForVersion = async (
 // Deploy-bound refresh: a new Worker version (or one never seeded) triggers the get-all
 // once, in the background, off the first request that reaches this isolate. Never blocks.
 // ---
-export const seedRepresentativesOnNewVersion = (
+export const seedRepsOnNewVersion = (
 	env: WorkerEnv,
 	// --- Only `waitUntil` is needed; a structural type keeps this off the churny ExecutionContext generic. ---
 	ctx: { waitUntil: (promise: Promise<unknown>) => void },

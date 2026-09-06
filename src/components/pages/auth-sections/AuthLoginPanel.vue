@@ -9,7 +9,7 @@ import { Eye, EyeOff } from '@lucide/vue';
 import { twMerge } from 'tailwind-merge';
 import { sendResetPasswordLinkAction } from '../../../api';
 import { AuthLogoMark } from '../../../assets';
-import type { AuthRouteMode } from '../../../lib';
+import type { AuthMode } from '../../../lib';
 import AuthLoadingState from './AuthLoadingState.vue';
 import AuthShell from './AuthShell.vue';
 import AuthVerificationLinkPanel from './AuthVerificationLinkPanel.vue';
@@ -20,7 +20,7 @@ const {
 	authMode,
 	redirectAfterLogin = '/blog',
 } = defineProps<{
-	authMode: AuthRouteMode;
+	authMode: AuthMode;
 	redirectAfterLogin?: string;
 }>();
 

@@ -39,8 +39,8 @@ const passedWithName = computed(() => {
 ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞ -->
 <template>
 	<div class="cursor-pointer">
-		<!-- #################### LINK-ICONS #################### -->
-		<!-- twitter icon -->
+		<!-- ∞∞∞∞∞∞∞∞ SOCIAL LINK ICONS ∞∞∞∞∞∞∞∞ -->
+		<!-- ∞∞∞∞∞∞∞∞ TWITTER ICON ∞∞∞∞∞∞∞∞ -->
 		<div v-show="passedWithName === 'twitter'">
 			<a>
 				<svg
@@ -64,7 +64,7 @@ const passedWithName = computed(() => {
 				</svg>
 			</a>
 		</div>
-		<!-- youtube icon -->
+		<!-- ∞∞∞∞∞∞∞∞ YOUTUBE ICON ∞∞∞∞∞∞∞∞ -->
 		<div v-show="passedWithName === 'youtube'">
 			<a>
 				<svg
@@ -84,7 +84,7 @@ const passedWithName = computed(() => {
 				</svg>
 			</a>
 		</div>
-		<!-- facebook icon -->
+		<!-- ∞∞∞∞∞∞∞∞ FACEBOOK ICON ∞∞∞∞∞∞∞∞ -->
 		<div v-show="passedWithName === 'facebook'">
 			<a>
 				<svg
@@ -102,7 +102,7 @@ const passedWithName = computed(() => {
 				</svg>
 			</a>
 		</div>
-		<!-- linkedin icon -->
+		<!-- ∞∞∞∞∞∞∞∞ LINKEDIN ICON ∞∞∞∞∞∞∞∞ -->
 		<div v-show="passedWithName === 'linkedin'">
 			<a>
 				<svg
@@ -125,7 +125,7 @@ const passedWithName = computed(() => {
 				</svg>
 			</a>
 		</div>
-		<!-- instagram icon -->
+		<!-- ∞∞∞∞∞∞∞∞ INSTAGRAM ICON ∞∞∞∞∞∞∞∞ -->
 		<div v-show="passedWithName === 'instagram'">
 			<a>
 				<svg
@@ -154,8 +154,8 @@ const passedWithName = computed(() => {
 				</svg>
 			</a>
 		</div>
-		<!-- #################### LINK-ICONS #################### -->
-		<!-- google-colored icon -->
+		<!-- ∞∞∞∞∞∞∞∞ AUTH PROVIDER ICONS ∞∞∞∞∞∞∞∞ -->
+		<!-- ∞∞∞∞∞∞∞∞ GOOGLE-COLORED ICON ∞∞∞∞∞∞∞∞ -->
 		<div v-show="passedWithName === 'google-colored'">
 			<svg
 				class="mr-11 w-6 pl-1.5"
@@ -193,7 +193,7 @@ const passedWithName = computed(() => {
 				></path>
 			</svg>
 		</div>
-		<!-- linkedin-colored icon -->
+		<!-- ∞∞∞∞∞∞∞∞ LINKEDIN-COLORED ICON ∞∞∞∞∞∞∞∞ -->
 		<div v-show="passedWithName === 'linkedin-colored'">
 			<svg
 				xmlns="http://www.w3.org/2000/svg"
@@ -216,7 +216,7 @@ const passedWithName = computed(() => {
 				></path>
 			</svg>
 		</div>
-		<!-- facebook-colored icon -->
+		<!-- ∞∞∞∞∞∞∞∞ FACEBOOK-COLORED ICON ∞∞∞∞∞∞∞∞ -->
 		<div v-show="passedWithName === 'facebook-colored'">
 			<svg
 				xmlns="http://www.w3.org/2000/svg"
@@ -239,7 +239,7 @@ const passedWithName = computed(() => {
 				></path>
 			</svg>
 		</div>
-		<!-- apple-colored icon -->
+		<!-- ∞∞∞∞∞∞∞∞ APPLE-COLORED ICON ∞∞∞∞∞∞∞∞ -->
 		<div v-show="passedWithName === 'apple-colored'">
 			<svg
 				xmlns="http://www.w3.org/2000/svg"

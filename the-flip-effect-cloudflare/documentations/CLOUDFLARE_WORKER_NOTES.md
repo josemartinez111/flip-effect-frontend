@@ -18,7 +18,7 @@ the-flip-effect-cloudflare/
 │   ├── server.ts                       # the "server": Hono app + logger + onError + scheduled cron handler
 │   └── api-modules/                    # ≈ .NET Modules/
 │       ├── representatives-module/      # a feature module = one full vertical slice
-│       │   ├── presentation/           # representativesEndpoint.ts   (createFactory handlers + route group)
+│       │   ├── presentation/           # representativesEndpoint.ts   (Endpoints class + mapped routes)
 │       │   ├── application/            # representativesService.ts    (orchestration)
 │       │   ├── infrastructure/         # civicDataProviders.ts + representativesCache.ts (I/O: upstreams + KV)
 │       │   └── domain/                 # representativeModel.ts + civicUpstreamModel.ts + representativeConstants.ts
@@ -44,7 +44,7 @@ the-flip-effect-cloudflare/
 | `app/app.ts` | `Program.cs` (`public partial class Program`) | the one `export default` worker object + CORS allowlist + `app.route` mounts | Cloudflare's dated rule demands `export default {}`. Quarantine it to one entry file; everything else is plain `export const` and unit-callable. |
 | `app/server.ts` | wiring section of `Program.cs` | Hono `app` + `logger` + `onError` + `scheduled` | "the server" — the Hono instance and request/cron surface. `app.ts` composes it (CORS + routes), so the entry stays a thin wiring file. |
 | `app/api-modules/` | `Modules/` | every `-module/` folder | The module bag. `app.ts`/`server.ts` import **downward** into modules; a module never imports back up into `app/`. |
-| `presentation/` | `Presentation/*Endpoints.cs` | `createFactory` handlers + route group (`new Hono()`) | HTTP shape only, no business logic. Route group declared here, mounted in `app.ts`. |
+| `presentation/` | `Presentation/*Endpoints.cs` | `*Endpoints` class with static `mapped*Routes()` + private static handlers | HTTP shape only, no business logic. The completed route group is mounted in `app.ts`. |
 | `application/` | `Application/Services/` | validate → fan out → normalize | The brain. Knows nothing about HTTP or KV mechanics. |
 | `infrastructure/` | `Infrastructure/` | upstream fetches + KV cache | All I/O. Swappable without touching the brain. |
 | `domain/` | `Domain/{Entities,DTOs}` | `*Model.ts` types + `*Constants.ts` | The contract. Imported everywhere, depends on nothing. Models take a `Model` postfix; both app-facing and upstream DTO models live here. |
@@ -55,7 +55,7 @@ the-flip-effect-cloudflare/
 
 **Path aliases (`tsconfig.json` `paths`):** `@app/*` → `app/*`, `@representatives-module/*` → `app/api-modules/representatives-module/*`, `@health-check-module/*` → `app/api-modules/health-check-module/*`, `@shared-module/*` → `app/api-modules/shared-module/*`. One alias per module, 1:1 with the folder name. `vitest.config.ts` re-declares the same set as `resolve.alias` (Vite ignores tsconfig `paths`).
 
-**Adding a feature module later:** drop `app/api-modules/<newName>-module/{presentation,application,infrastructure,domain}`, add an `@<newName>-module/*` alias to `tsconfig.json` (and `vitest.config.ts`), export its route group from the endpoint (`new Hono<WorkerHonoEnv>()`), and mount it in `app/app.ts` with `app.route('/api', newModuleRoutes)`. `shared-module/`, `health-check-module/`, and `server.ts` don't change.
+**Adding a feature module later:** drop `app/api-modules/<newName>-module/{presentation,application,infrastructure,domain}`, add an `@<newName>-module/*` alias to `tsconfig.json` (and `vitest.config.ts`), return its route group from `YourEndpoints.mappedYourRoutes()`, and mount it in `app/app.ts` with `app.route('/api', YourEndpoints.mappedYourRoutes())`. `shared-module/`, `health-check-module/`, and `server.ts` don't change.
 
 ---
 
@@ -65,16 +65,16 @@ The Worker runs on **Hono**. The old hand-rolled `ts-pattern` router + manual CO
 
 | Gain | Old (hand-rolled) | New (Hono) |
 |------|-------------------|------------|
-| Routing | one big `match(pathname)` in `server.ts` | `routeGroup.post('/representatives', ...)` declared in the endpoint, mounted via `app.route('/api', routeGroup)` |
+| Routing | one big `match(pathname)` in `server.ts` | `RepresentativesEndpoints.mappedRepresentativesRoutes()` returns the group mounted by `app.route()` |
 | CORS | manual `Origin` header echo + `OPTIONS` branch | `hono/cors` allowlist middleware on `/api/*` |
 | Logging | none | `hono/logger` (method, path, status, timing) |
 | Errors | per-handler try/catch only | `app.onError` central 500 net + per-handler guards |
 | Testing | spin a real request | `app.request('/api/...')` in-process, or `SELF.fetch()` through real workerd (see Testing below) |
 
 **Typing rules we hold (Hono "takes liberties" otherwise):**
-- Generics everywhere: `new Hono<WorkerHonoEnv>()`, `createFactory<WorkerHonoEnv>()`. `WorkerHonoEnv = { Bindings: WorkerEnv }` lives in `shared-module/worker-env.ts` so `ctx.env` is fully typed.
+- Generics everywhere: `new Hono<WorkerHonoEnv>()`, `Context<WorkerHonoEnv>`. `WorkerHonoEnv = { Bindings: WorkerEnv }` lives in `shared-module/worker-env.ts` so `ctx.env` is fully typed.
 - Context is **`ctx`**, not `c`.
-- **Extract handlers, never inline** — `createFactory().createHandlers(async (ctx) => {...})`, then spread into the route: `routeGroup.post('/path', ...handlers)`.
+- **Class-own handlers, never inline** — `YourEndpoints.mappedYourRoutes()` passes a private static handler directly to `routeGroup.post('/path', YourEndpoints.fetchThingAsync)`.
 - **Status codes:** Hono ships only **types** (`StatusCode` / `ContentfulStatusCode` from `hono/utils/http-status`), no value enum. So `shared-module/httpStatus.ts` keeps the `STATUS` const; its `HttpStatus` union (`200 | 400 | 404 | 500 | 503`) is a subset of `ContentfulStatusCode`, so `ctx.json(body, result.statusCode)` type-checks with **no casts**.
 
 **Entry split with Hono:** `server.ts` builds `app`, attaches `logger` + `onError`, exports `app` and `scheduled` as `export const`. `app.ts` imports them, attaches the CORS allowlist on `/api/*`, mounts route groups, and is the only `export default` (`{ fetch: app.fetch, scheduled }`). `wrangler.toml` `main` → `app/app.ts`.
@@ -248,7 +248,7 @@ The KV cache fills two ways, both running the same `seedAllStates` (federal blob
 ## ♻️ Porting Into The Vue/Vite Scaffold (Future)
 
 When folding this into the scaffolding template, the reusable, project-agnostic pieces are:
-- **Hono as the framework:** `new Hono<WorkerHonoEnv>()` + `hono/logger` + `hono/cors` allowlist + `app.onError`. The `createFactory` extracted-handler pattern and the "route group declared in the endpoint, mounted in `app.ts`" convention port as-is.
+- **Hono as the framework:** `new Hono<WorkerHonoEnv>()` + `hono/logger` + `hono/cors` allowlist + `app.onError`. Each `*Endpoints` class owns its static `mapped*Routes()` method and private static handlers; `app.ts` mounts the completed route groups.
 - The module-based folder shape: `app/{app,server}` + `app/api-modules/<name>-module/{presentation,application,infrastructure,domain}` + `app/api-modules/shared-module/{worker-env,httpStatus,apiTryCatchTypes,utils}`. Models take a `Model` postfix; feature modules carry the full slice, `shared-module/` stays flat.
 - `shared-module/httpStatus.ts` (`STATUS` const + `HttpStatus` union), `shared-module/worker-env.ts` (`WorkerEnv` + `WorkerHonoEnv`), `shared-module/apiTryCatchTypes.ts` (try/catch contracts), and `shared-module/utils.ts` (behavior) — fully feature-agnostic.
 - **`health-check-module/` + its `test/health-check-module/healthCheck.test.ts`** — the always-there scaffold default. New project → `pm test:worker` → green proves the wiring before any real module is written.

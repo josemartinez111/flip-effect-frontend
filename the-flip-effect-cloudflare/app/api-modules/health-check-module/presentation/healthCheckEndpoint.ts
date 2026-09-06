@@ -3,7 +3,7 @@
 // > HEALTH_CHECK_ENDPOINT.TS
 // ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
 import { Hono } from 'hono';
-import { createFactory } from 'hono/factory';
+import type { Context } from 'hono';
 import type { WorkerHonoEnv } from '@shared-module/worker-env';
 import { STATUS } from '@shared-module/httpStatus';
 import type { HttpStatus } from '@shared-module/httpStatus';
@@ -16,16 +16,22 @@ type HealthCheckResult = {
 };
 // ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
 
-// --- 
-// Typed handler factory bound to the Worker env 
-// (extracted handler, never inlined at the route). 
-// ---
-const workerFactory = createFactory<WorkerHonoEnv>();
-// ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
+// --- Own the health-check route group and private handler like the Elysia health endpoint. ---
+export class HealthCheckEndpoints {
+	static mappedHealthCheckRoutes(): Hono<WorkerHonoEnv> {
+		const healthCheckRoutes = new Hono<WorkerHonoEnv>();
+		healthCheckRoutes.get(
+			'/health-check',
+			HealthCheckEndpoints.fetchHealthCheckAsync,
+		);
 
-// --- GET /api/health-check → 200 healthy; ?fail=true simulates a 503 (mirrors the .NET HealthCheckModule). ---
-const healthCheckHandlers = workerFactory.createHandlers((ctx) => {
-	try {
+		return healthCheckRoutes;
+	}
+
+	// --- GET /api/health-check → 200 healthy; ?fail=true simulates a 503. ---
+	private static fetchHealthCheckAsync(
+		ctx: Context<WorkerHonoEnv>,
+	): Response {
 		// --- Manual failure switch so the unhealthy path is testable without breaking anything real. ---
 		const simulateFailure =
 			ctx.req.query('fail')?.toLowerCase() === 'true';
@@ -37,38 +43,18 @@ const healthCheckHandlers = workerFactory.createHandlers((ctx) => {
 				status: 'unavailable',
 				statusCode: STATUS.SERVICE_UNAVAILABLE,
 			};
+			const response = ctx.json(unavailable, unavailable.statusCode);
 
-			return ctx.json(unavailable, unavailable.statusCode);
+			return response;
 		}
 
 		const healthy: HealthCheckResult = {
 			status: 'ok',
 			statusCode: STATUS.OK,
 		};
+		const response = ctx.json(healthy, healthy.statusCode);
 
-		return ctx.json(healthy, healthy.statusCode);
-	} catch (error: unknown) {
-		console.error(error instanceof Error ? error.message : String(error));
-
-		const failed: HealthCheckResult = {
-			status: 'unavailable',
-			statusCode: STATUS.INTERNAL_SERVER_ERROR,
-		};
-
-		return ctx.json(failed, failed.statusCode);
+		return response;
 	}
-});
-// -- ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞ --
-// --- 
-// Route group (declared here like a .NET 
-// endpoint class; mounted under /api in app.ts). 
-// ---
-const healthCheckRoutes = new Hono<WorkerHonoEnv>();
-
-healthCheckRoutes.get(
-	'/health-check', 
-	...healthCheckHandlers
-);
-// ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
-export { healthCheckRoutes };
+}
 // ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞

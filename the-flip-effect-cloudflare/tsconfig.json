@@ -21,6 +21,7 @@
 		"noEmit": true,
 		"paths": {
 			"@app/*": ["./app/*"],
+			"@congressional-balance-module/*": ["./app/api-modules/congressional-balance-module/*"],
 			"@representatives-module/*": ["./app/api-modules/representatives-module/*"],
 			"@approval-module/*": ["./app/api-modules/approval-module/*"],
 			"@health-check-module/*": ["./app/api-modules/health-check-module/*"],

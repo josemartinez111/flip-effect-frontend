@@ -22,6 +22,10 @@ export type {
 	SeatGridCardSeat,
 	SeatGridCardSeatStyleClasses,
 } from './shared/seat-grid-card/SeatGridCardTypes.ts';
+// ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
+// youtube-video-player components->shared
+// ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
+export { default as FWTYouTubeVideoPlayer } from './shared/youtube-video-player/FWTYouTubeVideoPlayer.vue';
 // ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
 // home components
 // ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
@@ -37,7 +41,7 @@ export { default as HomeBranchesBadge } from './pages/home/hero/HomeBranchesBadg
 // ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
 export { default as ApprovalRatingTierSection } from './pages/home/approval-rating/ApprovalRatingTierSection.vue';
 export { default as HeroApprovalRatingCard } from './pages/home/approval-rating/HeroApprovalRatingCard.vue';
-export { default as CongressionalControlSection } from './pages/home/congressional/CongressionalControlSection.vue';
+export { default as CongressionalControlSection } from './pages/balance-of-power/congressional/CongressionalControlSection.vue';
 // ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
 // backgrounds components->shared
 // ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞

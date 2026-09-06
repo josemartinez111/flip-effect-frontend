@@ -108,9 +108,9 @@ const handlePublish = (): void => {
 			</div>
 		</template>
 
-		<!-- --- Form card --- -->
+		<!-- ∞∞∞∞∞∞∞∞ FORM CARD ∞∞∞∞∞∞∞∞ -->
 		<div :class="publishFormCardStyleClasses">
-			<!-- --- Circular image upload --- -->
+			<!-- ∞∞∞∞∞∞∞∞ CIRCULAR IMAGE UPLOAD ∞∞∞∞∞∞∞∞ -->
 			<div class="flex flex-col gap-2">
 				<div
 					:class="uploadZoneStyleClasses"
@@ -162,12 +162,12 @@ const handlePublish = (): void => {
 				</span>
 			</div>
 
-			<!-- --- Form grid --- -->
+			<!-- ∞∞∞∞∞∞∞∞ FORM GRID ∞∞∞∞∞∞∞∞ -->
 			<form
 				:class="publishFormGridStyleClasses"
 				@submit.prevent="handlePublish"
 			>
-				<!-- --- Blog Title (full width) --- -->
+				<!-- ∞∞∞∞∞∞∞∞ BLOG TITLE (FULL WIDTH) ∞∞∞∞∞∞∞∞ -->
 				<div :class="publishFieldStyleClasses">
 					<label :class="publishFieldLabelStyleClasses"
 						>Blog Title *</label
@@ -186,7 +186,7 @@ const handlePublish = (): void => {
 					</div>
 				</div>
 
-				<!-- --- Author (full width) --- -->
+				<!-- ∞∞∞∞∞∞∞∞ AUTHOR (FULL WIDTH) ∞∞∞∞∞∞∞∞ -->
 				<div :class="publishFieldStyleClasses">
 					<label :class="publishFieldLabelStyleClasses">Author *</label>
 					<div :class="publishInputShellStyleClasses">
@@ -204,7 +204,7 @@ const handlePublish = (): void => {
 					</div>
 				</div>
 
-				<!-- --- Body Content (full width) --- -->
+				<!-- ∞∞∞∞∞∞∞∞ BODY CONTENT (FULL WIDTH) ∞∞∞∞∞∞∞∞ -->
 				<div :class="publishFieldStyleClasses">
 					<label :class="publishFieldLabelStyleClasses"
 						>Body Content *</label
@@ -217,7 +217,7 @@ const handlePublish = (): void => {
 					/>
 				</div>
 
-				<!-- --- Submit (right-aligned) --- -->
+				<!-- ∞∞∞∞∞∞∞∞ SUBMIT (RIGHT-ALIGNED) ∞∞∞∞∞∞∞∞ -->
 				<div :class="publishSubmitContainerStyleClasses">
 					<button
 						type="submit"

@@ -6,6 +6,8 @@ import { logger } from 'hono/logger';
 import type { WorkerEnv, WorkerHonoEnv } from '@shared-module/worker-env';
 import { STATUS } from '@shared-module/httpStatus';
 import { seedAllStates } from '@representatives-module/infrastructure/representativesCache';
+import { CongressBalanceService } from '@congressional-balance-module/application/congressionalBalanceService';
+import { DAILY_CONGRESSIONAL_BALANCE_CRON } from '@congressional-balance-module/domain/congressionalBalanceConstants';
 // ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
 
 // --- The server: base Hono app + cross-cutting middleware. Routes get mounted onto it in app.ts. ---
@@ -30,12 +32,18 @@ app.onError((error, ctx: Context<WorkerHonoEnv>) => {
 	return response;
 });
 
-// --- Weekly cron: refresh the federal blob + every state roster in KV. ---
+// --- Route each trigger to one job: federal balance daily, complete state rosters weekly. ---
 export const scheduled = (
-	_event: ScheduledController,
+	event: Pick<ScheduledController, 'cron'>,
 	env: WorkerEnv,
-	ctx: ExecutionContext,
+	ctx: Pick<ExecutionContext, 'waitUntil'>,
 ): void => {
+	if (event.cron === DAILY_CONGRESSIONAL_BALANCE_CRON) {
+		ctx.waitUntil(CongressBalanceService.fetchCronsCongressBalance(env));
+
+		return;
+	}
+
 	ctx.waitUntil(seedAllStates(env));
 };
 // ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞

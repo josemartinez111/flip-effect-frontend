@@ -15,10 +15,26 @@ import type {
 	DateFormatType,
 	SessionExpirationOptions,
 } from '../types/DateTimeTypes';
-import type { AsyncActionParams, Results } from '../types/TryCatchTypes';
+import type {
+	AsyncActionParams,
+	Results,
+	SyncActionParams,
+} from '../types/TryCatchTypes';
 // ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
 
 export class Utils {
+	private static normalizeThrown(
+		thrown: unknown,
+		errorContext: string,
+	): Error {
+		const normalized =
+			thrown instanceof Error
+				? thrown
+				: new Error(`[${errorContext}] ${String(thrown)}`);
+
+		return normalized;
+	}
+
 	static async runTryCatch<TResult>({
 		callback,
 		errorContext,
@@ -35,11 +51,33 @@ export class Utils {
 			return succeeded;
 		} catch (thrown: unknown) {
 			// --- A caught value is unknown because JavaScript permits throwing any value. ---
-			const normalized: Error =
-				thrown instanceof Error
-					? thrown
-					: new Error(`[${errorContext}] ${String(thrown)}`);
+			const normalized = Utils.normalizeThrown(thrown, errorContext);
 
+			const failed: Results<TResult> = {
+				statusCode: failureStatusCode,
+				error: normalized,
+			};
+
+			return failed;
+		}
+	}
+
+	static runTryCatchSync<TResult>({
+		callback,
+		errorContext,
+		successStatusCode = HTTP_STATUS.OK,
+		failureStatusCode = HTTP_STATUS.INTERNAL_SERVER_ERROR,
+	}: SyncActionParams<TResult>): Results<TResult> {
+		try {
+			const result = callback();
+			const succeeded: Results<TResult> = {
+				statusCode: successStatusCode,
+				result,
+			};
+
+			return succeeded;
+		} catch (thrown: unknown) {
+			const normalized = Utils.normalizeThrown(thrown, errorContext);
 			const failed: Results<TResult> = {
 				statusCode: failureStatusCode,
 				error: normalized,

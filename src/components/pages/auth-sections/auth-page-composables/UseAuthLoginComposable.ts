@@ -10,21 +10,16 @@ import {
 	SupabaseContext,
 } from '../../../../api';
 import {
-	isAuthMaintenanceMode,
-	type AuthRouteMode,
+	AuthModeUtils,
+	AuthVerificationSessionUtils,
+	type AuthMode,
 	UseSessionStore,
 	Utils,
 } from '../../../../lib';
-import {
-	clearAuthVerificationSession,
-	clearUrlFragment,
-	getAuthVerificationSession,
-	setAuthVerificationSession,
-} from './UseAuthVerificationSessionComposable';
 // ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
 
 type UseAuthLoginOptions = {
-	authMode: AuthRouteMode;
+	authMode: AuthMode;
 	redirectAfterLogin?: string;
 };
 
@@ -76,7 +71,8 @@ export const UseAuthLoginComposable = ({
 	};
 
 	const hydrateExistingVerification = (): boolean => {
-		const verificationSession = getAuthVerificationSession();
+		const verificationSession =
+			AuthVerificationSessionUtils.fetchVerificationSession();
 
 		if (!verificationSession) {
 			return false;
@@ -121,14 +117,15 @@ export const UseAuthLoginComposable = ({
 			return;
 		}
 
-		const verificationSession = setAuthVerificationSession(verifiedEmail);
+		const verificationSession =
+			AuthVerificationSessionUtils.saveVerificationSession(verifiedEmail);
 		verifiedIdentityEmail.value = verificationSession?.email ?? verifiedEmail;
 		email.value = verifiedIdentityEmail.value;
-		clearUrlFragment();
+		AuthVerificationSessionUtils.clearUrlFragment();
 	};
 
 	const initializeAuthLogin = async (): Promise<void> => {
-		if (isAuthMaintenanceMode(authMode)) {
+		if (AuthModeUtils.isMaintenance(authMode)) {
 			isCheckingAuth.value = false;
 			return;
 		}
@@ -173,7 +170,7 @@ export const UseAuthLoginComposable = ({
 			return;
 		}
 
-		clearAuthVerificationSession();
+		AuthVerificationSessionUtils.clearVerificationSession();
 		password.value = '';
 		await router.push(redirectTarget.value);
 	};

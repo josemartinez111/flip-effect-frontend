@@ -167,7 +167,7 @@ const handleCloseDeleteDialog = (): void => {
 		</template>
 
 		<div :class="deleteBodyStyleClasses">
-			<!-- --- Warning box --- -->
+			<!-- ∞∞∞∞∞∞∞∞ WARNING BOX ∞∞∞∞∞∞∞∞ -->
 			<div :class="deleteWarningBoxStyleClasses">
 				<span :class="deleteWarningIconStyleClasses">
 					<i class="pi pi-trash text-sm" />
@@ -182,7 +182,7 @@ const handleCloseDeleteDialog = (): void => {
 				</div>
 			</div>
 
-			<!-- --- Checkbox safety gate --- -->
+			<!-- ∞∞∞∞∞∞∞∞ CHECKBOX SAFETY GATE ∞∞∞∞∞∞∞∞ -->
 			<div :class="deleteCheckboxRowStyleClasses">
 				<Checkbox
 					v-model="confirmDelete"
