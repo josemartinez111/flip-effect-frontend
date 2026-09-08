@@ -1,5 +1,5 @@
 // ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
-// COMPONENTS: PAGES > BALANCE-OF-POWER > BALANCE-OF-POWER-PAGE-COMPOSABLES
+// COMPONENTS: PAGES > AMERICA-IN-FOCUS > AMERICA-IN-FOCUS-PAGE-COMPOSABLES
 // > USE_CONGRESS_CONTROL_COMPOSABLE.TS
 // ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
 import clsx from 'clsx';

@@ -44,17 +44,30 @@ const routes: Readonly<Array<RouteRecordRaw>> = [
 					layoutBackgroundImage: DominoEffectBGHomePage,
 				},
 			},
-			// --- Balance of Power Route ---
+			// --- America in Focus Route ---
 			{
-				path: 'balance-of-power',
-				name: 'balance-of-power',
+				path: 'america-in-focus',
+				name: 'america-in-focus',
 				component: () =>
-					import('../pages/balance-of-power/balance-of-power.page.vue'),
+					import('../pages/america-in-focus/america-in-focus.page.vue'),
 				meta: {
 					showLayoutBackground: true,
 					layoutBackgroundImage: DominoEffectBGHomePage,
 				},
 			},
+			// --- Civics Quiz Route ---
+			{
+				path: 'civics-quiz',
+				name: 'civics-quiz',
+				// --- Shareable, indexable twin of the home page quiz modal. ---
+				component: () => import('../pages/civics-quiz/civics-quiz.page.vue'),
+				meta: {
+					showLayoutBackground: true,
+					layoutBackgroundImage: DominoEffectBGHomePage,
+				},
+			},
+			// --- Preserve existing bookmarks while navigation uses the renamed page. ---
+			{ path: 'balance-of-power', redirect: { name: 'america-in-focus' } },
 			// --- Blog Route ---
 			{
 				path: 'blog',

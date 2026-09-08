@@ -8,7 +8,12 @@ import { useHead } from '@unhead/vue';
  * Valid social media platforms supported by the metadata generator.
  * Used to ensure type safety when specifying platforms for meta-tag generation.
  */
-type SupportedPlatform = 'facebook' | 'instagram' | 'twitter' | 'linkedin';
+type SupportedPlatform =
+	| 'threads'
+	| 'facebook'
+	| 'instagram'
+	| 'twitter'
+	| 'linkedin';
 
 /**
  * Configuration for each social media platform's meta-tag requirements.
@@ -49,6 +54,15 @@ type MetaTag =
 // ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
 
 const PLATFORM_CONFIGS: Record<SupportedPlatform, PlatformConfig> = {
+	// ---
+	// Threads has no meta namespace of its own. Its crawler reads plain Open Graph,
+	// the same tags Facebook and Instagram use, so this entry is an og alias. Pass
+	// only one og-based platform per page or the og: tags get emitted twice.
+	// ---
+	threads: {
+		prefix: 'og',
+		nameAttribute: 'property',
+	},
 	facebook: {
 		prefix: 'og',
 		nameAttribute: 'property',
@@ -126,7 +140,19 @@ export const UseSocialMediaMetadataComposable = ({
 		return baseTags;
 	});
 
-	useHead({ meta });
+	// ---
+	// Social crawlers read the og:/twitter: tags built above, but search engines read
+	// the document title, the plain description, and the canonical link. Without these
+	// three the page inherits index.html's static title and has no canonical URL,
+	// so every route looks like the same document to a crawler.
+	// ---
+	meta.push({ name: 'description', content: description });
+
+	useHead({
+		title,
+		meta,
+		link: [{ rel: 'canonical', href: url }],
+	});
 };
 
 // ⚫️ ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞

@@ -5,6 +5,7 @@
 type GlobalEnvKey =
 	| 'VITE_API_URL'
 	| 'VITE_AUTH_MODE'
+	| 'VITE_SITE_URL'
 	| 'VITE_STRIPE_DONATION_URL'
 	| 'VITE_STRIPE_PUBLISHABLE_KEY'
 	| 'VITE_STRIPE_PRODUCT_ID'
@@ -98,6 +99,12 @@ export class GlobalEnvs {
 	static readonly LeavingMagaUrl = GlobalEnvs.getEnv(
 		'VITE_LEAVING_MAGA_URL',
 		'https://leavingmaga.org/',
+	);
+
+	// --- Canonical public origin used by page metadata (canonical links, Open Graph URLs). ---
+	static readonly SiteUrl = GlobalEnvs.getEnv(
+		'VITE_SITE_URL',
+		'https://theflipeffect.us',
 	);
 
 	// --- Civic Representative Environment Variables ---

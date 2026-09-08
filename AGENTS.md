@@ -77,7 +77,6 @@ vuejs-frontend-template/
 │   │   │   └── home.page.vue
 │   │   ├── layouts/                      # Layout components (wrap RouterView once at root)
 │   │   │   └── RootLayout.vue            # Default root layout (NavBar + RouterView + Footer)
-│   │   └── index.ts                      # Pages barrel
 │   │
 │   ├── router/
 │   │   ├── routes.ts                     # Vue Router config + navigation guards
@@ -299,6 +298,8 @@ The reusable Tailwind v4 variant for that behavior lives in `src/app.css`:
 
 ### Barrel Export Style
 
+Route pages have no `src/pages/index.ts` barrel. Import each page directly in `src/router/routes.ts` with `component: () => import('../pages/.../name.page.vue')` to preserve route-level lazy loading; the shared `RootLayout` can remain a direct static import.
+
 Use barrel exports only at intentional app boundaries. Root-level barrels collect and re-export assets, components, stores, utilities, and types so consuming files import from stable module boundaries instead of deep nested paths.
 
 For `src/components/`, keep one root component barrel at `src/components/index.ts`. Do not add nested `index.ts` files inside component subdirectories; that creates too many barrels to maintain. New reusable components should be exported from the root component barrel with a clear section comment.
@@ -310,7 +311,6 @@ Do not add local barrel files inside `src/pages/`, page-specific directories, or
 ```zsh
 export { default as NavBar } from './shared/navbar/NavBar.vue';
 export { default as Footer } from './shared/footer/Footer.vue';
-export { default as HomePage } from './home/home.page.vue';
 ```
 
 Asset barrels MUST be grouped by source directory with comment headers. Runtime image exports should use Vite ImageTools `?format=webp` whenever the source image supports it. Keep Canva/high-quality source files as PNG/JPG assets, then export the optimized app import as WebP through the barrel.

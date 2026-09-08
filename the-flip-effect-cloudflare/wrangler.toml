@@ -47,7 +47,7 @@ binding = "APPROVAL_CACHE"
 id = "bf078d293e7844a880850982e72fbcbc"
 
 # ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
-# --- Daily federal balance at 10:00 UTC; weekly state get-all Mondays at 09:00 UTC. ---
+# --- Daily federal balance, household-price research, and Treasury refresh at 10:00 UTC; weekly state get-all Mondays at 09:00 UTC. ---
 [triggers]
 crons = ["0 10 * * *", "0 9 * * 1"]
 # ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞

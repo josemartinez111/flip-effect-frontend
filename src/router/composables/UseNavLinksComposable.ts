@@ -14,9 +14,13 @@ export type NavLinkType = {
 
 export const UseNavLinksComposable = (): Array<NavLinkType> => {
 	const NAV_LINKS: NavLinkType[] = [
+		// --- site-page-links/internal links ---
 		{ path: '/', label: 'Home' },
-		{ path: '/balance-of-power', label: 'Balance of Power' },
-		{ path: '/blog', label: 'Blog' },
+		{ path: '/america-in-focus', label: 'America in Focus' },
+		// --- Internal entries render in both the desktop navbar and the drawer; externals only in the drawer. ---
+		{ path: '/civics-quiz', label: 'Civics Quiz' },
+		// { path: '/blog', label: 'Blog' },
+		// --- backlinks/external links ---
 		{
 			path: GlobalEnvs.EpsteinFilesUrl,
 			label: 'Epstein Files',

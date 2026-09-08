@@ -25,7 +25,7 @@ Already configured — do not rebuild.
 
 ## Frontend Export Style
 
-Use barrel exports throughout the frontend. Directory-level `index.ts` files should collect and re-export assets, components, pages, stores, utilities, and types so feature files import from stable module boundaries instead of deep nested paths.
+Keep barrels at intentional boundaries for assets, shared components, stores, utilities, and types. Route pages have no barrel: `src/router/routes.ts` imports each `.page.vue` directly with `component: () => import('../pages/.../name.page.vue')`, preserving route-level lazy loading.
 
 **Example:**
 

@@ -42,20 +42,28 @@ export const UseHomeHeroComposable = () => {
 		clsx('relative col-span-full flex w-full justify-center'),
 	);
 
+	// ---
+	// Box sizes must stay identical to the timeline trigger in
+	// UseApprovalRatingTierComposable. Both artworks are 1024x1536, and the image
+	// is `object-contain`, so a box narrower than height * 0.667 clamps by width
+	// and the card renders short. The old widths (6rem / 8rem / 10.5rem) were all
+	// under that line, which is why this badge looked smaller than the timeline
+	// one sitting across from it.
+	// ---
 	const branchesTriggerButtonStyleClasses = twMerge(
 		clsx(
-			'relative z-30 flex h-40 w-28 cursor-pointer overflow-hidden',
-			'origin-top-right items-center justify-center rounded-xl bg-transparent p-0',
+			'relative z-40 flex h-40 w-28 cursor-pointer overflow-hidden',
+			'origin-top-left items-center justify-center rounded-xl bg-transparent p-0',
 			'transition duration-300 hover:z-50 hover:scale-[1.55] hover:opacity-100',
 			'active:scale-95 active:opacity-75',
 			'tablet:h-56 tablet:w-38',
-			'laptop:absolute laptop:right-8 laptop:top-4 laptop:h-72 laptop:w-48',
+			'laptop:absolute laptop:left-8 laptop:top-4 laptop:h-72 laptop:w-48',
 		),
 	);
 
 	const branchesTriggerImageStyleClasses = twMerge(
 		clsx(
-			'h-full w-full object-contain',
+			'h-full w-full object-contain object-center',
 			'drop-shadow-[0_12px_24px_rgba(15,23,42,0.35)]',
 			'dark:drop-shadow-[0_12px_24px_rgba(0,0,0,0.55)]',
 		),
@@ -118,7 +126,66 @@ export const UseHomeHeroComposable = () => {
 		),
 	);
 
+	// --- The hero quiz keeps its dialog styling while the branches trigger occupies the approval row. ---
+	const quizTriggerButtonStyleClasses = twMerge(
+		clsx(
+			'relative z-30 flex h-40 w-28 cursor-pointer overflow-hidden',
+			'origin-top-right items-center justify-center rounded-xl bg-transparent p-0',
+			'transition duration-300 hover:z-50 hover:scale-[1.55] hover:opacity-100',
+			'active:scale-95 active:opacity-75',
+			'tablet:h-56 tablet:w-38',
+			'laptop:absolute laptop:right-8 laptop:top-4 laptop:h-72 laptop:w-48',
+		),
+	);
+
+	const quizTriggerImageStyleClasses = twMerge(
+		clsx(
+			'h-full w-full object-contain',
+			'drop-shadow-[0_12px_24px_rgba(15,23,42,0.35)]',
+			'dark:drop-shadow-[0_12px_24px_rgba(0,0,0,0.55)]',
+		),
+	);
+
+	const quizModalRootStyleClasses = twMerge(
+		clsx(
+			'w-auto overflow-hidden border-none! bg-slate-950! shadow-2xl',
+			'shadow-flipeffect-cyan/20',
+			'dark:border-none! dark:bg-black! dark:shadow-black/45',
+		),
+	);
+
+	const quizModalContentWrapperStyleClasses = twMerge(clsx('max-h-[90vh] bg-transparent! p-0!'));
+
+	const quizModalHeaderStyleClasses = twMerge(
+		clsx(
+			'absolute right-2 top-2 z-20 border-none! bg-transparent! p-0!',
+			'dark:border-none!',
+		),
+	);
+
+	const quizModalCloseButtonStyleClasses = twMerge(
+		clsx(
+			'cursor-pointer border! border-white/35! bg-slate-950/72! text-white!',
+			'h-8! w-8! tablet:h-10! tablet:w-10!',
+			'shadow-lg shadow-black/35 backdrop-blur-md',
+			'hover:border-flipeffect-rose-bright/80! hover:bg-slate-950/90!',
+			'hover:text-flipeffect-rose-bright!',
+			'[&_.p-button-icon]:text-white! hover:[&_.p-button-icon]:text-flipeffect-rose-bright!',
+			'dark:border-white/25! dark:bg-black/62! dark:text-white!',
+			'dark:hover:bg-black/82! dark:hover:text-flipeffect-rose-bright!',
+		),
+	);
+
+	const quizModalCloseIconStyleClasses = twMerge(clsx('text-xs! text-white! tablet:text-sm! dark:text-white!'));
+
 	return {
+		quizTriggerButtonStyleClasses,
+		quizTriggerImageStyleClasses,
+		quizModalRootStyleClasses,
+		quizModalContentWrapperStyleClasses,
+		quizModalHeaderStyleClasses,
+		quizModalCloseButtonStyleClasses,
+		quizModalCloseIconStyleClasses,
 		heroSectionStyleClasses,
 		heroContentContainerStyleClasses,
 		heroCopyContainerStyleClasses,

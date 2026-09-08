@@ -26,6 +26,9 @@ export type {
 // youtube-video-player components->shared
 // ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
 export { default as FWTYouTubeVideoPlayer } from './shared/youtube-video-player/FWTYouTubeVideoPlayer.vue';
+// --- Reusable trend charts and their native Chart.js data contract. ---
+export { default as FWTTrendChartCard } from './shared/trend-chart-card/FWTTrendChartCard.vue';
+export type { TrendChartData, TrendChartCardProps } from './shared/trend-chart-card/TrendChartCardTypes';
 // ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
 // home components
 // ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
@@ -36,12 +39,13 @@ export { default as CivicRepresentativeSearchSection } from './pages/home/search
 // ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
 export { default as HomeHeroSection } from './pages/home/hero/HomeHeroSection.vue';
 export { default as HomeBranchesBadge } from './pages/home/hero/HomeBranchesBadge.vue';
+export { default as HomeQuizBadge } from './pages/home/hero/HomeQuizBadge.vue';
 // ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
 // home components->approval-rating
 // ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
 export { default as ApprovalRatingTierSection } from './pages/home/approval-rating/ApprovalRatingTierSection.vue';
 export { default as HeroApprovalRatingCard } from './pages/home/approval-rating/HeroApprovalRatingCard.vue';
-export { default as CongressionalControlSection } from './pages/balance-of-power/congressional/CongressionalControlSection.vue';
+export { default as CongressionalControlSection } from './pages/america-in-focus/congressional/CongressionalControlSection.vue';
 // ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
 // backgrounds components->shared
 // ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞

@@ -20,6 +20,7 @@
 		"forceConsistentCasingInFileNames": true,
 		"noEmit": true,
 		"paths": {
+			"@economy-module/*": ["./app/api-modules/economy-module/*"],
 			"@app/*": ["./app/*"],
 			"@congressional-balance-module/*": ["./app/api-modules/congressional-balance-module/*"],
 			"@representatives-module/*": ["./app/api-modules/representatives-module/*"],

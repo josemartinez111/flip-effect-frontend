@@ -82,8 +82,9 @@ export const UseYouTubePlayerComposable = ({
 
 	const initializeYouTubePlayer = async (): Promise<void> => {
 		const initialVideo = selectedVideo.value;
+		const initialElement = playerElement.value;
 
-		if (!initialVideo || !playerElement.value || player) {
+		if (!isMounted || !initialVideo || !initialElement || player) {
 			return;
 		}
 
@@ -94,20 +95,26 @@ export const UseYouTubePlayerComposable = ({
 			errorContext: 'LOAD_YOUTUBE_IFRAME_API',
 		});
 
+		const videoToInitialize = selectedVideo.value;
+
+		// --- The source or container may disappear while the shared SDK is loading. ---
+		if (
+			!isMounted ||
+			playerElement.value !== initialElement ||
+			!videoToInitialize ||
+			player
+		) {
+			return;
+		}
+
 		if (iframeAPIResults.error !== undefined) {
 			playerError.value = iframeAPIResults.error.message;
 
 			return;
 		}
 
-		const videoToInitialize = selectedVideo.value;
-
-		if (!isMounted || !playerElement.value || !videoToInitialize) {
-			return;
-		}
-
 		const iframeAPI = iframeAPIResults.result;
-		player = new iframeAPI.Player(playerElement.value, {
+		player = new iframeAPI.Player(initialElement, {
 			videoId: videoToInitialize.videoId,
 			height: '100%',
 			width: '100%',
@@ -120,6 +127,10 @@ export const UseYouTubePlayerComposable = ({
 			},
 			events: {
 				onReady: () => {
+					if (!isMounted || playerElement.value !== initialElement) {
+						return;
+					}
+
 					isPlayerReady.value = true;
 					playerError.value = undefined;
 					const readyVideo = selectedVideo.value ?? videoToInitialize;
@@ -139,21 +150,39 @@ export const UseYouTubePlayerComposable = ({
 		});
 	};
 
-	watch(selectedVideo, (currentVideo, previousVideo) => {
-		if (
-			!currentVideo ||
-			!player ||
-			!isPlayerReady.value ||
-			currentVideo.videoId === previousVideo?.videoId
-		) {
-			return;
-		}
+	// --- Post-render observation supports API-loaded URLs and Show removing/recreating the stage. ---
+	watch(
+		[selectedVideo, playerElement],
+		async ([currentVideo, currentElement], [previousVideo]) => {
+			if (!currentVideo || !currentElement) {
+				player?.destroy();
+				player = undefined;
+				isPlayerReady.value = false;
+				playerState.value = 'unstarted';
+				playerError.value = undefined;
 
-		playerError.value = undefined;
-		player.getIframe().setAttribute('title', currentVideo.title);
+				return;
+			}
 
-		player.cueVideoById(currentVideo.videoId);
-	});
+			if (!player) {
+				await initializeYouTubePlayer();
+
+				return;
+			}
+
+			if (!isPlayerReady.value) {
+				return;
+			}
+
+			player.getIframe().setAttribute('title', currentVideo.title);
+
+			if (currentVideo.videoId !== previousVideo?.videoId) {
+				playerError.value = undefined;
+				player.cueVideoById(currentVideo.videoId);
+			}
+		},
+		{ flush: 'post' },
+	);
 
 	onMounted(async () => {
 		isMounted = true;

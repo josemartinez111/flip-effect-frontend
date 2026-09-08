@@ -9,7 +9,7 @@ import {
 	CivicRepresentativeSearchSection,
 	FWTScrollAnimation,
 	GeneralElectionCountdownSection,
-	HomeBranchesBadge,
+	HomeQuizBadge,
 	HomeHeroSection,
 } from '../../components';
 import { UseHomeComposable } from '../../components/pages/pages-composables/UseHomeComposable.ts';
@@ -39,7 +39,7 @@ onMounted(async () => {
 ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞ -->
 <template>
 	<main :class="mainContainerStyleClasses">
-		<!-- ∞∞∞∞∞∞∞∞ COUNTDOWN AND BRANCHES ∞∞∞∞∞∞∞∞ -->
+		<!-- ∞∞∞∞∞∞∞∞ COUNTDOWN AND QUIZ ∞∞∞∞∞∞∞∞ -->
 		<div
 			class="laptop:block laptop:px-0 laptop:pt-0 flex items-start justify-between gap-2 px-4 pt-4"
 		>
@@ -57,8 +57,8 @@ onMounted(async () => {
 				:duration-ms="820"
 				:delay-ms="160"
 			>
-				<!-- ∞∞∞∞∞∞∞∞ GOVERNMENT BRANCHES ∞∞∞∞∞∞∞∞ -->
-				<HomeBranchesBadge />
+				<!-- ∞∞∞∞∞∞∞∞ GOVERNMENT CHECKS AND BALANCES QUIZ ∞∞∞∞∞∞∞∞ -->
+				<HomeQuizBadge />
 			</FWTScrollAnimation>
 		</div>
 

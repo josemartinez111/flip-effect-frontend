@@ -5,19 +5,15 @@
 <script setup lang="ts">
 // ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
 import { onMounted, onUnmounted, ref } from 'vue';
-import {
-	GovernmentChecksBalancesClick,
-	TrumpAdminTimelineModalClick,
-} from '../../../../assets';
+import { TrumpAdminTimelineModalClick } from '../../../../assets';
 import BaseModal from '../../../utils/BaseModal.vue';
-import GovernmentChecksBalancesQuiz from './GovernmentChecksBalancesQuiz.vue';
+import HomeBranchesBadge from '../hero/HomeBranchesBadge.vue';
 import GovernmentCorruptionTimelineDeck from './GovernmentCorruptionTimelineDeck.vue';
 import { UseApprovalRatingTierComposable } from '../../pages-composables/UseApprovalRatingTierComposable.ts';
 // ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
 
 // --- Modal state stays local because each trigger only belongs to this homepage section. ---
 const approvalTimelineModalOpen = ref(false);
-const approvalQuizModalOpen = ref(false);
 const approvalTierRootElement = ref<HTMLElement>();
 let approvalTierAnimationStarted = false;
 let approvalTierIntersectionObserver: IntersectionObserver | undefined;
@@ -41,14 +37,11 @@ const {
 	approvalTierBadgeDescriptionStyleClasses,
 	approvalTimelineTriggerButtonStyleClasses,
 	approvalTimelineTriggerImageStyleClasses,
-	approvalQuizTriggerButtonStyleClasses,
-	approvalQuizTriggerImageStyleClasses,
 	approvalTimelineModalRootStyleClasses,
 	approvalTimelineModalContentWrapperStyleClasses,
 	approvalTimelineModalHeaderStyleClasses,
 	approvalTimelineModalCloseButtonStyleClasses,
 	approvalTimelineModalCloseIconStyleClasses,
-	approvalQuizModalRootStyleClasses,
 	getApprovalTierImageStyleClasses,
 	startApprovalRatingAnimation,
 	stopApprovalRatingAnimation,
@@ -104,21 +97,10 @@ onUnmounted(() => {
 		ref="approvalTierRootElement"
 		:class="approvalTierCompositionStyleClasses"
 	>
-		<!-- ∞∞∞∞∞∞∞∞ APPROVAL TIER: TRIGGER ROW (QUIZ + TIMELINE) ∞∞∞∞∞∞∞∞ -->
+		<!-- ∞∞∞∞∞∞∞∞ APPROVAL TIER: TRIGGER ROW (BRANCHES + TIMELINE) ∞∞∞∞∞∞∞∞ -->
 		<div class="laptop:block flex items-start justify-center gap-4">
-			<!-- ∞∞∞∞∞∞∞∞ APPROVAL TIER: QUIZ TRIGGER ∞∞∞∞∞∞∞∞ -->
-			<button
-				type="button"
-				:class="approvalQuizTriggerButtonStyleClasses"
-				aria-label="Open government checks and balances quiz"
-				@click="approvalQuizModalOpen = true"
-			>
-				<img
-					:src="GovernmentChecksBalancesClick"
-					alt="Government checks and balances quiz"
-					:class="approvalQuizTriggerImageStyleClasses"
-				/>
-			</button>
+			<!-- ∞∞∞∞∞∞∞∞ APPROVAL TIER: THREE BRANCHES TRIGGER AND MODAL ∞∞∞∞∞∞∞∞ -->
+			<HomeBranchesBadge />
 
 			<!-- ∞∞∞∞∞∞∞∞ APPROVAL TIER: TIMELINE TRIGGER ∞∞∞∞∞∞∞∞ -->
 			<button
@@ -192,18 +174,6 @@ onUnmounted(() => {
 			<GovernmentCorruptionTimelineDeck
 				:active="approvalTimelineModalOpen"
 			/>
-		</BaseModal>
-
-		<!-- ∞∞∞∞∞∞∞∞ APPROVAL TIER: QUIZ MODAL ∞∞∞∞∞∞∞∞ -->
-		<BaseModal
-			v-model:visible="approvalQuizModalOpen"
-			:root-class="approvalQuizModalRootStyleClasses"
-			:header-class="approvalTimelineModalHeaderStyleClasses"
-			:content-class="approvalTimelineModalContentWrapperStyleClasses"
-			:close-button-class="approvalTimelineModalCloseButtonStyleClasses"
-			:close-button-icon-class="approvalTimelineModalCloseIconStyleClasses"
-		>
-			<GovernmentChecksBalancesQuiz :active="approvalQuizModalOpen" />
 		</BaseModal>
 	</section>
 </template>

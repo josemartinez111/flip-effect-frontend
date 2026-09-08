@@ -297,25 +297,6 @@ export const UseApprovalRatingTierComposable = () => {
 		),
 	);
 
-	const approvalQuizTriggerButtonStyleClasses = twMerge(
-		clsx(
-			'relative z-40 flex h-40 w-[6rem] cursor-pointer overflow-hidden',
-			'origin-top-left items-center justify-center rounded-xl bg-transparent p-0',
-			'transition duration-300 hover:z-50 hover:scale-[1.55] hover:opacity-100',
-			'active:scale-95 active:opacity-75',
-			'tablet:h-56 tablet:w-[8rem]',
-			'laptop:absolute laptop:left-8 laptop:top-4 laptop:h-72 laptop:w-[10.5rem]',
-		),
-	);
-
-	const approvalQuizTriggerImageStyleClasses = twMerge(
-		clsx(
-			'h-full w-full object-contain object-center',
-			'drop-shadow-[0_12px_24px_rgba(15,23,42,0.35)]',
-			'dark:drop-shadow-[0_12px_24px_rgba(0,0,0,0.55)]',
-		),
-	);
-
 	const approvalTimelineModalRootStyleClasses = twMerge(
 		clsx(
 			'w-auto overflow-hidden border-none! bg-transparent! shadow-none!',
@@ -346,14 +327,6 @@ export const UseApprovalRatingTierComposable = () => {
 	);
 
 	const approvalTimelineModalCloseIconStyleClasses = twMerge(clsx('text-xs! text-white! tablet:text-sm! dark:text-white!'));
-
-	const approvalQuizModalRootStyleClasses = twMerge(
-		clsx(
-			'w-auto overflow-hidden border-none! bg-slate-950! shadow-2xl',
-			'shadow-flipeffect-cyan/20',
-			'dark:border-none! dark:bg-black! dark:shadow-black/45',
-		),
-	);
 
 	const approvalTierActiveImageStyleClasses = twMerge(clsx('opacity-100 scale-100 blur-0 saturate-100'));
 
@@ -422,14 +395,11 @@ export const UseApprovalRatingTierComposable = () => {
 		approvalTierBadgeDescriptionStyleClasses,
 		approvalTimelineTriggerButtonStyleClasses,
 		approvalTimelineTriggerImageStyleClasses,
-		approvalQuizTriggerButtonStyleClasses,
-		approvalQuizTriggerImageStyleClasses,
 		approvalTimelineModalRootStyleClasses,
 		approvalTimelineModalContentWrapperStyleClasses,
 		approvalTimelineModalHeaderStyleClasses,
 		approvalTimelineModalCloseButtonStyleClasses,
 		approvalTimelineModalCloseIconStyleClasses,
-		approvalQuizModalRootStyleClasses,
 		getApprovalTierImageStyleClasses,
 		startApprovalRatingAnimation,
 		stopApprovalRatingAnimation,

@@ -35,6 +35,13 @@ export * from './actions/civic-representatives/fetchCivicRepresentativesAction.t
 // actions/congressional-balance api->actions
 // ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
 export * from './actions/congressional-balance/fetchCongressBalanceAction.ts';
+// --- Economy actions and their Worker-facing contracts. ---
+export * from './actions/economy/fetchTariffActivityAction';
+export type * from './action-results/TariffActivityActionResult';
+export type * from './models/TariffActivityModel';
+export { fetchHouseholdPricesAction } from './actions/economy/fetchHouseholdPricesAction';
+export type { HouseholdPrices, HouseholdPriceObservation } from './models/HouseholdPriceModel';
+export type { HouseholdPriceActionResult } from './action-results/HouseholdPriceActionResult';
 // ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
 // action-results/civic-representatives api->action-results
 // ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞

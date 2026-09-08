@@ -30,6 +30,7 @@ export default defineConfig({
       'primevue/divider',
       'primevue/drawer',
       'primevue/inputtext',
+      'primevue/metergroup',
       'primevue/progressbar',
       'primevue/select',
       'primevue/tag',
