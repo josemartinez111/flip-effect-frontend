@@ -1,12 +1,12 @@
 <!-- ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
-    COMPONENTS: PAGES > BALANCE-OF-POWER > CONGRESSIONAL
+    COMPONENTS: PAGES > AMERICA-IN-FOCUS > CONGRESSIONAL
     > CONGRESSIONAL_CONTROL_SECTION.VUE
 ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞ -->
 <script setup lang="ts">
 // -- ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞ --
 import { computed, onMounted } from 'vue';
 import SeatGridCard from '../../../shared/seat-grid-card/SeatGridCard.vue';
-import { UseCongressControlComposable } from '../balance-of-power-page-composables/UseCongressControlComposable.ts';
+import { UseCongressControlComposable } from '../america-in-focus-page-composables/UseCongressControlComposable.ts';
 // -- ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞ --
 
 type CongressionalControlSectionProps = {

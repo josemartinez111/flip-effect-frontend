@@ -1,0 +1,12 @@
+# ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
+# The Flip Effect - crawler rules
+# ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
+
+User-agent: *
+Allow: /
+
+# --- Admin screens carry no public content and should never be indexed. ---
+Disallow: /admin/
+Disallow: /access-denied
+
+Sitemap: https://theflipeffect.us/sitemap.xml

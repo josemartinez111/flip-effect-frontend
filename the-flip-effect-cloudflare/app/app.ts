@@ -11,6 +11,8 @@ import { HealthCheckEndpoints } from '@health-check-module/presentation/healthCh
 import { RepresentativesEndpoints } from '@representatives-module/presentation/representativesEndpoint';
 import { ApprovalEndpoints } from '@approval-module/presentation/approvalEndpoint';
 import { CongressBalanceEndpoints } from '@congressional-balance-module/presentation/congressionalBalanceEndpoint';
+import { TariffActivityEndpoints } from '@economy-module/presentation/tariffActivityEndpoint';
+import { HouseholdPriceEndpoints } from '@economy-module/presentation/householdPriceEndpoint';
 import { seedRepsOnNewVersion } from '@representatives-module/application/representativesSeedOnDeploy';
 // ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
 //                        MIDDLEWARE
@@ -49,6 +51,8 @@ app.route('/api', HealthCheckEndpoints.mappedHealthCheckRoutes());
 app.route('/api', RepresentativesEndpoints.mappedRepresentativesRoutes());
 app.route('/api', ApprovalEndpoints.mappedApprovalRoutes());
 app.route('/api', CongressBalanceEndpoints.mappedCongressBalanceRoutes());
+app.route('/api', TariffActivityEndpoints.mappedTariffActivityRoutes());
+app.route('/api', HouseholdPriceEndpoints.mappedHouseholdPriceRoutes());
 // ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
 //                     EXPORTED_HANDLER
 // ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞

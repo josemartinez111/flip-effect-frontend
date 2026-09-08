@@ -264,3 +264,45 @@ Project-specific (swap per app): the feature module name + its route group + its
 ---
 
 _Append new sections below as decisions land. Keep the "why" — that's the part that's hard to recover later._
+
+## 📈 Treasury Tariff Activity — September 6, 2026
+
+**Active integration:** the America in Focus page combines two smaller Treasury charts with the household-price research below under “Tariffs & Your Wallet.” Collections and refunds have separate dollar scales; checkout prices remain a separate percentage chart with their own reporting period.
+
+`GET /api/economy/tariffs` returns the newest 24 available monthly customs-duty observations from the [Treasury Monthly Treasury Statement](https://fiscaldata.treasury.gov/datasets/monthly-treasury-statement/receipts-of-the-u-s-government). Its [public API](https://fiscaldata.treasury.gov/api-documentation/) needs no key. This is published monthly data checked daily, not a real-time transaction feed.
+
+- `economy-module/` owns the endpoint, service, source, cache, and domain contracts. Its static service methods use `Utils.APITryCatch`; the browser's `fetchTariffActivityAction` uses `Utils.runTryCatch`.
+- The request selects `Customs Duties` from `mts_table_4`, ordered newest-first with `page[size]=24`. It reads **current-month** gross receipts, refunds, and net receipts, not fiscal-year totals. Monetary strings are actual USD; there is no millions multiplier. Negative net receipts are preserved when refunds exceed collections.
+- The normalized history is ordered oldest-first for the chart. Invalid dates, duplicate dates, missing/non-numeric amounts, empty results, and inconsistent gross-minus-refund totals are rejected before any cache write.
+- KV reuses `REPRESENTATIVES_CACHE` with the distinct key `economy:tariffs:v1`; no new namespace or secret is required. The value has no expiration, so an upstream outage cannot delete last-good history.
+- A snapshot younger than 24 hours serves immediately. An older snapshot also serves immediately with `isStale: true` while `waitUntil` refreshes it. A cold miss fetches Treasury with a five-second timeout and no retry; a failed cold read returns a typed 503, never fabricated zeros.
+- The existing daily cron attempts to refresh Treasury independently alongside federal seat counts and household-price research. The weekly state-roster cron is unchanged. `latestReportDate` describes the data period; `fetchedAt` describes the last successful download, not a new reporting period.
+- Frontend flow: action → `useTariffActivityStore` → `UseTariffActivityComposable` → `TariffMoneySection` → `FWTTrendChartCard` on `/america-in-focus`. `HouseholdPriceSection` composes the money cards above the research chart, keeping the page lean. The reusable chart knows nothing about Treasury or network requests; its optional `summary` slot displays the latest month's amount. Mount failures stay in the affected cards without a toast or hiding the other source. A failed repeat fetch retains already loaded observations.
+- Both dollar charts display the same available monthly history. The summary divides **sum of refunds by sum of collections** in those displayed months, not the average of monthly percentages. Net receipts sum the same period; negative net values remain negative. The ratio is not a matched refund rate: refunds may relate to collections before the displayed window. Empty data never becomes invented zeros.
+- **Customs refunds are not household relief payouts.** Recipient companies and a separate relief-payment total are not identified by this source. The old all-null relief series is no longer plotted. Treasury attribution and a short disclosure remain visible, with reporting details on source-link hover/focus. These figures alone do not measure household benefit or prove tariff effectiveness.
+
+### 🌐 Browser fallback for Treasury's Worker TLS failure
+
+Production logs confirmed `525` on the Worker → Treasury request (SSL handshake failure), while the same public HTTPS query returned `200` and `Access-Control-Allow-Origin: *` from a direct request. The chart props and frontend → Worker CORS policy were not the cause.
+
+`fetchTariffActivityAction` still prefers Worker/KV, including a valid stale snapshot. If that request fails, has malformed data, or exceeds two seconds, it calls `fetchTreasuryTariffActivityAction`. This second action uses `Utils.runTryCatch`, requests the same 24 monthly observations directly from Treasury with `credentials: 'omit'`, a five-second timeout, and no retries, then validates and normalizes them into the existing frontend contract. No key, third-party proxy, weakened TLS, or chart changes are involved.
+
+Browser fallback data stays in the existing Pinia store; it is **not uploaded to KV**. Only server-fetched data can populate that trusted cache. If both requests fail, the current card error/last-good behavior remains. Frontend constants live in `src/lib/constants/TariffActivityConstants.ts`; keep its dataset fields, units, and validation behavior aligned with the Worker source when Treasury changes its schema.
+
+This fallback needs the updated frontend bundle (or a local Vite refresh), **not another Worker deployment**. The Worker may still log its upstream TLS error until that connection succeeds again.
+
+Deploy from `the-flip-effect-cloudflare/` with the existing `pm deploy:worker` script before a frontend pointing at the live Worker can use this new route. Local Worker testing uses the existing local bindings instead; nothing is deployed automatically by building the frontend.
+
+## 🛒 Household Price Research — September 6, 2026
+
+**Purpose:** distinguish government cash flows from prices at checkout. The America in Focus page mounts `HouseholdPriceSection`, which composes `TariffMoneySection` above a full-width research chart and two-row summary. Each source retains its own composable, action, and Pinia last-good snapshot. The research compares cumulative price changes for lower-priced and premium imported goods; neither series claims to isolate the causal effect of tariffs or measure a household's total costs.
+
+- `GET /api/economy/household-prices` serves the [HBS Pricing Lab tariff tracker's](https://www.pricinglab.org/tariff-tracker/) downloadable `Cavallo_Llamas_Vazquez_cheapflation.csv`. This is a published CSV, not a documented JSON API or HTML scrape. No key or new dependency is needed.
+- `index_1_imp_ma` and `index_4_imp_ma` identify the lowest- and highest-priced quartiles of imported products within categories, classified using pre-tariff prices. They are product groups, **not** household income groups. The source's published indices are preserved in the wire contract.
+- Both chart series use `currentIndex / firstIndex - 1` from the same earliest observation date. Percentage formatting consumes that fraction directly. Decreases stay negative; no selective time window or invented dollar amount is used. The table uses the same full-period calculation.
+- On September 6, the download contained 561 daily observations from **October 1, 2024 through April 14, 2026**. The view always says **Historical** and displays the actual latest observation date. Checking the CSV daily does not mean its research is updated daily. The separate CPI file ends even earlier and is deliberately not mixed into this view.
+- Static Worker service/cache/source/endpoint classes follow the existing economy slice and use `Utils.APITryCatch`; `fetchHouseholdPricesAction` uses `Utils.runTryCatch`. Harvard does not return browser CORS permission, so there is no direct-browser or Treasury fallback.
+- The source caps response bytes, download time, and row count. It validates the exact numeric CSV schema, valid ordered dates, positive finite indices, and sufficient history before writing KV. Malformed/empty downloads retain the last-good value; a download with an earlier latest date cannot overwrite a newer cached snapshot.
+- KV remains `REPRESENTATIVES_CACHE`, under **`economy:household-prices:v1`**. No expiration preserves last-good history. Cached reads return immediately; an older fetched snapshot triggers a contained background refresh. Cold failures return a typed 503 rather than substituting zeros or Treasury data.
+- The existing daily cron refreshes household-price research, Treasury, and congressional balance independently. The weekly state roster schedule is unchanged. Restoring Treasury's refresh requires a Worker deployment; the combined UI reuses both existing endpoints without a contract change.
+- Deploy the updated Worker using **`pm deploy:worker`** inside `the-flip-effect-cloudflare/` before testing a localhost frontend configured to use the deployed Worker. A frontend build alone does not publish the new endpoint. No template port or automatic deployment is included.

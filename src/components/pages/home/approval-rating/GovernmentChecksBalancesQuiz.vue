@@ -6,22 +6,23 @@
 // ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
 import Button from 'primevue/button';
 import Card from 'primevue/card';
+import MeterGroup from 'primevue/metergroup';
 import ProgressBar from 'primevue/progressbar';
 import Tag from 'primevue/tag';
 import { UseGovernmentChecksBalancesQuizComposable } from '../../pages-composables/UseGovernmentChecksBalancesQuizComposable.ts';
+import type { GovernmentChecksBalancesQuizVariant } from '../../pages-composables/UseGovernmentChecksBalancesQuizStyleComposable.ts';
 // ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
 
+// --- `active` gates loading and resets; `variant` picks the modal or full-page shell. ---
 type GovernmentChecksBalancesQuizProps = {
 	active?: boolean;
+	variant?: GovernmentChecksBalancesQuizVariant;
 };
 
-const props = withDefaults(
-	defineProps<GovernmentChecksBalancesQuizProps>(),
-	{
-		active: false,
-	},
-);
+const { active = false, variant = 'modal' } =
+	defineProps<GovernmentChecksBalancesQuizProps>();
 
+// --- All state and styling live in the composable. This file only renders three screens. ---
 const {
 	quizLoading,
 	quizLoadMessage,
@@ -42,7 +43,14 @@ const {
 	quizStatusTagValue,
 	quizStatusTagStyleClasses,
 	quizFeedbackTitleStyleClasses,
+	quizTierNumber,
+	quizTotalTierCount,
+	quizTierMeterSegments,
+	canContinueToNextTier,
+	quizBankCleared,
 	startQuiz,
+	resetQuizState,
+	continueToNextTier,
 	moveToNextQuestion,
 	selectAnswerOption,
 	getAnswerOptionStyleClasses,
@@ -73,8 +81,11 @@ const {
 	quizScoreSummaryStyleClasses,
 	quizQuestionContainerStyleClasses,
 	quizQuestionHeaderStyleClasses,
+	quizQuestionHeaderActionsStyleClasses,
+	quizRestartButtonStyleClasses,
 	quizQuestionCounterStyleClasses,
 	quizProgressBarStyleClasses,
+	quizTierMeterStyleClasses,
 	quizQuestionCardContentStyleClasses,
 	quizQuestionTitleStyleClasses,
 	quizAnswerOptionsGridStyleClasses,
@@ -84,7 +95,10 @@ const {
 	quizFeedbackCopyStyleClasses,
 	quizNextButtonStyleClasses,
 } = UseGovernmentChecksBalancesQuizComposable({
-	active: () => props.active,
+	// --- Destructured props stay reactive only when read inside a getter, so the composable gets one. ---
+	active: () => active,
+	// --- The shell never changes after mount, so the style classes are built once from a plain value. ---
+	variant,
 });
 // ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
 </script>
@@ -176,14 +190,29 @@ const {
 						</p>
 
 						<p :class="quizScoreSummaryStyleClasses">
-							{{ quizResultMessage }}
+							{{ quizBankCleared
+								? 'Every question in the bank answered correctly. There is nothing left to ask you.'
+								: quizResultMessage }}
 						</p>
+
+						<!-- ∞∞∞∞∞∞∞∞
+							A clean sweep unlocks the next tier of unseen questions.
+							Miss one and the run ends, so the only way deeper is a
+							perfect tier.
+						∞∞∞∞∞∞∞∞ -->
+						<Button
+							v-if="canContinueToNextTier"
+							:class="quizPrimaryButtonStyleClasses"
+							:label="`Continue to Tier ${quizTierNumber + 1}`"
+							type="button"
+							@click="continueToNextTier"
+						/>
 
 						<Button
 							:class="quizPrimaryButtonStyleClasses"
-							label="Restart Quiz"
+							:label="canContinueToNextTier ? 'Start Over' : 'Restart Quiz'"
 							type="button"
-							@click="startQuiz"
+							@click="resetQuizState"
 						/>
 					</div>
 				</template>
@@ -195,14 +224,30 @@ const {
 			<!-- ∞∞∞∞∞∞∞∞ QUIZ: QUESTION HEADER ∞∞∞∞∞∞∞∞ -->
 			<div :class="quizQuestionHeaderStyleClasses">
 				<div :class="quizQuestionCounterStyleClasses">
+					<span v-if="quizTierNumber > 1">
+						Tier {{ quizTierNumber }} / {{ quizTotalTierCount }} &middot;
+					</span>
 					Question {{ currentQuestionIndex + 1 }} /
 					{{ totalQuestionCount }}
 				</div>
 
-				<Tag
-					:value="quizStatusTagValue"
-					:class="quizStatusTagStyleClasses"
-				/>
+				<div :class="quizQuestionHeaderActionsStyleClasses">
+					<Tag
+						:value="quizStatusTagValue"
+						:class="quizStatusTagStyleClasses"
+					/>
+
+					<!-- ∞∞∞∞∞∞∞∞
+						Mid-run restart. Drops tier history too, so it is a true
+						start-over rather than a re-roll of the current tier.
+					∞∞∞∞∞∞∞∞ -->
+					<Button
+						:class="quizRestartButtonStyleClasses"
+						label="Restart"
+						type="button"
+						@click="resetQuizState"
+					/>
+				</div>
 			</div>
 
 			<ProgressBar
@@ -210,6 +255,19 @@ const {
 				:class="quizProgressBarStyleClasses"
 				:show-value="false"
 			/>
+
+			<!-- ∞∞∞∞∞∞∞∞
+				One segment per tier. Cleared tiers burn bright, the tier in play
+				is dimmer, untouched tiers stay near-transparent. Default labels
+				are suppressed since the header already names the tier.
+			∞∞∞∞∞∞∞∞ -->
+			<MeterGroup
+				v-if="quizTotalTierCount > 1"
+				:value="quizTierMeterSegments"
+				:class="quizTierMeterStyleClasses"
+			>
+				<template #label></template>
+			</MeterGroup>
 
 			<!-- ∞∞∞∞∞∞∞∞ QUIZ: QUESTION CARD ∞∞∞∞∞∞∞∞ -->
 			<Transition
@@ -237,17 +295,22 @@ const {
 							<!-- ∞∞∞∞∞∞∞∞ QUIZ: ANSWER OPTIONS ∞∞∞∞∞∞∞∞ -->
 							<div :class="quizAnswerOptionsGridStyleClasses">
 								<button
-									v-for="option in currentQuestion.options"
+									v-for="(option, optionIndex) in currentQuestion.options"
 									:key="option.id"
 									type="button"
 									:class="getAnswerOptionStyleClasses(option)"
 									:disabled="currentQuestionAnswered"
 									@click="selectAnswerOption(option)"
 								>
+									<!-- ∞∞∞∞∞∞∞∞
+										Options are shuffled, so the stored id no longer
+										matches its position. The marker comes from the
+										rendered index to keep the column reading a, b, c, d.
+									∞∞∞∞∞∞∞∞ -->
 									<span
 										:class="quizAnswerOptionMarkerStyleClasses"
 									>
-										{{ option.id }}
+										{{ String.fromCharCode(97 + optionIndex) }}
 									</span>
 									<span :class="quizAnswerOptionLabelStyleClasses">
 										{{ option.label }}

@@ -8,6 +8,8 @@ import { STATUS } from '@shared-module/httpStatus';
 import { seedAllStates } from '@representatives-module/infrastructure/representativesCache';
 import { CongressBalanceService } from '@congressional-balance-module/application/congressionalBalanceService';
 import { DAILY_CONGRESSIONAL_BALANCE_CRON } from '@congressional-balance-module/domain/congressionalBalanceConstants';
+import { HouseholdPriceService } from '@economy-module/application/householdPriceService';
+import { TariffActivityService } from '@economy-module/application/tariffActivityService';
 // ∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞∞
 
 // --- The server: base Hono app + cross-cutting middleware. Routes get mounted onto it in app.ts. ---
@@ -32,7 +34,7 @@ app.onError((error, ctx: Context<WorkerHonoEnv>) => {
 	return response;
 });
 
-// --- Route each trigger to one job: federal balance daily, complete state rosters weekly. ---
+// --- Refresh each snapshot independently; a failed Treasury pull must not block seats or household-price research. ---
 export const scheduled = (
 	event: Pick<ScheduledController, 'cron'>,
 	env: WorkerEnv,
@@ -40,6 +42,8 @@ export const scheduled = (
 ): void => {
 	if (event.cron === DAILY_CONGRESSIONAL_BALANCE_CRON) {
 		ctx.waitUntil(CongressBalanceService.fetchCronsCongressBalance(env));
+		ctx.waitUntil(HouseholdPriceService.fetchCronsHouseholdPrice(env));
+		ctx.waitUntil(TariffActivityService.fetchCronsTariffActivity(env));
 
 		return;
 	}

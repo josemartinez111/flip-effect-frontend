@@ -77,7 +77,6 @@ vuejs-frontend-template/
 │   │   │   └── home.page.vue
 │   │   ├── layouts/                      # Layout components (wrap RouterView once at root)
 │   │   │   └── RootLayout.vue            # Default root layout (NavBar + RouterView + Footer)
-│   │   └── index.ts                      # Pages barrel
 │   │
 │   ├── router/
 │   │   ├── routes.ts                     # Vue Router config + navigation guards
@@ -300,6 +299,8 @@ The reusable Tailwind v4 variant for that behavior lives in `src/app.css`:
 
 ### Barrel Export Style
 
+Route pages have no `src/pages/index.ts` barrel. Import each page directly in `src/router/routes.ts` with `component: () => import('../pages/.../name.page.vue')` to preserve route-level lazy loading; the shared `RootLayout` can remain a direct static import.
+
 Use barrel exports only at intentional app boundaries. Root-level barrels collect and re-export assets, components, stores, utilities, and types so consuming files import from stable module boundaries instead of deep nested paths.
 
 For `src/components/`, keep one root component barrel at `src/components/index.ts`. Do not add nested `index.ts` files inside component subdirectories; that creates too many barrels to maintain. New reusable components should be exported from the root component barrel with a clear section comment.
@@ -311,7 +312,6 @@ Do not add local barrel files inside `src/pages/`, page-specific directories, or
 ```zsh
 export { default as NavBar } from './shared/navbar/NavBar.vue';
 export { default as Footer } from './shared/footer/Footer.vue';
-export { default as HomePage } from './home/home.page.vue';
 ```
 
 Asset barrels MUST be grouped by source directory with comment headers. Runtime image exports should use Vite ImageTools `?format=webp` whenever the source image supports it. Keep Canva/high-quality source files as PNG/JPG assets, then export the optimized app import as WebP through the barrel.
@@ -624,9 +624,16 @@ try {
 pm dev              # Dev server (localhost:5173)
 pm build            # Production build → dist/
 pm preview          # Preview production locally
+pm test             # Vitest run (app tests)
+pm add -D <pkg>     # Install a dev dependency
+pm exec <bin>       # Run a local binary (vue-tsc, vitest, vite)
 ```
 
 **Note:** Use alias `pm` (not `pnpm`) for all package manager commands.
+
+**This project is pnpm-only. NEVER use `npm`, `npx`, or `yarn` — not to install, not to run a binary.** `npx vue-tsc` and `npx vitest` are violations even though they work; they resolve through npm and can pull a different version than the pnpm lockfile pinned. Use `pm exec vue-tsc --noEmit`, `pm exec vitest run`, `pm exec vite build`.
+
+**The UI testing toolchain is already installed. Do not add packages to test a component.** `vitest` (runner), `jsdom` (DOM), and `@vue/test-utils` (`mount`, `setProps`, stubs) are all present. Check `package.json` before reaching for anything.
 
 ---
 
@@ -720,11 +727,19 @@ Files removed
 - If proposing plans/questions, STOP and wait for user response
 
 **Validation:**
-- Run `pm build`, `vue-tsc --noEmit` when feasible
+- Run `pm build`, `pm exec vue-tsc --noEmit` when feasible
 - Check console errors, dark mode, responsive design
 - Call out skipped validation
 - Component tests are temporary implementation tools. After a UI component is verified, delete its local test file.
 - Keep only one reusable UI-component test example in `vuejs-frontend-template`; utility, API, and business-logic tests remain durable.
+
+**UI Verification (CRITICAL):**
+- **A typecheck and a build are not verification.** They prove the code compiles, not that it behaves. Never claim a component works on that basis alone.
+- When component behavior changes — props, state, events, conditional rendering, composable wiring — write a temporary test that `mount()`s the component and asserts the behavior that actually changed.
+- **Prove the test can fail.** Break the code under test, confirm the assertion fails, restore it. A test that passes against broken code verified nothing, and this step is the only reason the test is worth writing.
+- Delete the test file once verified. Utility, API, and business-logic tests stay.
+- Report the test as run, and say plainly that the deliberate-failure check passed.
+- **Know what this does NOT catch.** A mount test asserts logic and rendered output, never appearance. Sizing, spacing, overflow, breakpoint behavior, and z-order all pass a green test while looking broken. When a change is visual, say so and ask the user to look, or check the rendered geometry directly — never imply a passing test covered it.
 
 **Template Compliance:**
 - ALWAYS use `<script setup lang="ts">` — never Options API
